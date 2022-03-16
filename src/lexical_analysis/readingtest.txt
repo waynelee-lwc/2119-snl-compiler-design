@@ -1,0 +1,8 @@
+hello world!
+this line will test whether character '\n' affect string splition
+here is the third line \n
+strange symbols \n \\
+next serval lines will test blanks.
+
+
+here is the end.
