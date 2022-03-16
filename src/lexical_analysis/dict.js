@@ -4,7 +4,8 @@
     map,正则表达式
     用哪个实现哪个
 */
-
+//字母
+exports.LetterReg = /[a-z,A-Z]/
 //小写字母
 exports.LowerLetterReg = /[a-z]/
 exports.LowerLetter = {
@@ -52,4 +53,9 @@ exports.Reserved = {    //map或者list都可以，map更快一些，list更好�
 exports.UnsignedIntegerReg = /[1-9][0-9]?/
 exports.UnsignedInteger = {
 
+}
+//程序结束符
+exports.ProgramEnderReg = / /
+exports.ProgramEnder = {
+    '.':true
 }

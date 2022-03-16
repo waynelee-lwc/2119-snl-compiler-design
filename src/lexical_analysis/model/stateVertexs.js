@@ -1,26 +1,5 @@
 
-var dict = require('./dict')
-var checking = require('./checking')
-var rw = require('./rw')
-var model = require('./model/models')
-
-// console.log(dict.LegalCharacter['a'])
-// console.log(checking.IsLegal('a'))
-// console.log(checking.IsLowerLetter)
-
-// console.log(rw.LoadSourceCode('readingtest.txt').split('\n'))
-// console.log(__dirname)
-
-// var token = new model.Token('testtype','testname',13)
-
-// console.log(JSON.stringify(token))
-
-// let code = rw.LoadSourceCode('readingtest.txt').split('\n')
-// for(idx in code){
-//     console.log(Number(idx) + 1,code[idx])
-// }
-
-let endState = new model.StateVertex(
+export const endState = new model.StateVertex(
     'end',
     function(ch){
         let res = {
@@ -40,7 +19,8 @@ let endState = new model.StateVertex(
         return new model.Token('program end','.',this.line,`${this.beginCol}-${this.endCol}`)
     }
 )
-let beginState = new model.StateVertex(
+
+export const  beginState = new model.StateVertex(
     'begin',
     function(ch){
         let res = {
@@ -65,7 +45,7 @@ let beginState = new model.StateVertex(
     }
 )
 
-let testState = new model.StateVertex(
+export const testState = new model.StateVertex(
     'test',
     function(ch){
         let res = {
@@ -108,32 +88,3 @@ let testState = new model.StateVertex(
         return new model.Token('test',this.tokenStr,this.line,`${this.beginCol}-${this.endCol}`)
     }
 )
-
-let testStr = 'hello world from nodejs.'
-let tokenList = []
-
-let currState = beginState
-currState.init(1,1)
-for(let i = 0;i < testStr.length;i++){
-    res = currState.parse(testStr[i])
-    if(res.error != null){
-        break;
-    }
-    if(res.tokenEnd){
-        token = currState.getToken()
-        if(token){
-            console.log('token:',JSON.stringify(token))
-            tokenList.push(token)
-        }
-        currState = res.nextState
-        currState.init(1,Number(i) + 1)
-        i -= res.goback ? 1 : 0
-    }else{
-        console.log('res  :',JSON.stringify(res.log))
-    }
-    if(res.parseEnd){
-        break;
-    }
-}
-
-console.log(tokenList)

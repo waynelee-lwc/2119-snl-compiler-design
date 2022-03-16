@@ -2,12 +2,12 @@
 /* 
     校验检测部分代码
 */
-
+var dict = require('./dict')
 
 /* 单字符检测 */
 //合法字符
 exports.IsLegal = (ch)=>{
-
+    return true
 }
 //数字
 exports.IsNumber = (ch)=>{
@@ -19,7 +19,7 @@ exports.IsNonZeroNumber = (ch)=>{
 }
 //字母
 exports.IsLetter = (ch)=>{
-
+    return dict.LetterReg.test(ch)
 }
 //小写字母
 exports.IsLowerLetter = (ch)=>{
@@ -36,6 +36,14 @@ exports.IsSeperator = (ch)=>{
 //字符起始结束符
 exports.IsCharacterMarker = (ch)=>{
 
+}
+//程序结束符
+exports.IsProgramEnder = (ch)=>{
+    return dict.ProgramEnder[ch]
+}
+//是否空格
+exports.IsBlankSpace = (ch)=>{
+    return ch === ' '
 }
 
 /* token类型检测 */
