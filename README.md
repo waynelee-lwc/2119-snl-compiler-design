@@ -38,3 +38,12 @@
 - 中间产物输出格式
   - 词法分析token序列
     - json[{"type":"typename(string)", "name":"name(string", "line":"line_num(int)" },{}...]
+
+### 3月16日
+- DONE
+  - 更改git仓库权限
+  - 粗读词法分析部分，掌握原理
+- TODO
+  - 完善脚手架，多加注释
+  - 编写DFA节点，增加Token和error
+  - 尝试测试一个完整的从输入到输入
