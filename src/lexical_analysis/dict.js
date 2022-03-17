@@ -46,7 +46,8 @@ exports.ReservedReg = / /
 exports.Reserved = {    //map或者list都可以，map更快一些，list更好写一些
     'program':true,
     'if':true,
-    'else':true
+    'else':true,
+    'for':true,
     //...
 }
 //无符号整数

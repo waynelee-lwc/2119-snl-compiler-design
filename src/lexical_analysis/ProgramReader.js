@@ -1,6 +1,7 @@
 
-//程序阅读器，解析每一个字符，获取行列值
-export class ProgramReader{
+//程序阅读器，解析一段程序，获取到每个字符的行列值
+//支持迭代获取和重置，配合语法解析器使用
+class ProgramReader{
 
     constructor(program){
         this.init(program)
@@ -19,6 +20,23 @@ export class ProgramReader{
 
     setProgram(program){
         this.program = program
+        this.length = program.length
+        this.content = []
+
+        let line = 1
+        let col = 0
+        for(let i = 0;i < this.length;i++){
+            col++
+            this.content[i] = {
+                char    : program[i],
+                line    : line,
+                col     : col
+            }
+            if(program[i] == '\n'){
+                line++
+                col = 0
+            }
+        }
     }
 
     getLine(){
@@ -37,20 +55,13 @@ export class ProgramReader{
         if(!this.hasNextChar()){
             return null
         }
-        ch = this.program[this.currIdx]
-        this.currIdx += 1
-        this.col++
+        this.currIdx ++
+        return this.content[this.currIdx - 1]
+    }
 
-        resp = {
-            char : ch,
-            line : this.line,
-            col  : this.col
-        }
 
-        if(ch == '\n'){
-            this.line ++
-            this.col = 1
-        }
-        return resp
+    goback(k){
+        this.currIdx = Math.max(0,this.currIdx - k)
     }
 }
+module.exports = ProgramReader
