@@ -3,7 +3,7 @@
 */
 
 //Token对象，接受 类型，名称，行号
-exports.Token = class{
+class Token{
 
     constructor(type,name,line,col){
         this.type = type
@@ -14,7 +14,7 @@ exports.Token = class{
 
 }
 //错误对象， 接受 行号，列号，错误详情
-exports.Error = class{
+class Error{
 
     constructor(err,line = 0,col = 0){
         this.line = line
@@ -33,7 +33,7 @@ exports.Error = class{
     }
 }
 //日志对象
-exports.Log = class{
+class Log{
 
     constructor(stateName,line,col,log,error){
         this.stateName = stateName
@@ -44,17 +44,16 @@ exports.Log = class{
     }
 }
 //FDA状态节点
-exports.StateVertex = class{
+class StateVertex{
 
-    constructor(name,parse,getToken){
+    constructor(name,parse){
         this.name = name
         this.parse = parse
-        this.getToken = getToken
     }
 
     //状态初始化
-    init(line,col){
-        this.tokenStr = ''      //当前字符串
+    init(line,col,tokenStr = ''){
+        this.tokenStr = tokenStr//当前字符串
         this.line = line        //起始字符所在行
         this.beginCol = col     //起始字符所在列
         this.endCol = col - 1   //最终字符所在列
@@ -62,15 +61,26 @@ exports.StateVertex = class{
     }
 
     //标准解析返回值
-    getStdResponse(){
-        return {
-            error       : null,     //错误
-            tokenEnd    : false,    //token解析结束
-            parseEnd    : false,    //程序解析结束
-            nextState   : null,     //解析后状态
-            log         : null,     //日志
-            goback      : 0         //回退步数
-        }
+    getNewResponse(){
+        return new function(){
+            return {
+                error       : null,         //错误
+                isTokenEnd  : false,        //token解析结束
+                isParseEnd  : false,        //程序解析结束
+                nextState   : null,         //解析后状态
+                log         : null,         //日志
+                goback      : 0,            //回退步数
+                tokenStr    : this.tokenStr,//当前节点token内容
+                token       : null          //生成token，节点结束时用
+            }
+        }()
+        
+    }
+
+    //添加一个新字符
+    addChar(ch){
+        this.tokenStr += ch
+        this.endCol ++
     }
 
     //正常解析日志
@@ -82,4 +92,26 @@ exports.StateVertex = class{
     getErrorLog(error){
         return new Log(this.name,this.line,this.endCol,`parse failed : ${error.err}`,error)
     }
+
+    //非解析且转移日志
+    getTransitionWithoutParsingLog(nextState){
+        return new Log(this.name,this.line,this.endCol,`transfer state to '${nextState.name}' without parsing`)
+    }
+
+    //解析且转移日志
+    getTransitionWithParsingLog(nextState,ch){
+        return new Log(this.name,this.line,this.endCol,`transfer state to '${nextState.name}' with parsing '${ch}'`)
+    }
+
+    //状态转移日志
+    getTransitionLog(nextState){
+        return new Log(this.name,this.line,this.endCol,`transfer state to '${nextState.name}'`)
+    }
+}
+
+module.exports = {
+    Log         : Log,
+    StateVertex : StateVertex,
+    Token       : Token,
+    Error       : Error
 }

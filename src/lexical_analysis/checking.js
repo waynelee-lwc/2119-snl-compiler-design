@@ -57,7 +57,7 @@ exports.IsUnsignedInteger = (token)=>{
 }
 //保留字
 exports.IsReserved = (token)=>{
-
+    return dict.Reserved[token]
 }
 //单字符分界符
 exports.IsSingleSeperator = (token)=>{
