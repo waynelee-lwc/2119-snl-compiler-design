@@ -1,4 +1,4 @@
-
+var pathTool = require('path')
 var fs = require('fs')
 
 exports.LoadSourceCode = function(filename){
@@ -8,7 +8,11 @@ exports.LoadSourceCode = function(filename){
 }
 
 exports.SaveTokens = function(filename,tokens){
+    let path = pathTool.resolve(__dirname,'../../outputs') + '/' + filename
+    console.log(path)
+    let content = JSON.stringify(tokens)
 
+    fs.writeFileSync(path,content)
 }
 
 exports.SaveLogs = function(filename,logs){

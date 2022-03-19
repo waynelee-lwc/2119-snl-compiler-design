@@ -15,6 +15,33 @@
   - EOF
 
 ### 语法分析
+#### 语法树节点命名
+- 标志节点
+  - ProK
+  - PheadK
+  - TypeK
+  - VarK
+  - ProcDecK
+  - StmLK
+- 具体节点
+  - DecK
+    - ArrayK
+    - CharK
+    - IntegerK
+    - RecordK
+    - IdK
+  - StmtK
+    - IfK
+    - WhileK
+    - AssignK
+    - ReadK
+    - WriteK
+    - CallK
+    - ReturnK
+  - ExpK
+    - OpK
+    - ConstK
+    - IdEK
 ### 语义分析
 ### web服务
 
