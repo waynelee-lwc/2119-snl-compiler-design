@@ -24,4 +24,18 @@ exports.TEST_DEMO_BLANK_TOKEN_TYPE = "BLANK"
 exports.TEST_DEMO_END_TOKEN_TYPE = "END"
 
 exports.TEST_DEMO_RESERVED_TOKEN_TYPE = "RESERVED"
+
+/**
+ * 词法分析Token类型
+ */
+exports.ID          = "ID"
+exports.RESERVED    = "RESERVED"
+exports.NUMBER      = "NUMBER"
+exports.CHARC       = "CHARC"
+exports.SEPERATOR   = "SEPERATOR"
+exports.EOF         = "EOF"
+exports.UNDERANGE   = "UNDERANGE"
+exports.ASSIGN      = "ASSIGN"
+
+
 //...
