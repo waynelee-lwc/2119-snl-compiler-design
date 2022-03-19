@@ -4,6 +4,16 @@
 ## 技术目录
 ### 词法分析
 - 实现语言：node.js
+- token命名
+  - RESERVED
+  - ID
+  - SEPERATOR
+  - ASSIGN
+  - UNDERANGE
+  - CHARC
+  - NUMBER
+  - EOF
+
 ### 语法分析
 ### 语义分析
 ### web服务
