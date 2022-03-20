@@ -9,7 +9,7 @@ exports.LoadSourceCode = function(filename){
 
 exports.SaveTokens = function(filename,tokens){
     let path = pathTool.resolve(__dirname,'../../outputs') + '/' + filename
-    console.log(path)
+    // console.log(path)
     let content = JSON.stringify(tokens)
 
     fs.writeFileSync(path,content)
@@ -17,4 +17,9 @@ exports.SaveTokens = function(filename,tokens){
 
 exports.SaveLogs = function(filename,logs){
 
+}
+
+exports.Loads = function(filename){
+    let path = pathTool.resolve(__dirname,filename)
+    return fs.readFileSync(path)
 }

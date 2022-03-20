@@ -61,7 +61,7 @@ class StateVertex{
     }
 
     //标准解析返回值
-    getNewResponse(){
+    newResponse(){
         return new function(){
             return {
                 error       : null,         //错误
@@ -106,6 +106,27 @@ class StateVertex{
     //状态转移日志
     getTransitionLog(nextState){
         return new Log(this.name,this.line,this.endCol,`transfer state to '${nextState.name}'`)
+    }
+
+    //非法字符错误
+    getIllegalCharacterError(ch){
+        return new Error(`illegal character '${ch}'`,this.line,this.beginCol)
+    }
+    //解析冒号出错
+    getErrorNextColon(ch){
+        return new Error(`error next color ${ch}`,this.line,this.beginCol)
+    }
+    //解析字符出错
+    getErrorInChar(ch){
+        return new Error(`error when parsing a char ${ch}`,this.line,this.beginCol)
+    }
+    //未定义错误
+    getUndefinedError(ch){
+        return new Error(`caught an undefined error ! ${ch}`,this.line,this.beginCol)
+    }
+    //程序不完整
+    getNeedDotError(){
+        return new Error(`need a dot at the end of program!`,this.line,this.beginCol)
     }
 }
 

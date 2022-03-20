@@ -4,7 +4,7 @@
 class ProgramReader{
 
     constructor(program){
-        this.init(program)
+        this.init(program + '\0')
     }
 
     init(program){
@@ -34,17 +34,18 @@ class ProgramReader{
             }
             if(program[i] == '\n'){
                 line++
+                this.lines = line
                 col = 0
             }
         }
     }
 
-    getLine(){
-        return this.line
+    getLines(){
+        return this.lines
     }
 
     getCol(){
-        return this.line
+        return this.col
     }
     
     hasNextChar(){
