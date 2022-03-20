@@ -1,6 +1,11 @@
 
 //语法分析器，创建的时候指定一个programReader
 //执行语法分析过程，返回处理结果
+
+const stateVertexs = require("./model/stateVertexs")
+const tokens = require('./model/tokens')
+const errors = require('./model/errors')
+
 //处理结果包括 已经解析的token序列，可能出现的错误，历次解析的日志
 class LexicalAnalysiser{
 
@@ -21,7 +26,8 @@ class LexicalAnalysiser{
 
         let needInit = true
         let tokenStr = ''
-
+        
+        // for(let i = 0;i < 300;i++){
         while(this.reader.hasNextChar()){
             //下一个字符
             let nextChar = this.reader.getNextChar()
@@ -34,7 +40,8 @@ class LexicalAnalysiser{
             
             //执行状态转移
             res = currState.parse(nextChar.char)
-
+            // console.log(`goback ${res.goback} `,JSON.stringify(nextChar),JSON.stringify(res.log))
+            
             //日志处理
             if(res.log){
                 logList.push(res.log)
@@ -61,6 +68,12 @@ class LexicalAnalysiser{
             if(res.isParseEnd){
                 break;
             }
+        }
+        
+        if(currState.name == stateVertexs.DONE){
+            tokenList.push(tokens.GetToken(tokens.EOF,'EOF',this.reader.getLines() + 1,0))
+        }else{
+            errorList.push(currState.getNeedDotError())
         }
 
         //...

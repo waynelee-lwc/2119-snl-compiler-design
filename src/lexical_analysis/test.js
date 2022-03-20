@@ -140,16 +140,43 @@ var tokens = require('./model/tokens')
 
 // console.log(tokenList)
 
-let str = 'testing \
-hello world. \n \
-haha'
+// let str = 'testing \
+// hello world. \n \
+// haha'
 
-program = rw.LoadSourceCode('./readingtest.txt')
-reader = new ProgramReader(program)
+// program = rw.LoadSourceCode('./readingtest.txt')
+// reader = new ProgramReader(program)
 
-while(reader.hasNextChar()){
-    console.log(reader.getNextChar())
+// while(reader.hasNextChar()){
+//     console.log(reader.getNextChar())
+// }
+
+// console.log(tokens.ID_TOKEN_TYPE)
+// console.log(tokens.RESERVED_TOKEN_TYPE)
+
+// console.log(checking.IsLegal('+'))
+// console.log(checking.IsLegal('-'))
+// console.log(checking.IsLegal('*'))
+// console.log(checking.IsLegal('/'))
+// console.log(checking.IsLegal('<'))
+// console.log(checking.IsLegal('>'))
+// console.log(checking.IsLegal('a'))
+// console.log(checking.IsLegal('\''))
+// console.log(checking.IsLegal(' '))
+// console.log(checking.IsLegal('\n'))
+// console.log(checking.IsNumber(','))
+// console.log(checking.IsLetter(','))
+// console.log(checking.IsLegal(','))
+
+let tokenList1 = JSON.parse(rw.Loads('../../outputs/mock_tokens.txt'))
+let tokenList2 = JSON.parse(rw.Loads('../../outputs/test_output_tokens.txt'))
+console.log(tokenList1.length,tokenList2.length)
+
+for(let i = 0;i < Math.min(tokenList1.length,tokenList2.length);i++){
+    console.log(i+1)
+    console.log(tokenList1[i])
+    console.log(tokenList2[i])
 }
 
-console.log(tokens.ID_TOKEN_TYPE)
-console.log(tokens.RESERVED_TOKEN_TYPE)
+console.log(tokenList1[63])
+console.log(tokenList1[64])

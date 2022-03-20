@@ -9,10 +9,10 @@ var StateVertexs = require('./model/stateVertexs')
  */
 function main(){
 
-    let program = rw.LoadSourceCode('sentence.txt')
+    let program = rw.LoadSourceCode('mock_program.txt')
     console.log(`parsing program \n'''\n${program}\n'''`)
     reader = new ProgramReader(program)
-    parser = new LexicalAnalysiser(reader,StateVertexs.TestDemoStart)
+    parser = new LexicalAnalysiser(reader,StateVertexs.Start)
     resp = parser.parse()
 
     console.log('---------------------------error-----------')
@@ -29,6 +29,7 @@ function main(){
     }
 
     //error...
+    rw.SaveTokens('test_output_tokens.txt',resp.tokenList)
 
     //token list...
 

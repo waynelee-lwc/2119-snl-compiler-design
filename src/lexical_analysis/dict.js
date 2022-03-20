@@ -5,58 +5,46 @@
     用哪个实现哪个
 */
 //字母
-exports.LetterReg = /[a-z,A-Z]/
+exports.LetterReg = /[a-zA-Z]/
 //小写字母
 exports.LowerLetterReg = /[a-z]/
-exports.LowerLetter = {
-
-}
+exports.LowerLetter = {}
 //大写字母
 exports.UpperLetterReg = /[A-Z]/
-exports.UpperLetter = {
-
-}
+exports.UpperLetter = {}
 //数字
 exports.NumberReg = /[0-9]/
-exports.Number = {
-
-}
+exports.Number = {}
 //非0数字
 exports.NonZeroNumberReg = /[1-9]/
-exports.NonZeroNumber = {
-
-}
+exports.NonZeroNumber = {}
 //分界符
 exports.SeperatorReg = / /
-exports.Seperator = {
-
-}
-//符号集合
-exports.SymbolReg = / /
-exports.Symbol = {
-
-}
+exports.Seperator = []
+exports.SeperatorList = '+-*/();[]=<,'
+//点符
+exports.DotReg = /\./
+//等号
+exports.EqualSignReg = /\=/
 //合法字符
-exports.LegalCharacterReg = / /
-exports.LegalCharacter = {
-
-}
+exports.LegalCharacterReg = /[0-9a-zA-z]/
+exports.LegalCharacter = {}
+exports.LegalCharacterList = `+-*/<=()[]{}.',;: \n\0`
 //保留字
 exports.ReservedReg = / /
-exports.Reserved = {    //map或者list都可以，map更快一些，list更好写一些
-    'program':true,
-    'if':true,
-    'else':true,
-    'for':true,
-    //...
-}
+exports.Reserved = ['program','procedure','type','var','if','then','else','fi','while','do','endwh','begin','end','read','write','array','of','record','return','integer','char']
 //无符号整数
 exports.UnsignedIntegerReg = /[1-9][0-9]?/
-exports.UnsignedInteger = {
-
-}
-//程序结束符
-exports.ProgramEnderReg = / /
-exports.ProgramEnder = {
-    '.':true
-}
+exports.UnsignedInteger = {}
+//注释头符
+exports.CommentHeaderReg = /\{/
+//注释尾符
+exports.CommentEnderReg = /\}/
+//空白字符
+exports.Blank = ' \n\t'
+//冒号
+exports.ColonReg = /\:/
+//单引号
+exports.ApostropheReg = /\'/
+//EOF
+exports.EOFList = ['\0'] 
