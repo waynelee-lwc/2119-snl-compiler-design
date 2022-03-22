@@ -28,14 +28,14 @@ exports.TEST_DEMO_RESERVED_TOKEN_TYPE = "RESERVED"
 /**
  * 词法分析Token类型
  */
-exports.ID          = "ID"
-exports.RESERVED    = "RESERVED"
-exports.NUMBER      = "NUMBER"
-exports.CHARC       = "CHARC"
-exports.SEPERATOR   = "SEPERATOR"
-exports.EOF         = "EOF"
-exports.UNDERANGE   = "UNDERANGE"
-exports.ASSIGN      = "ASSIGN"
+exports.ID          = "ID"          //标识符
+exports.RESERVED    = "RESERVED" 
+exports.NUMBER      = "NUMBER"     // 数字
+exports.CHARC       = "CHARC"      //字符标识符
+exports.SEPERATOR   = "SEPERATOR"  
+exports.EOF         = "EOF"       //文件结束符
+exports.UNDERANGE   = "UNDERANGE" //数组下标界限符
+exports.ASSIGN      = "ASSIGN"   //双字符分界符
 
 
 //...
