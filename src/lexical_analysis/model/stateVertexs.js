@@ -342,6 +342,7 @@ const InDot         = new models.StateVertex(INDOT      ,function(ch){
         res.nextState   = InRange
         res.isTokenEnd  = true
         res.log         = this.getTransitionLog(InRange)
+        res.goback      = 1
         return res
     }
     //空白符，程序结束，其他符号，生成点号继续解析

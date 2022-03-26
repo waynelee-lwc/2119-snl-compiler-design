@@ -63,4 +63,30 @@ func (p PredictSet) Predict(token *token.Token) bool {
 
 var (
 	DemoPredict = PredictSet{Program, Procedure, ID, Colon}
+
+	//类型定义节点
+	TypeDec2Nil             = PredictSet{Var, Procedure, Begin}
+	TypeDec2TypeDeclaration = PredictSet{Type}
+
+	TypeDecMore2Nil         = PredictSet{Var, Procedure, Begin}
+	TypeDecMore2TypeDecList = PredictSet{ID}
+
+	TypeDef2BaseType      = PredictSet{Integer, Char}
+	TypeDef2StructureType = PredictSet{Array, Record}
+	TypeDef2Id            = PredictSet{ID}
+
+	BaseType2Integer = PredictSet{Integer}
+	BaseType2Char    = PredictSet{Char}
+
+	StructureType2ArrayType = PredictSet{Array}
+	StructureTYpe2RecType   = PredictSet{Record}
+
+	FieldDecList2BaseType  = PredictSet{Integer, Char}
+	FieldDecList2ArrayType = PredictSet{Array}
+
+	FieldDecMore2Nil          = PredictSet{End}
+	FieldDecMore2FieldDecList = PredictSet{Integer, Char, Array}
+
+	IdMore2Nil    = PredictSet{Semi}
+	IdMore2IdList = PredictSet{Comma}
 )

@@ -2,11 +2,11 @@ package token_set
 
 import (
 	"fmt"
-	"recursive_descent_parser/model/token"
+	tokens "recursive_descent_parser/model/token"
 )
 
 type TokenScanner struct {
-	tokenList []*token.Token
+	tokenList []*tokens.Token
 	len       int
 	idx       int
 }
@@ -23,7 +23,7 @@ func (scanner *TokenScanner) HasNext() bool {
 	return scanner.idx < scanner.len
 }
 
-func (scanner *TokenScanner) GetCurr() (*token.Token, error) {
+func (scanner *TokenScanner) GetCurr() (*tokens.Token, error) {
 	if !scanner.HasNext() {
 		return nil, fmt.Errorf("no more tokens!%v/%v", scanner.idx, scanner.len)
 	}
@@ -38,7 +38,7 @@ func (scanner *TokenScanner) Next() error {
 	return nil
 }
 
-func (scanner *TokenScanner) Poll() (*token.Token, error) {
+func (scanner *TokenScanner) Poll() (*tokens.Token, error) {
 	if !scanner.HasNext() {
 		return nil, fmt.Errorf("no more tokens!%v/%v", scanner.idx, scanner.len)
 	}
@@ -47,9 +47,16 @@ func (scanner *TokenScanner) Poll() (*token.Token, error) {
 	return token, nil
 }
 
+func (scanner *TokenScanner) Goback(steps int) {
+	scanner.idx -= steps
+	if scanner.idx < 0 {
+		scanner.idx = 0
+	}
+}
+
 var Scanner TokenScanner
 
-func Initscanner(tokenList []*token.Token) {
+func Initscanner(tokenList []*tokens.Token) {
 	Scanner = TokenScanner{
 		tokenList: tokenList,
 		len:       len(tokenList),

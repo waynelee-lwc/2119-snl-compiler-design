@@ -41,6 +41,9 @@ func NewToken(type_ TokenType, name string, line int, column int) *Token {
 
 //token坚定，部分token不需要比较具体内容
 func (t Token) Compare(token *Token) bool {
+	if token == nil {
+		return false
+	}
 	if t.Type != token.Type {
 		return false
 	}

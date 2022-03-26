@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	"recursive_descent_parser/model/statement"
 	"recursive_descent_parser/model/token"
 	"recursive_descent_parser/model/token_set"
 	"testing"
 )
 
 func TestMain(t *testing.T) {
-	tokens, err := LoadTokens("../../../outputs/test_output_tokens.txt")
+	tokens, err := LoadTokens("../../../outputs/test_output_tokens1.txt")
 	fmt.Println(err)
 	for _, token := range tokens {
-		fmt.Println(token_set.DemoPredict.Predict(token), token)
+		fmt.Println(token)
 	}
 }
 
@@ -59,4 +60,15 @@ func TestTokenReader(t *testing.T) {
 	for token_set.Scanner.HasNext() {
 		fmt.Println(token_set.Scanner.Poll())
 	}
+}
+
+func TestTypeDec(t *testing.T) {
+	tokens, _ := LoadTokens("../../../outputs/test_output_tokens1.txt")
+	token_set.Initscanner(tokens)
+
+	node, err := statement.TypeDec()
+
+	fmt.Println("error: ", err)
+
+	fmt.Println(node.ToString(""))
 }
