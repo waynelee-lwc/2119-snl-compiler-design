@@ -8,7 +8,7 @@ exports.LoadSourceCode = function(filename){
 }
 
 exports.SaveTokens = function(filename,tokens){
-    let path = pathTool.resolve(__dirname,'../../outputs') + '/' + filename
+    let path = pathTool.resolve(__dirname,filename)
     // console.log(path)
     let content = JSON.stringify(tokens)
 
