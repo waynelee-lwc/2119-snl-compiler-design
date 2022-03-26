@@ -186,7 +186,7 @@ const InNum         = new models.StateVertex(INNUM      ,function(ch){
     res.isTokenEnd  = true
     res.nextState   = Start
     res.log         = this.getTransitionLog(Start)
-    res.token       = tokens.GetToken(tokens.NUMBER,Number.parseInt(this.tokenStr),this.line,this.beginCol)
+    res.token       = tokens.GetToken(tokens.NUMBER,this.tokenStr,this.line,this.beginCol)
     res.goback      = 1
     return res
 })
@@ -344,11 +344,17 @@ const InDot         = new models.StateVertex(INDOT      ,function(ch){
         res.log         = this.getTransitionLog(InRange)
         return res
     }
-    //其他符号
+    //空白符，程序结束，其他符号，生成点号继续解析
     res.isTokenEnd  = true
-    res.IsParseEnd  = true
-    res.nextState   = Done
     res.token       = tokens.GetToken(tokens.SEPERATOR,'.',this.line,this.beginCol)
+    if(checking.IsBlankSpace(ch) || checking.isEOF(ch)){
+        res.IsParseEnd = true
+        res.nextState = Done
+    }else{
+        res.IsParseEnd = false
+        res.nextState = Start
+        res.goback = 1
+    }
     return res
 })
 const InRange       = new models.StateVertex(INRANGE    ,function(ch){
