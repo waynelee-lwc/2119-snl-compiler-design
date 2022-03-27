@@ -265,26 +265,3 @@ func FieldDecMore() ([]*tree_node.TreeNode, error) {
 
 	return nil, fmt.Errorf("FieldDecMore match failed! %v", currToken)
 }
-
-/*
-
-type
-	t1 = integer;
-	t2 = array[1..20] of integer;
-	t3 = record
-		integer a,b;
-		char c,d;
-		array[1..30]of char e,f;
-		end
-	t4 = t1
-
-TypeK
-	DecK IntegerK t1
-	DecK ArrayK t2 1 20 IntegerK
-	DecK RecordK t3
-		Deck IntegerK a b
-		DecK CharK c d
-		DecK ArrayK e f 1 30 CharK
-	DecK t1 t4
-
-*/

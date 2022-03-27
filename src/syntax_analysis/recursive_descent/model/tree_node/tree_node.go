@@ -37,8 +37,8 @@ const (
 	ConstK      Kind = "ConstK"
 	DefaultKind Kind = ""
 
-	ValParamType     ProcParamType = "valparamtype"
-	VarParamType     ProcParamType = "varparamtype"
+	ValParamType     ProcParamType = "valparam"
+	VarParamType     ProcParamType = "varparam"
 	DefaultParamType ProcParamType = ""
 
 	IdV               ExpVarKind = "IdV"
@@ -107,6 +107,11 @@ func (node *TreeNode) ToString(prefix string) string {
 	// fmt.Println(node)
 	res := prefix
 	res += string(node.NodeKind) + " "
+
+	if node.Attr.ProcAttr.ParamType != "" {
+		res += string(node.Attr.ProcAttr.ParamType) + " "
+	}
+
 	res += string(node.Kind) + " "
 	for _, id := range node.Name {
 		res += id + " "

@@ -89,4 +89,31 @@ var (
 
 	IdMore2Nil    = PredictSet{Semi}
 	IdMore2IdList = PredictSet{Comma}
+
+	VarDec2Nil            = PredictSet{Procedure, Begin}
+	VarDec2VarDeclaration = PredictSet{Var}
+
+	VarDecMore2Nil        = PredictSet{Procedure, Begin}
+	VarDecMore2VarDecList = PredictSet{Integer, Char, Record, Array, ID}
+
+	VarIdMore2Nil       = PredictSet{Semi}
+	VarIdMore2VarIdList = PredictSet{Comma}
+
+	ProcDec2Nil             = PredictSet{Begin}
+	ProcDec2ProcDeclaration = PredictSet{Procedure}
+
+	ProcDecMore2Nil     = PredictSet{Begin}
+	ProcDecMore2ProcDec = PredictSet{Procedure}
+
+	ParamList2Nil          = PredictSet{RParen}
+	ParamList2ParamDecList = PredictSet{Integer, Char, Array, Record, ID, Var}
+
+	ParamMore2Nil          = PredictSet{RParen}
+	ParamMore2ParamDecList = PredictSet{Semi}
+
+	ParamVal = PredictSet{Integer, Char, Record, Array, ID}
+	ParamVar = PredictSet{Var}
+
+	FidMore2Nil      = PredictSet{Semi, RParen}
+	FidMore2FormList = PredictSet{Comma}
 )
