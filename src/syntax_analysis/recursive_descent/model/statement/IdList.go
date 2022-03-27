@@ -96,3 +96,47 @@ func FidMore(node *tree_node.TreeNode) error {
 
 	return nil
 }
+
+func ActParamList() ([]*tree_node.TreeNode, error) {
+	currToken, _ := token_set.Scanner.GetCurr()
+
+	if token_set.ActParamList2Nil.Predict(currToken) {
+		return nil, nil
+	}
+	if token_set.ActParamList2ActParamList.Predict(currToken) {
+		res := []*tree_node.TreeNode{}
+		if node, err := Exp(); err != nil {
+			return nil, fmt.Errorf("ActParamList %v", err)
+		} else {
+			res = append(res, node)
+		}
+		if brothers, err := ActParamMore(); err != nil {
+			return nil, fmt.Errorf("ActParamList %v", err)
+		} else {
+			res = append(res, brothers...)
+		}
+		return res, nil
+	}
+
+	return nil, fmt.Errorf("ActParamList match failed! %v", currToken)
+}
+
+func ActParamMore() ([]*tree_node.TreeNode, error) {
+	currToken, _ := token_set.Scanner.GetCurr()
+
+	if token_set.ActParamMore2Nil.Predict(currToken) {
+		return nil, nil
+	}
+	if token_set.ActParamMore2ActParamList.Predict(currToken) {
+		if _, err := Match(token_set.Comma); err != nil {
+			return nil, fmt.Errorf("ActParamMore %v", err)
+		}
+		if params, err := ActParamList(); err != nil {
+			return nil, fmt.Errorf("ActParamMore %v", err)
+		} else {
+			return params, nil
+		}
+	}
+
+	return nil, fmt.Errorf("ActParamMore match failed! %v", currToken)
+}

@@ -79,6 +79,16 @@ func DeclarePart() ([]*tree_node.TreeNode, error) {
 }
 
 func ProgramBody() (*tree_node.TreeNode, error) {
+	node := tree_node.NewTreeNode()
+	node.NodeKind = tree_node.StmLK
+	if _, err := Match(token_set.Begin); err != nil {
+		return nil, fmt.Errorf("ProgramBody %v", err)
+	}
+	if children, err := StmList(); err != nil {
+		return nil, fmt.Errorf("ProgramBody, %v", err)
+	} else {
+		node.Children = append(node.Children, children...)
+	}
 
-	return nil, nil
+	return node, nil
 }

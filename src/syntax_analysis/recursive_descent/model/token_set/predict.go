@@ -116,4 +116,23 @@ var (
 
 	FidMore2Nil      = PredictSet{Semi, RParen}
 	FidMore2FormList = PredictSet{Comma}
+
+	StmMore2Nil     = PredictSet{End, EndWhile}
+	StmMore2StmList = PredictSet{Semi}
+
+	Stm2ConditionalStm = PredictSet{If}
+	Stm2LoopStm        = PredictSet{While}
+	Stm2InputStm       = PredictSet{Read}
+	Stm2OutputStm      = PredictSet{Write}
+	Stm2ReturnStm      = PredictSet{Return}
+	Stm2AssCal         = PredictSet{ID}
+
+	AssCall2AssignmentRest = PredictSet{Assign}
+	AssCall2CallStmRest    = PredictSet{LParen}
+
+	ActParamList2Nil          = PredictSet{RParen}
+	ActParamList2ActParamList = PredictSet{ID, Number}
+
+	ActParamMore2Nil          = PredictSet{RParen}
+	ActParamMore2ActParamList = PredictSet{Comma}
 )

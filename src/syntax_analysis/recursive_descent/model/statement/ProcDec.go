@@ -55,6 +55,14 @@ func ProcDeclaration() ([]*tree_node.TreeNode, error) {
 	return res, nil
 }
 
+func ProcBody() (*tree_node.TreeNode, error) {
+	if node, err := ProgramBody(); err != nil {
+		return nil, fmt.Errorf("ProcBody, %v", err)
+	} else {
+		return node, nil
+	}
+}
+
 func ProcName(node *tree_node.TreeNode) error {
 	if id, err := Match(token_set.ID); err != nil {
 		return fmt.Errorf("ProcName parse failed! %v", err)
