@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"recursive_descent_parser/model/token_set"
 	"recursive_descent_parser/model/tree_node"
-	"strconv"
 )
 
 func Exp() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.ExpK
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 
 	if term, err := Term(); err != nil {
 		return nil, fmt.Errorf("Exp %v", err)
@@ -32,6 +32,7 @@ func RelExp() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.ExpK
 	node.Kind = tree_node.OpK
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 	if exp, err := Exp(); err != nil {
 		return nil, fmt.Errorf("RelExp %v", err)
 	} else {
@@ -59,6 +60,7 @@ func OtherRelE(node *tree_node.TreeNode) error {
 func Term() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.ExpK
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 	if factor, err := Factor(); err != nil {
 		return nil, fmt.Errorf("Term %v", err)
 	} else {
@@ -98,11 +100,11 @@ func Factor() (*tree_node.TreeNode, error) {
 		node := tree_node.NewTreeNode()
 		node.NodeKind = tree_node.ExpK
 		node.Kind = tree_node.ConstK
-		node.Attr.ExpAttr = tree_node.ExpAttr{}
+		node.Attr.ExpAttr = &tree_node.ExpAttr{}
 		if intc, err := Match(token_set.Number); err != nil {
 			return nil, fmt.Errorf("Factor %v", err)
 		} else {
-			node.Attr.ExpAttr.Val, _ = strconv.Atoi(intc.Name)
+			node.Attr.ExpAttr.Val = intc.Name
 			return node, nil
 		}
 	}
@@ -161,6 +163,7 @@ func Variable() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.ExpK
 	node.Kind = tree_node.IdK
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 	if id, err := Match(token_set.ID); err != nil {
 		return nil, fmt.Errorf("Variable %v", err)
 	} else {
@@ -215,6 +218,7 @@ func FieldVar() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.ExpK
 	node.Kind = tree_node.IdK
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 
 	if id, err := Match(token_set.ID); err != nil {
 		return nil, fmt.Errorf("FieldVar %v", err)
@@ -230,7 +234,7 @@ func FieldVar() (*tree_node.TreeNode, error) {
 
 func FieldVarMore(node *tree_node.TreeNode) error {
 	currToken, _ := token_set.Scanner.GetCurr()
-	node.Attr.ExpAttr = tree_node.ExpAttr{}
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 
 	if token_set.FieldVarMore2Nil.Predict(currToken) {
 		node.Attr.ExpAttr.VarKind = tree_node.IdV
@@ -258,7 +262,7 @@ func FieldVarMore(node *tree_node.TreeNode) error {
 func CmpOp(node *tree_node.TreeNode) error {
 	currToken, _ := token_set.Scanner.GetCurr()
 	node.Kind = tree_node.OpK
-	node.Attr.ExpAttr = tree_node.NewTreeNode().Attr.ExpAttr
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 
 	if token_set.CmpOp2EQ.Predict(currToken) {
 		if op, err := Match(token_set.Equal); err != nil {
@@ -283,7 +287,7 @@ func CmpOp(node *tree_node.TreeNode) error {
 func AddOp(node *tree_node.TreeNode) error {
 	currToken, _ := token_set.Scanner.GetCurr()
 	node.Kind = tree_node.OpK
-	node.Attr.ExpAttr = tree_node.NewTreeNode().Attr.ExpAttr
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 
 	if token_set.AddOp2Plus.Predict(currToken) {
 		if op, err := Match(token_set.Plus); err != nil {
@@ -308,7 +312,7 @@ func AddOp(node *tree_node.TreeNode) error {
 func MultOp(node *tree_node.TreeNode) error {
 	currToken, _ := token_set.Scanner.GetCurr()
 	node.Kind = tree_node.OpK
-	node.Attr.ExpAttr = tree_node.NewTreeNode().Attr.ExpAttr
+	node.Attr.ExpAttr = &tree_node.ExpAttr{}
 
 	if token_set.MultOp2Times.Predict(currToken) {
 		if op, err := Match(token_set.Times); err != nil {

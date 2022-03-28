@@ -1,78 +1,78 @@
-ProK   
-	PheadK  p  
-	TypeK   
-		DecK IntegerK t1  
-		DecK ArrayK t2 1 20 IntegerK  
-		DecK CharK t3  
-		DecK RecordK t4  
+ProK  
+	PheadK  p 
+	TypeK  
+		DecK IntegerK t1 
+		DecK ArrayK t2 1 20 IntegerK 
+		DecK CharK t3 
+		DecK RecordK t4 
 			DecK IntegerK a b  
 			DecK CharK c d  
 			DecK ArrayK e f 1 30 CharK  
-		DecK IdK t5 t1 
-	VarK   
-		DecK IdK v1 t1 
-		DecK IdK v2 t2 
-		DecK IdK v3 t3 
-		DecK IdK v4 t4 
-		DecK IdK v5 t5 
-		DecK IntegerK a b  
-		DecK CharK c d  
-		DecK ArrayK e f 1 20 IntegerK  
-		DecK RecordK g h  
+		DecK IdK t5 
+	VarK  
+		DecK IdK v1 
+		DecK IdK v2 
+		DecK IdK v3 
+		DecK IdK v4 
+		DecK IdK v5 
+		DecK IntegerK a b 
+		DecK CharK c d 
+		DecK ArrayK e f 1 20 IntegerK 
+		DecK RecordK g h 
 			DecK IntegerK a  
 			DecK CharK b  
-	ProcDecK  p  
-		DecK valparam IntegerK a b  
-		DecK valparam CharK c d  
-		DecK varparam IdK v1 t1 
-		DecK valparam RecordK r1  
+	ProcDecK  p 
+		DecK IntegerK a b valparam 
+		DecK CharK c d valparam 
+		DecK IdK v1 varparam 
+		DecK RecordK r1 valparam 
 			DecK IntegerK a b  
-		TypeK   
-			DecK IntegerK t1  
-		VarK   
-			DecK IdK v1 v2 t1 
-		StmLK   
-			StmtK ReadK v1  
-			StmtK AssignK  
-				ExpK IdK v2 IdV  
-				ExpK OpK +  
-					ExpK IdK v1 IdV  
-					ExpK ConstK   
-			StmtK AssignK  
-				ExpK IdK v3 IdV  
-				ExpK OpK +  
-					ExpK IdK v2 IdV  
-					ExpK OpK +  
-						ExpK ConstK   
-						ExpK ConstK   
-			StmtK WriteK  
-				ExpK IdK v2 IdV  
-	ProcDecK  q  
-		DecK varparam CharK name  
-		DecK valparam IntegerK age  
-		TypeK   
-			DecK RecordK Person  
+		TypeK  
+			DecK IntegerK t1 
+		VarK  
+			DecK IdK v1 v2 
+		StmLK  
+			StmtK ReadK v1 
+			StmtK AssignK 
+				ExpK IdK v2 IdV 
+				ExpK OpK + 
+					ExpK IdK v1 IdV 
+					ExpK ConstK 1 
+			StmtK AssignK 
+				ExpK IdK v3 IdV 
+				ExpK OpK + 
+					ExpK IdK v2 IdV 
+					ExpK OpK + 
+						ExpK ConstK 6 
+						ExpK ConstK 5 
+			StmtK WriteK 
+				ExpK IdK v2 IdV 
+	ProcDecK  q 
+		DecK CharK name varparam 
+		DecK IntegerK age valparam 
+		TypeK  
+			DecK RecordK Person 
 				DecK IntegerK age  
 				DecK CharK name  
-		VarK   
-			DecK IdK person Person 
-		StmLK   
-			StmtK AssignK  
-				ExpK IdK person FieldMembV  
-					ExpK IdK name IdV  
-				ExpK IdK name IdV  
-			StmtK AssignK  
-				ExpK IdK person FieldMembV  
-					ExpK IdK age IdV  
-				ExpK IdK age IdV  
-			StmtK WriteK  
-				ExpK IdK person FieldMembV  
-					ExpK IdK name IdV  
-			StmtK ReturnK  
-	StmLK   
-		StmtK ReadK c  
-		StmtK ReadK a  
-		StmtK CallK  
-			ExpK IdK q   
-			ExpK IdK c IdV  
-			ExpK IdK a IdV  
+		VarK  
+			DecK IdK person 
+		StmLK  
+			StmtK AssignK 
+				ExpK IdK person FieldMembV 
+					ExpK IdK name IdV 
+				ExpK IdK name IdV 
+			StmtK AssignK 
+				ExpK IdK person FieldMembV 
+					ExpK IdK age IdV 
+				ExpK IdK age IdV 
+			StmtK WriteK 
+				ExpK IdK person FieldMembV 
+					ExpK IdK name IdV 
+			StmtK ReturnK 
+	StmLK  
+		StmtK ReadK c 
+		StmtK ReadK a 
+		StmtK CallK 
+			ExpK IdK q  
+			ExpK IdK c IdV 
+			ExpK IdK a IdV 

@@ -63,7 +63,7 @@ func TestTokenReader(t *testing.T) {
 }
 
 func TestTypeDec(t *testing.T) {
-	tokens, _ := LoadTokens("../../../outputs/test_output_tokens2.txt")
+	tokens, _ := LoadTokens("../../../outputs/bubble_sort.tk")
 	token_set.Initscanner(tokens)
 	for _, token := range tokens {
 		fmt.Println(token)
@@ -84,7 +84,7 @@ func TestTypeDec(t *testing.T) {
 
 	fmt.Println("error ", err)
 	// fmt.Println(program.ToString(""))
-	err = SaveSyntaxTree("../../../outputs/test_output_tree2.txt", program.ToString(""))
+	err = SaveSyntaxTree("../../../outputs/bubble_sort.tree", program.ToString(""))
 	fmt.Println("error ", err)
 }
 

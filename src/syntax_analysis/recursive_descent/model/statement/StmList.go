@@ -86,6 +86,7 @@ func Stm() (*tree_node.TreeNode, error) {
 		idNode := tree_node.NewTreeNode()
 		idNode.NodeKind = tree_node.ExpK
 		idNode.Kind = tree_node.IdK
+		idNode.Attr.ExpAttr = &tree_node.ExpAttr{}
 		if id, err := Match(token_set.ID); err != nil {
 			return nil, fmt.Errorf("Stm %v", err)
 		} else {
@@ -154,7 +155,7 @@ func ConditionalStm() (*tree_node.TreeNode, error) {
 	if _, err := Match(token_set.If); err != nil { //IF
 		return nil, fmt.Errorf("ConditionalStm %v", err)
 	}
-	if exp, err := Exp(); err != nil { //Exp
+	if exp, err := RelExp(); err != nil { //RelE
 		return nil, fmt.Errorf("ConditionalStm %v", err)
 	} else {
 		node.Children = append(node.Children, exp)
@@ -190,7 +191,7 @@ func LoopStm() (*tree_node.TreeNode, error) {
 	if _, err := Match(token_set.While); err != nil { //WHILE
 		return nil, fmt.Errorf("LoopStm %v", err)
 	}
-	if exp, err := Exp(); err != nil { //Exp
+	if exp, err := RelExp(); err != nil { //RelExp
 		return nil, fmt.Errorf("LoopStm %v", err)
 	} else {
 		node.Children = append(node.Children, exp)

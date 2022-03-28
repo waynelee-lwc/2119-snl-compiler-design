@@ -66,15 +66,15 @@ type ProcAttr struct {
 
 type ExpAttr struct {
 	Op      string
-	Val     int
+	Val     string
 	VarKind ExpVarKind
 	Type    ExpType
 }
 
 type Attr struct {
-	ArrayAttr ArrayAttr
-	ProcAttr  ProcAttr
-	ExpAttr   ExpAttr
+	ArrayAttr *ArrayAttr
+	ProcAttr  *ProcAttr
+	ExpAttr   *ExpAttr
 }
 
 type TreeNode struct {
@@ -99,7 +99,7 @@ func NewTreeNode() *TreeNode {
 		Name:       []string{},
 		TypeName:   "",
 		Children:   []*TreeNode{},
-		Attr:       Attr{},
+		Attr:       Attr{nil, nil, nil},
 	}
 }
 
@@ -110,37 +110,75 @@ func (node *TreeNode) ToString(prefix string) string {
 	// fmt.Println(node)
 	res := prefix
 	res += string(node.NodeKind) + " "
-
-	if node.Attr.ProcAttr.ParamType != "" {
-		res += string(node.Attr.ProcAttr.ParamType) + " "
-	}
-
 	res += string(node.Kind) + " "
-	for _, id := range node.Name {
-		res += id + " "
+	for _, name := range node.Name {
+		res += name + " "
 	}
-
-	if node.Kind == ArrayK {
-		res += strconv.Itoa(node.Attr.ArrayAttr.Low) + " "
-		res += strconv.Itoa(node.Attr.ArrayAttr.Top) + " "
-		res += string(node.Attr.ArrayAttr.ChildType) + " "
+	if node.NodeKind == DecK && node.Kind == Kind(IdV) {
+		res += node.TypeName + " "
 	}
-	if node.NodeKind == ExpK {
-		if node.Kind == OpK {
-			res += node.Attr.ExpAttr.Op + " "
-		} else {
-			res += string(node.Attr.ExpAttr.VarKind) + " "
-			if node.Attr.ExpAttr.VarKind == ExpVarKind(ConstK) {
-				res += strconv.Itoa(node.Attr.ExpAttr.Val) + " "
-			}
-		}
-
-	}
-
-	res += node.TypeName + " "
-
+	res += node.Attr.ToString(node)
 	for _, child := range node.Children {
 		res += "\n" + child.ToString(prefix+"\t")
+	}
+
+	return res
+
+	// if node.Attr.ProcAttr.ParamType != "" {
+	// 	res += string(node.Attr.ProcAttr.ParamType) + " "
+	// }
+
+	// res += string(node.Kind) + " "
+	// for _, id := range node.Name {
+	// 	res += id + " "
+	// }
+
+	// if node.Kind == ArrayK {
+	// 	res += strconv.Itoa(node.Attr.ArrayAttr.Low) + " "
+	// 	res += strconv.Itoa(node.Attr.ArrayAttr.Top) + " "
+	// 	res += string(node.Attr.ArrayAttr.ChildType) + " "
+	// }
+	// if node.NodeKind == ExpK {
+	// 	if node.Kind == OpK {
+	// 		res += node.Attr.ExpAttr.Op + " "
+	// 	} else {
+	// 		res += string(node.Attr.ExpAttr.VarKind) + " "
+	// 		if node.Attr.ExpAttr.VarKind == ExpVarKind(ConstK) {
+	// 			res += node.Attr.ExpAttr.Val
+	// 		}
+	// 	}
+
+	// }
+
+	// res += node.TypeName + " "
+
+	// for _, child := range node.Children {
+	// 	res += "\n" + child.ToString(prefix+"\t")
+	// }
+
+	// return res
+}
+func (attr *Attr) ToString(node *TreeNode) string {
+	res := ""
+
+	if attr.ArrayAttr != nil {
+		res += strconv.Itoa(attr.ArrayAttr.Low) + " "
+		res += strconv.Itoa(attr.ArrayAttr.Top) + " "
+		res += string(attr.ArrayAttr.ChildType) + " "
+	}
+	if attr.ExpAttr != nil {
+		if node.Kind == OpK {
+			res += attr.ExpAttr.Op + " "
+		}
+		if node.Kind == ConstK {
+			res += attr.ExpAttr.Val + " "
+		}
+		if node.Kind == IdK {
+			res += string(attr.ExpAttr.VarKind) + " "
+		}
+	}
+	if attr.ProcAttr != nil {
+		res += string(attr.ProcAttr.ParamType) + " "
 	}
 
 	return res

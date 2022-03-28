@@ -44,6 +44,9 @@ func ProcDeclaration() ([]*tree_node.TreeNode, error) {
 	if _, err := Match(token_set.RParen); err != nil {
 		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	}
+	if _, err := Match(token_set.Semi); err != nil {
+		return nil, fmt.Errorf("ProDeclaration %v", err)
+	}
 
 	if procDecPart, err := ProcDecPart(); err != nil {
 		return nil, fmt.Errorf("ProcDeclaration %v", err)
@@ -167,7 +170,7 @@ func Param() (*tree_node.TreeNode, error) {
 	currToken, _ := token_set.Scanner.GetCurr()
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.DecK
-	node.Attr.ProcAttr = tree_node.ProcAttr{}
+	node.Attr.ProcAttr = &tree_node.ProcAttr{}
 
 	if token_set.ParamVal.Predict(currToken) {
 		node.Attr.ProcAttr.ParamType = tree_node.ValParamType

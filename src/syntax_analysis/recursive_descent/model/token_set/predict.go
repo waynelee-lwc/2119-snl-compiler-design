@@ -117,7 +117,7 @@ var (
 	FidMore2Nil      = PredictSet{Semi, RParen}
 	FidMore2FormList = PredictSet{Comma}
 
-	StmMore2Nil     = PredictSet{End, EndWhile}
+	StmMore2Nil     = PredictSet{End, EndWhile, Else, Fi} //分支情况要考虑！
 	StmMore2StmList = PredictSet{Semi}
 
 	Stm2ConditionalStm = PredictSet{If}
@@ -127,7 +127,7 @@ var (
 	Stm2ReturnStm      = PredictSet{Return}
 	Stm2AssCal         = PredictSet{ID}
 
-	AssCall2AssignmentRest = PredictSet{Assign, Dot} //这个要加一个Dot！
+	AssCall2AssignmentRest = PredictSet{Assign, Dot, LMidParen} //这个要加一个Dot，和左中括号，考虑左值是记录或者数组！
 	AssCall2CallStmRest    = PredictSet{LParen}
 
 	ActParamList2Nil          = PredictSet{RParen}
@@ -155,10 +155,10 @@ var (
 	OtherFactor2Nil    = PredictSet{Plus, Minus, LT, Equal, RMidParen, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
 	OtherFactor2MultOp = PredictSet{Times, Over}
 
-	VariMore2Nil      = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	VariMore2Nil      = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RMidParen, RParen, End, Semi, Comma}
 	VariMore2Exp      = PredictSet{LMidParen}
 	VariMore2FieldVar = PredictSet{Dot}
 
-	FieldVarMore2Nil = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	FieldVarMore2Nil = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RMidParen, RParen, End, Semi, Comma}
 	FieldVarMore2Exp = PredictSet{LMidParen}
 )

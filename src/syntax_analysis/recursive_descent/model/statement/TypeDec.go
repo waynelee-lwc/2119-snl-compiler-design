@@ -143,7 +143,7 @@ func StructureType(node *tree_node.TreeNode) error {
 
 func ArrayType(node *tree_node.TreeNode) error {
 	node.Kind = tree_node.ArrayK
-	node.Attr.ArrayAttr = tree_node.ArrayAttr{}
+	node.Attr.ArrayAttr = &tree_node.ArrayAttr{}
 
 	if _, err := Match(token_set.Array); err != nil {
 		//ARRAY
@@ -207,6 +207,7 @@ func FieldDecList() ([]*tree_node.TreeNode, error) {
 	currToken, _ := token_set.Scanner.GetCurr()
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.DecK
+	node.Attr.ProcAttr = &tree_node.ProcAttr{}
 	res := []*tree_node.TreeNode{node}
 
 	if token_set.FieldDecList2BaseType.Predict(currToken) {

@@ -1,0 +1,113 @@
+ProK  
+	PheadK  bubble 
+
+	VarK  
+		DecK IntegerK i j num 
+		DecK ArrayK a 1 20 IntegerK 
+	ProcDecK  q 
+		DecK IntegerK num valparam 
+
+		VarK  
+			DecK IntegerK i j k 
+			DecK IntegerK t 
+		StmLK  
+			StmtK AssignK 
+				ExpK IdK i IdV 
+				ExpK ConstK 1 
+			StmtK WhileK 
+				ExpK OpK < 
+					ExpK IdK i IdV 
+					ExpK IdK num IdV 
+				StmtK AssignK 
+					ExpK IdK j IdV 
+					ExpK OpK - 
+						ExpK IdK num IdV 
+						ExpK OpK + 
+							ExpK IdK i IdV 
+							ExpK ConstK 1 
+				StmtK AssignK 
+					ExpK IdK k IdV 
+					ExpK ConstK 1 
+				StmtK WhileK 
+					ExpK OpK < 
+						ExpK IdK k IdV 
+						ExpK IdK j IdV 
+					StmtK IfK 
+						ExpK OpK < 
+							ExpK IdK a ArrayMemebV 
+								ExpK OpK + 
+									ExpK IdK k IdV 
+									ExpK ConstK 1 
+							ExpK IdK a ArrayMemebV 
+								ExpK IdK k IdV 
+						StmtK AssignK 
+							ExpK IdK t IdV 
+							ExpK IdK a ArrayMemebV 
+								ExpK IdK k IdV 
+						StmtK AssignK 
+							ExpK IdK a ArrayMemebV 
+								ExpK IdK k IdV 
+							ExpK IdK a ArrayMemebV 
+								ExpK OpK + 
+									ExpK IdK k IdV 
+									ExpK ConstK 1 
+						StmtK AssignK 
+							ExpK IdK a ArrayMemebV 
+								ExpK OpK + 
+									ExpK IdK k IdV 
+									ExpK ConstK 1 
+							ExpK IdK t IdV 
+						StmtK AssignK 
+							ExpK IdK temp IdV 
+							ExpK ConstK 0 
+					StmtK AssignK 
+						ExpK IdK k IdV 
+						ExpK OpK + 
+							ExpK IdK k IdV 
+							ExpK ConstK 1 
+				StmtK AssignK 
+					ExpK IdK i IdV 
+					ExpK OpK + 
+						ExpK IdK i IdV 
+						ExpK ConstK 1 
+	StmLK  
+		StmtK ReadK num 
+		StmtK AssignK 
+			ExpK IdK i IdV 
+			ExpK ConstK 1 
+		StmtK WhileK 
+			ExpK OpK < 
+				ExpK IdK i IdV 
+				ExpK OpK + 
+					ExpK IdK num IdV 
+					ExpK ConstK 1 
+			StmtK ReadK j 
+			StmtK AssignK 
+				ExpK IdK a ArrayMemebV 
+					ExpK IdK i IdV 
+				ExpK IdK j IdV 
+			StmtK AssignK 
+				ExpK IdK i IdV 
+				ExpK OpK + 
+					ExpK IdK i IdV 
+					ExpK ConstK 1 
+		StmtK CallK 
+			ExpK IdK q  
+			ExpK IdK num IdV 
+		StmtK AssignK 
+			ExpK IdK i IdV 
+			ExpK ConstK 1 
+		StmtK WhileK 
+			ExpK OpK < 
+				ExpK IdK i IdV 
+				ExpK OpK + 
+					ExpK IdK num IdV 
+					ExpK ConstK 1 
+			StmtK WriteK 
+				ExpK IdK a ArrayMemebV 
+					ExpK IdK i IdV 
+			StmtK AssignK 
+				ExpK IdK i IdV 
+				ExpK OpK + 
+					ExpK IdK i IdV 
+					ExpK ConstK 1 

@@ -22,7 +22,7 @@ var
 		integer a;
 		char b;
 		end g,h;
-procedure p(integer a,b;char c,d;var t1 v1;record integer a,b; end r1)
+procedure p(integer a,b;char c,d;var t1 v1;record integer a,b; end r1);
 	type
 		t1 = integer;
 	var
@@ -33,7 +33,7 @@ procedure p(integer a,b;char c,d;var t1 v1;record integer a,b; end r1)
 		v3 := v2+(6+5);
 		write(v2)
 	end
-procedure q(var char name;integer age)
+procedure q(var char name;integer age);
 	type
 		Person = record
 			integer age;
