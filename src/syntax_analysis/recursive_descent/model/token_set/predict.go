@@ -135,4 +135,30 @@ var (
 
 	ActParamMore2Nil          = PredictSet{RParen}
 	ActParamMore2ActParamList = PredictSet{Comma}
+
+	OtherTerm2Nil   = PredictSet{LT, Equal, RMidParen, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	OtherTerm2AddOp = PredictSet{Plus, Minus}
+
+	CmpOp2EQ = PredictSet{Equal}
+	CmpOp2LT = PredictSet{LT}
+
+	AddOp2Plus  = PredictSet{Plus}
+	AddOp2Minus = PredictSet{Minus}
+
+	MultOp2Times = PredictSet{Times}
+	MultOp2Over  = PredictSet{Over}
+
+	Factor2Exp      = PredictSet{LParen}
+	Factor2IntC     = PredictSet{Number}
+	Factor2Variable = PredictSet{ID}
+
+	OtherFactor2Nil    = PredictSet{Plus, Minus, LT, Equal, RMidParen, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	OtherFactor2MultOp = PredictSet{Times, Over}
+
+	VariMore2Nil      = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	VariMore2Exp      = PredictSet{LMidParen}
+	VariMore2FieldVar = PredictSet{Dot}
+
+	FieldVarMore2Nil = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	FieldVarMore2Exp = PredictSet{LMidParen}
 )

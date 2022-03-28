@@ -44,6 +44,7 @@ const (
 	IdV               ExpVarKind = "IdV"
 	ArrayMembV        ExpVarKind = "ArrayMemebV"
 	ParamMembV        ExpVarKind = "ParamMembV"
+	FieldMembV        ExpVarKind = "FieldMembV"
 	DefaultExpVarKind ExpVarKind = ""
 
 	ExpInteger     ExpType = "Integer"
