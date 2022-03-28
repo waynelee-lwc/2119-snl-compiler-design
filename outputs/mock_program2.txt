@@ -1,0 +1,54 @@
+program p
+type
+	t1 = integer;
+	t2 = array[1..20] of integer;
+	t3 = char;
+	t4 = record
+		integer a,b;
+		char c,d;
+		array[1..30]of char e,f;
+		end;
+	t5 = t1;
+var
+	t1 v1;
+	t2 v2;
+	t3 v3;
+	t4 v4;
+	t5 v5;
+	integer a,b;
+	char c,d;
+	array[1..20]of integer e,f;
+	record
+		integer a;
+		char b;
+		end g,h;
+procedure p(integer a,b;char c,d;var t1 v1;record integer a,b; end r1)
+	type
+		t1 = integer;
+	var
+		t1 v1,v2;
+	begin
+		read(v1);
+		v2 := v1+1;
+		v3 := v2+(6+5);
+		write(v2)
+	end
+procedure q(var char name;integer age)
+	type
+		Person = record
+			integer age;
+			char name;
+			end;
+	var
+		Person person;
+	begin
+		person.name := name;
+		person.age := age;
+		write(person.name);
+		return
+	end
+begin
+	read(c);
+	read(a);
+	q(c,a)
+end.

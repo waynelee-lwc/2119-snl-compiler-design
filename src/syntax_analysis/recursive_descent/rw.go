@@ -18,3 +18,14 @@ func LoadTokens(file string) ([]*token.Token, error) {
 	}
 	return tokens, err
 }
+
+func SaveSyntaxTree(filePath string, tree string) error {
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	_, err = file.WriteString(tree)
+	return err
+
+}

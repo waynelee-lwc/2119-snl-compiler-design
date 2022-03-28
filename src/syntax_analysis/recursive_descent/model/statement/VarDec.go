@@ -14,7 +14,7 @@ func VarDec() (*tree_node.TreeNode, error) {
 	}
 	if token_set.VarDec2VarDeclaration.Predict(currToken) {
 		if node, err := VarDeclaration(); err != nil {
-			return nil, fmt.Errorf("VarDec parse failed! %v", err)
+			return nil, fmt.Errorf("VarDec  %v", err)
 		} else {
 			return node, nil
 		}
@@ -28,7 +28,7 @@ func VarDeclaration() (*tree_node.TreeNode, error) {
 	node.NodeKind = tree_node.VarK
 
 	if _, err := Match(token_set.Var); err != nil {
-		return nil, fmt.Errorf("VarDeclaration parse failed! %v", err)
+		return nil, fmt.Errorf("VarDeclaration  %v", err)
 	}
 	if children, err := VarDecList(); err != nil {
 		return nil, fmt.Errorf("VarDeclaration parse fialed! %v", err)
@@ -45,16 +45,16 @@ func VarDecList() ([]*tree_node.TreeNode, error) {
 	res := []*tree_node.TreeNode{node}
 
 	if err := TypeDef(node); err != nil {
-		return nil, fmt.Errorf("VarDecList parse failed! %v", err)
+		return nil, fmt.Errorf("VarDecList  %v", err)
 	}
 	if err := VarIdList(node); err != nil {
-		return nil, fmt.Errorf("VarDecLIst parse failed! %v", err)
+		return nil, fmt.Errorf("VarDecLIst  %v", err)
 	}
 	if _, err := Match(token_set.Semi); err != nil {
-		return nil, fmt.Errorf("VarDecLIst parse failed! %v", err)
+		return nil, fmt.Errorf("VarDecLIst  %v", err)
 	}
 	if brothers, err := VarDecMore(); err != nil {
-		return nil, fmt.Errorf("VarDecLIst parse failed! %v", err)
+		return nil, fmt.Errorf("VarDecLIst  %v", err)
 	} else {
 		res = append(res, brothers...)
 	}
@@ -70,7 +70,7 @@ func VarDecMore() ([]*tree_node.TreeNode, error) {
 	}
 	if token_set.VarDecMore2VarDecList.Predict(currToken) {
 		if brothers, err := VarDecList(); err != nil {
-			return nil, fmt.Errorf("VarDecMore parse failed! %v", err)
+			return nil, fmt.Errorf("VarDecMore  %v", err)
 		} else {
 			return brothers, nil
 		}

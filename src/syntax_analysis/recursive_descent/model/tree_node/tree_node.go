@@ -1,6 +1,8 @@
 package tree_node
 
-import "strconv"
+import (
+	"strconv"
+)
 
 type NodeKind string      //语法树节点类型
 type Kind string          //语法树节点具体类型
@@ -122,6 +124,17 @@ func (node *TreeNode) ToString(prefix string) string {
 		res += strconv.Itoa(node.Attr.ArrayAttr.Low) + " "
 		res += strconv.Itoa(node.Attr.ArrayAttr.Top) + " "
 		res += string(node.Attr.ArrayAttr.ChildType) + " "
+	}
+	if node.NodeKind == ExpK {
+		if node.Kind == OpK {
+			res += node.Attr.ExpAttr.Op + " "
+		} else {
+			res += string(node.Attr.ExpAttr.VarKind) + " "
+			if node.Attr.ExpAttr.VarKind == ExpVarKind(ConstK) {
+				res += strconv.Itoa(node.Attr.ExpAttr.Val) + " "
+			}
+		}
+
 	}
 
 	res += node.TypeName + " "

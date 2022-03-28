@@ -10,19 +10,19 @@ func Program() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.ProK
 	if programHead, err := ProgramHead(); err != nil {
-		return nil, fmt.Errorf("Program parse failed! %v", err)
+		return nil, fmt.Errorf("Program  %v", err)
 	} else {
 		node.Children = append(node.Children, programHead)
 	}
 
 	if declarations, err := DeclarePart(); err != nil {
-		return nil, fmt.Errorf("Program parse failed! %v", err)
+		return nil, fmt.Errorf("Program  %v", err)
 	} else {
 		node.Children = append(node.Children, declarations...)
 	}
 
 	if programBody, err := ProgramBody(); err != nil {
-		return nil, fmt.Errorf("Program parse failed! %v", err)
+		return nil, fmt.Errorf("Program  %v", err)
 	} else {
 		node.Children = append(node.Children, programBody)
 	}
@@ -34,11 +34,11 @@ func ProgramHead() (*tree_node.TreeNode, error) {
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.PheadK
 	if _, err := Match(token_set.Program); err != nil {
-		return nil, fmt.Errorf("ProgramHead parse failed! %v", err)
+		return nil, fmt.Errorf("ProgramHead  %v", err)
 	}
 
 	if err := ProgramName(node); err != nil {
-		return nil, fmt.Errorf("ProgramHead parse failed! %v", err)
+		return nil, fmt.Errorf("ProgramHead  %v", err)
 	}
 
 	return node, nil
@@ -46,7 +46,7 @@ func ProgramHead() (*tree_node.TreeNode, error) {
 
 func ProgramName(node *tree_node.TreeNode) error {
 	if name, err := Match(token_set.ID); err != nil {
-		return fmt.Errorf("ProgramName parse failed! %v", err)
+		return fmt.Errorf("ProgramName  %v", err)
 	} else {
 		node.Name = append(node.Name, name.Name)
 	}
@@ -58,19 +58,19 @@ func DeclarePart() ([]*tree_node.TreeNode, error) {
 	res := []*tree_node.TreeNode{}
 
 	if typeDec, err := TypeDec(); err != nil {
-		return nil, fmt.Errorf("DeclarePart parse failed! %v", err)
+		return nil, fmt.Errorf("DeclarePart  %v", err)
 	} else {
 		res = append(res, typeDec)
 	}
 
 	if varDec, err := VarDec(); err != nil {
-		return nil, fmt.Errorf("DeclarePart parse failed! %v", err)
+		return nil, fmt.Errorf("DeclarePart  %v", err)
 	} else {
 		res = append(res, varDec)
 	}
 
 	if procDecs, err := ProcDec(); err != nil {
-		return nil, fmt.Errorf("DeclarePart parse failed! %v", err)
+		return nil, fmt.Errorf("DeclarePart  %v", err)
 	} else {
 		res = append(res, procDecs...)
 	}
@@ -88,6 +88,9 @@ func ProgramBody() (*tree_node.TreeNode, error) {
 		return nil, fmt.Errorf("ProgramBody, %v", err)
 	} else {
 		node.Children = append(node.Children, children...)
+	}
+	if _, err := Match(token_set.End); err != nil {
+		return nil, fmt.Errorf("ProgramBody %v", err)
 	}
 
 	return node, nil

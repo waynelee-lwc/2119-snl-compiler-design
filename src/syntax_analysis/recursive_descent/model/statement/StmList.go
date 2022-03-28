@@ -15,7 +15,7 @@ func StmList() ([]*tree_node.TreeNode, error) {
 		res = append(res, node)
 	}
 	if brothers, err := StmMore(); err != nil {
-		return nil, fmt.Errorf("StmList")
+		return nil, fmt.Errorf("StmList %v", err)
 	} else {
 		res = append(res, brothers...)
 	}
@@ -81,6 +81,7 @@ func Stm() (*tree_node.TreeNode, error) {
 			return node, nil
 		}
 	}
+	//这里用match Id的话无法给结构赋值
 	if token_set.Stm2AssCal.Predict(currToken) {
 		idNode := tree_node.NewTreeNode()
 		idNode.NodeKind = tree_node.ExpK
@@ -128,6 +129,11 @@ func AssignmentRest(idNode *tree_node.TreeNode) (*tree_node.TreeNode, error) {
 	node.Kind = tree_node.AssignK
 	node.Children = append(node.Children, idNode)
 
+	//这里应该加上VariMore
+	if err := VariMore(idNode); err != nil {
+		return nil, fmt.Errorf("AssignmentRest %v", err)
+	}
+
 	if _, err := Match(token_set.Assign); err != nil {
 		return nil, fmt.Errorf("AssignmentRest %v", err)
 	}
@@ -146,31 +152,31 @@ func ConditionalStm() (*tree_node.TreeNode, error) {
 	node.Kind = tree_node.IfK
 
 	if _, err := Match(token_set.If); err != nil { //IF
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	}
 	if exp, err := Exp(); err != nil { //Exp
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	} else {
 		node.Children = append(node.Children, exp)
 	}
 	if _, err := Match(token_set.Then); err != nil { //THEN
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	}
 	if stmL, err := StmList(); err != nil { //StmList
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	} else {
 		node.Children = append(node.Children, stmL...)
 	}
 	if _, err := Match(token_set.Else); err != nil { //ELSE
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	}
 	if stmL, err := StmList(); err != nil { //StmList
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	} else {
 		node.Children = append(node.Children, stmL...)
 	}
 	if _, err := Match(token_set.Fi); err != nil { //FI
-		return nil, fmt.Errorf("ConditionalStm")
+		return nil, fmt.Errorf("ConditionalStm %v", err)
 	}
 
 	return node, nil
@@ -256,13 +262,12 @@ func ReturnStm() (*tree_node.TreeNode, error) {
 	node.Kind = tree_node.ReturnK
 
 	if _, err := Match(token_set.Return); err != nil {
-		return nil, fmt.Errorf("ReturnStm")
+		return nil, fmt.Errorf("ReturnStm %v", err)
 	}
 
 	return node, nil
 }
 func CallStmRest(idNode *tree_node.TreeNode) (*tree_node.TreeNode, error) {
-	currToken, _ := token_set.Scanner.GetCurr()
 	node := tree_node.NewTreeNode()
 	node.NodeKind = tree_node.StmtK
 	node.Kind = tree_node.CallK
@@ -280,5 +285,5 @@ func CallStmRest(idNode *tree_node.TreeNode) (*tree_node.TreeNode, error) {
 		return nil, fmt.Errorf("CallStmRest %v", err)
 	}
 
-	return nil, fmt.Errorf("CallStmRest match error! %v", currToken)
+	return node, nil
 }

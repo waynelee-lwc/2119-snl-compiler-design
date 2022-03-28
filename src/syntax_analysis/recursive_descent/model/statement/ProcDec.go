@@ -14,7 +14,7 @@ func ProcDec() ([]*tree_node.TreeNode, error) {
 	}
 	if token_set.ProcDec2ProcDeclaration.Predict(currToken) {
 		if nodes, err := ProcDeclaration(); err != nil {
-			return nil, fmt.Errorf("ProDec parse failed! %v", err)
+			return nil, fmt.Errorf("ProDec  %v", err)
 		} else {
 			return nodes, nil
 		}
@@ -28,31 +28,50 @@ func ProcDeclaration() ([]*tree_node.TreeNode, error) {
 	node.NodeKind = tree_node.ProcDecK
 	res := []*tree_node.TreeNode{node}
 	if _, err := Match(token_set.Procedure); err != nil {
-		return nil, fmt.Errorf("ProDeclaration parse error! %v", err)
+		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	}
 	if err := ProcName(node); err != nil {
-		return nil, fmt.Errorf("ProDeclaration parse error! %v", err)
+		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	}
 	if _, err := Match(token_set.LParen); err != nil {
-		return nil, fmt.Errorf("ProDeclaration parse error! %v", err)
+		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	}
 	if childern, err := ParamDecList(); err != nil {
-		return nil, fmt.Errorf("ProDeclaration parse error! %v", err)
+		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	} else {
 		node.Children = append(node.Children, childern...)
 	}
 	if _, err := Match(token_set.RParen); err != nil {
-		return nil, fmt.Errorf("ProDeclaration parse error! %v", err)
+		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	}
-	//TODO定义部分以及过程体部分
+
+	if procDecPart, err := ProcDecPart(); err != nil {
+		return nil, fmt.Errorf("ProcDeclaration %v", err)
+	} else {
+		node.Children = append(node.Children, procDecPart...)
+	}
+
+	if procBody, err := ProcBody(); err != nil {
+		return nil, fmt.Errorf("ProcDeclaration %v", err)
+	} else {
+		node.Children = append(node.Children, procBody)
+	}
 
 	if brothers, err := ProcDecMore(); err != nil {
-		return nil, fmt.Errorf("ProDeclaration parse error! %v", err)
+		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	} else {
 		res = append(res, brothers...)
 	}
 
 	return res, nil
+}
+
+func ProcDecPart() ([]*tree_node.TreeNode, error) {
+	if node, err := DeclarePart(); err != nil {
+		return nil, fmt.Errorf("ProcDecPart %v", err)
+	} else {
+		return node, err
+	}
 }
 
 func ProcBody() (*tree_node.TreeNode, error) {
@@ -65,7 +84,7 @@ func ProcBody() (*tree_node.TreeNode, error) {
 
 func ProcName(node *tree_node.TreeNode) error {
 	if id, err := Match(token_set.ID); err != nil {
-		return fmt.Errorf("ProcName parse failed! %v", err)
+		return fmt.Errorf("ProcName  %v", err)
 	} else {
 		node.Name = append(node.Name, id.Name)
 	}
@@ -81,7 +100,7 @@ func ProcDecMore() ([]*tree_node.TreeNode, error) {
 	}
 	if token_set.ProcDecMore2ProcDec.Predict(currToken) {
 		if brothers, err := ProcDeclaration(); err != nil {
-			return nil, fmt.Errorf("ProcDecMore parse failed! %v", err)
+			return nil, fmt.Errorf("ProcDecMore  %v", err)
 		} else {
 			return brothers, nil
 		}
@@ -111,12 +130,12 @@ func ParamList(node *tree_node.TreeNode) error {
 func ParamDecList() ([]*tree_node.TreeNode, error) {
 	res := []*tree_node.TreeNode{}
 	if node, err := Param(); err != nil {
-		return nil, fmt.Errorf("ParamDecList parse failed! %v", err)
+		return nil, fmt.Errorf("ParamDecList  %v", err)
 	} else {
 		res = append(res, node)
 	}
 	if brothers, err := ParamMore(); err != nil {
-		return nil, fmt.Errorf("ParamDecList parse failed! %v", err)
+		return nil, fmt.Errorf("ParamDecList  %v", err)
 	} else {
 		res = append(res, brothers...)
 	}
@@ -132,10 +151,10 @@ func ParamMore() ([]*tree_node.TreeNode, error) {
 	}
 	if token_set.ParamMore2ParamDecList.Predict(currToken) {
 		if _, err := Match(token_set.Semi); err != nil {
-			return nil, fmt.Errorf("ParamMore parse failed! %v", err)
+			return nil, fmt.Errorf("ParamMore  %v", err)
 		}
 		if nodes, err := ParamDecList(); err != nil {
-			return nil, fmt.Errorf("ParamMore parse failed! %v", err)
+			return nil, fmt.Errorf("ParamMore  %v", err)
 		} else {
 			return nodes, nil
 		}
@@ -153,23 +172,23 @@ func Param() (*tree_node.TreeNode, error) {
 	if token_set.ParamVal.Predict(currToken) {
 		node.Attr.ProcAttr.ParamType = tree_node.ValParamType
 		if err := TypeDef(node); err != nil {
-			return nil, fmt.Errorf("Param parse failed! %v", err)
+			return nil, fmt.Errorf("Param  %v", err)
 		}
 		if err := FormList(node); err != nil {
-			return nil, fmt.Errorf("Param parse failed! %v", err)
+			return nil, fmt.Errorf("Param  %v", err)
 		}
 		return node, nil
 	}
 	if token_set.ParamVar.Predict(currToken) {
 		node.Attr.ProcAttr.ParamType = tree_node.VarParamType
 		if _, err := Match(token_set.Var); err != nil {
-			return nil, fmt.Errorf("Param parse failed! %v", err)
+			return nil, fmt.Errorf("Param  %v", err)
 		}
 		if err := TypeDef(node); err != nil {
-			return nil, fmt.Errorf("Param parse failed! %v", err)
+			return nil, fmt.Errorf("Param  %v", err)
 		}
 		if err := FormList(node); err != nil {
-			return nil, fmt.Errorf("Param parse failed! %v", err)
+			return nil, fmt.Errorf("Param  %v", err)
 		}
 		return node, nil
 	}

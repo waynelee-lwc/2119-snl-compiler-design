@@ -127,7 +127,7 @@ var (
 	Stm2ReturnStm      = PredictSet{Return}
 	Stm2AssCal         = PredictSet{ID}
 
-	AssCall2AssignmentRest = PredictSet{Assign}
+	AssCall2AssignmentRest = PredictSet{Assign, Dot} //这个要加一个Dot！
 	AssCall2CallStmRest    = PredictSet{LParen}
 
 	ActParamList2Nil          = PredictSet{RParen}

@@ -62,7 +62,7 @@ func Term() (*tree_node.TreeNode, error) {
 	if factor, err := Factor(); err != nil {
 		return nil, fmt.Errorf("Term %v", err)
 	} else {
-		node.Children = append(node.Children, factor.Children...)
+		node.Children = append(node.Children, factor)
 	}
 	if otherFactor, err := OtherFactor(node); err != nil {
 		return nil, fmt.Errorf("Term %v", err)
@@ -150,7 +150,7 @@ func OtherTerm(node *tree_node.TreeNode) (*tree_node.TreeNode, error) {
 		if exp, err := Exp(); err != nil {
 			return nil, fmt.Errorf("OtherTerm %v", err)
 		} else {
-			node.Children = append(node.Children, exp)
+			return exp, nil
 		}
 	}
 

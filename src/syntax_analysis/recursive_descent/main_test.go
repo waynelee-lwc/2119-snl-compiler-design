@@ -63,8 +63,11 @@ func TestTokenReader(t *testing.T) {
 }
 
 func TestTypeDec(t *testing.T) {
-	tokens, _ := LoadTokens("../../../outputs/test_output_tokens1.txt")
+	tokens, _ := LoadTokens("../../../outputs/test_output_tokens2.txt")
 	token_set.Initscanner(tokens)
+	for _, token := range tokens {
+		fmt.Println(token)
+	}
 
 	// typeNode, _ := statement.TypeDec()
 	// varNode, _ := statement.VarDec()
@@ -77,9 +80,12 @@ func TestTypeDec(t *testing.T) {
 	// for _, procdure := range procedureNodes {
 	// 	fmt.Println(procdure.ToString(""))
 	// }
-	program, _ := statement.Program()
+	program, err := statement.Program()
 
-	fmt.Println(program.ToString(""))
+	fmt.Println("error ", err)
+	// fmt.Println(program.ToString(""))
+	err = SaveSyntaxTree("../../../outputs/test_output_tree2.txt", program.ToString(""))
+	fmt.Println("error ", err)
 }
 
 /*
@@ -108,9 +114,34 @@ var
 		char b;
 		end g,h;
 procedure p(integer a,b;char c,d;var t1 v1;record integer a,b; end r1)
+	type
+		t1 = integer;
+	var
+		t1 v1,v2;
+	begin
+		read(v1);
+		v2 = v1+1;
+		write(v2);
+	end
 procedure q(var char name;integer age)
+	type
+		Person = record
+			integer age;
+			char name;
+			end;
+	var
+		Person person;
+	begin
+		person.name = name;
+		person.age = age;
+		write(person.name);
+		return;
+	end
 begin
-end
+	read(c)
+	read(a)
+	q(c,a)
+end.
 
 TypeK
 	DecK IntegerK t1
