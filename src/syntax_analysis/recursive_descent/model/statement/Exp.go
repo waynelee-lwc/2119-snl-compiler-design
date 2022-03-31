@@ -20,8 +20,15 @@ func Exp() (*tree_node.TreeNode, error) {
 		return nil, fmt.Errorf("Exp %v", err)
 	} else {
 		if otherTerm != nil {
+			// if node.Kind == tree_node.OpK && node.Attr.ExpAttr.Op == token_set.Minus.Name &&
+			// 	otherTerm.Kind == tree_node.OpK && otherTerm.Attr.ExpAttr.Op == token_set.Minus.Name &&
+			// 	!otherTerm.Attr.ExpAttr.Paren {
+			// 	node.Children = append(node.Children, otherTerm.Children[0])
+			// 	otherTerm.Children[0] = node
+			// 	return otherTerm, nil
+			// } else {
 			node.Children = append(node.Children, otherTerm)
-			return node, nil
+			return LeftRotate(node), nil
 		} else {
 			return node.Children[0], nil
 		}
@@ -73,7 +80,7 @@ func Term() (*tree_node.TreeNode, error) {
 			return node.Children[0], nil
 		} else {
 			node.Children = append(node.Children, otherFactor)
-			return node, nil
+			return LeftRotate(node), nil
 		}
 	}
 }
@@ -94,6 +101,7 @@ func Factor() (*tree_node.TreeNode, error) {
 		if _, err := Match(token_set.RParen); err != nil {
 			return nil, fmt.Errorf("Factor %v", err)
 		}
+		node.Attr.ExpAttr.Paren = true //括号包裹表达式
 		return node, nil
 	}
 	if token_set.Factor2IntC.Predict(currToken) {
@@ -332,4 +340,42 @@ func MultOp(node *tree_node.TreeNode) error {
 	}
 
 	return fmt.Errorf("CmpOp match failed! %v", currToken)
+}
+
+func LeftRotate(node *tree_node.TreeNode) *tree_node.TreeNode {
+
+	rson := node.Children[1]
+	if NeedLeftRotate(node, rson) {
+
+		rlson := rson.Children[0]
+		node.Children[1] = rlson
+		rson.Children[0] = LeftRotate(node)
+		return rson
+	} else {
+		return node
+	}
+}
+
+func NeedLeftRotate(node *tree_node.TreeNode, rson *tree_node.TreeNode) bool {
+
+	if node.NodeKind != tree_node.ExpK || rson.NodeKind != tree_node.ExpK {
+		return false
+	}
+
+	if node.Kind != tree_node.OpK || rson.Kind != tree_node.OpK {
+		return false
+	}
+
+	if (node.Attr.ExpAttr.Op == "+" || node.Attr.ExpAttr.Op == "-") &&
+		(rson.Attr.ExpAttr.Op == "+" || rson.Attr.ExpAttr.Op == "-") &&
+		!rson.Attr.ExpAttr.Paren {
+		return true
+	}
+
+	if (node.Attr.ExpAttr.Op == "*" || node.Attr.ExpAttr.Op == "/") &&
+		(rson.Attr.ExpAttr.Op == "*" || rson.Attr.ExpAttr.Op == "/") &&
+		!rson.Attr.ExpAttr.Paren {
+		return true
+	}
+	return false
 }

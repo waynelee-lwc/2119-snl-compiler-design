@@ -5,6 +5,7 @@ import (
 	"recursive_descent_parser/model/statement"
 	"recursive_descent_parser/model/token"
 	"recursive_descent_parser/model/token_set"
+	"recursive_descent_parser/model/tree_node"
 	"testing"
 )
 
@@ -63,7 +64,7 @@ func TestTokenReader(t *testing.T) {
 }
 
 func TestTypeDec(t *testing.T) {
-	tokens, _ := LoadTokens("../../../outputs/bubble_sort.tk")
+	tokens, _ := LoadTokens("../../../outputs/program_for_hacking.tk")
 	token_set.Initscanner(tokens)
 	for _, token := range tokens {
 		fmt.Println(token)
@@ -84,8 +85,37 @@ func TestTypeDec(t *testing.T) {
 
 	fmt.Println("error ", err)
 	// fmt.Println(program.ToString(""))
-	err = SaveSyntaxTree("../../../outputs/bubble_sort.tree", program.ToString(""))
+	err = SaveSyntaxTree("../../../outputs/program_for_hacking.tree", program.ToString(""))
 	fmt.Println("error ", err)
+}
+
+func TestGeneProgram(t *testing.T) {
+	//程序头节点
+	headNode := tree_node.NewTreeNode()
+	headNode.NodeKind = tree_node.PheadK
+	headNode.Name = append(headNode.Name, "testP")
+	fmt.Print(headNode.ToProgram("", nil))
+
+	//类型节点
+	typeNode := tree_node.NewTreeNode()
+	typeNode.NodeKind = tree_node.TypeK
+	fmt.Print(typeNode.ToProgram("", nil))
+
+	//变量节点
+	varNode := tree_node.NewTreeNode()
+	varNode.NodeKind = tree_node.VarK
+	fmt.Print(varNode.ToProgram("", nil))
+
+	//过程定义节点
+	procDecNode := tree_node.NewTreeNode()
+	procDecNode.NodeKind = tree_node.ProcDecK
+	procDecNode.Name = append(procDecNode.Name, "proc")
+	fmt.Print(procDecNode.ToProgram("", nil))
+
+	//表达式列表节点
+	stmtLNode := tree_node.NewTreeNode()
+	stmtLNode.NodeKind = tree_node.StmLK
+
 }
 
 /*

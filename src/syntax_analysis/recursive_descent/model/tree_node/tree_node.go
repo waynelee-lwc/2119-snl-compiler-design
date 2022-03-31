@@ -69,6 +69,7 @@ type ExpAttr struct {
 	Val     string
 	VarKind ExpVarKind
 	Type    ExpType
+	Paren   bool //标记表达式节点是否包裹括号
 }
 
 type Attr struct {
@@ -181,5 +182,82 @@ func (attr *Attr) ToString(node *TreeNode) string {
 		res += string(attr.ProcAttr.ParamType) + " "
 	}
 
+	return res
+}
+
+func (node *TreeNode) ToProgram(prefix string, fa *TreeNode) string { //生成代码
+	res := ""
+
+	switch node.NodeKind {
+	case ProK:
+		for _, child := range node.Children {
+			res += child.ToProgram(prefix, node) + "\n"
+		}
+		return res
+	case PheadK:
+		res += "program " + node.Name[0] + "\n"
+		for _, child := range node.Children {
+			res += child.ToProgram(prefix, node) + "\n"
+		}
+		return res
+	case TypeK:
+		res += "type\n"
+		prefix += "\t"
+	case VarK:
+		res += "var\n"
+		prefix += "\t"
+	case ProcDecK:
+	case StmLK:
+		for i := 0; i < len(node.Children); i++ {
+			res += node.Children[i].ToProgram(prefix, node)
+			if i < len(node.Children)-1 {
+				res += ";\n"
+			}
+		}
+		return res
+	case DecK:
+		switch fa.NodeKind {
+		case TypeK:
+			switch node.Kind {
+			case ArrayK:
+			case CharK:
+			case IntegerK:
+			case RecordK:
+			case IdK:
+			}
+		case VarK:
+			switch node.Kind {
+			case ArrayK:
+			case CharK:
+			case IntegerK:
+			case RecordK:
+			case IdK:
+			}
+		case ProcDecK:
+			switch node.Kind {
+			case ArrayK:
+			case CharK:
+			case IntegerK:
+			case RecordK:
+			case IdK:
+			}
+		}
+	case StmtK:
+		switch node.Kind {
+		case IfK:
+		case WhileK:
+		case AssignK:
+		case ReadK:
+		case WriteK:
+		case CallK:
+		case ReturnK:
+		}
+	case ExpK:
+		switch node.Kind {
+		case OpK:
+		case ConstK:
+		case IdK:
+		}
+	}
 	return res
 }
