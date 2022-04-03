@@ -59,13 +59,13 @@ func DeclarePart() ([]*tree_node.TreeNode, error) {
 
 	if typeDec, err := TypeDec(); err != nil {
 		return nil, fmt.Errorf("DeclarePart  %v", err)
-	} else {
+	} else if typeDec != nil { //空节点不要！
 		res = append(res, typeDec)
 	}
 
 	if varDec, err := VarDec(); err != nil {
 		return nil, fmt.Errorf("DeclarePart  %v", err)
-	} else {
+	} else if varDec != nil { //空节点不要！
 		res = append(res, varDec)
 	}
 

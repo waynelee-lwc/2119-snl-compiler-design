@@ -64,7 +64,7 @@ func TestTokenReader(t *testing.T) {
 }
 
 func TestTypeDec(t *testing.T) {
-	tokens, _ := LoadTokens("../../../outputs/program_for_hacking.tk")
+	tokens, _ := LoadTokens("../../../outputs/bubble_sort.tk")
 	token_set.Initscanner(tokens)
 	for _, token := range tokens {
 		fmt.Println(token)
@@ -85,37 +85,88 @@ func TestTypeDec(t *testing.T) {
 
 	fmt.Println("error ", err)
 	// fmt.Println(program.ToString(""))
-	err = SaveSyntaxTree("../../../outputs/program_for_hacking.tree", program.ToString(""))
+	err = SaveSyntaxTree("../../../outputs/bubble_sort.tree", program.ToString(""))
 	fmt.Println("error ", err)
+	fmt.Println(program.ToProgram("", nil))
+	generated := program.ToProgram("", nil)
+	err = SaveSyntaxTree("../../../outputs/bubble_sort.gene", generated)
+	fmt.Println(err)
+}
+
+func TestCreateNameList(t *testing.T) {
+	nameList := []string{"a", "b", "hello", "world"}
+	fmt.Println(tree_node.CreateNameList(nameList))
+	// fmt.Println(fmt.Sprintf("hello %v", "wayne"))
 }
 
 func TestGeneProgram(t *testing.T) {
-	//程序头节点
-	headNode := tree_node.NewTreeNode()
-	headNode.NodeKind = tree_node.PheadK
-	headNode.Name = append(headNode.Name, "testP")
-	fmt.Print(headNode.ToProgram("", nil))
+
+	//定义节点1
+	decNodeParam1 := tree_node.NewTreeNode()
+	decNodeParam1.Attr.ProcAttr = &tree_node.ProcAttr{
+		ParamType: tree_node.ValParamType,
+	}
+	decNodeParam1.Name = append(decNodeParam1.Name, "a", "b")
+	decNodeParam1.NodeKind = tree_node.DecK
+	decNodeParam1.Kind = tree_node.IntegerK
+	//定义节点2
+	decNodeParam2 := tree_node.NewTreeNode()
+	decNodeParam2.NodeKind = tree_node.DecK
+	decNodeParam2.Kind = tree_node.ArrayK
+	decNodeParam2.Attr.ArrayAttr = &tree_node.ArrayAttr{
+		Low:       0,
+		Top:       30,
+		ChildType: tree_node.ChildTypeChar,
+	}
+	decNodeParam2.Name = append(decNodeParam2.Name, "c", "d")
+	decNodeParam2.Attr.ProcAttr = &tree_node.ProcAttr{
+		ParamType: tree_node.VarParamType,
+	}
+	//定义节点3
+	decNodeParam3 := tree_node.NewTreeNode()
+	decNodeParam3.NodeKind = tree_node.DecK
+	decNodeParam3.Kind = tree_node.IdK
+	decNodeParam3.TypeName = "t1"
+	decNodeParam3.Name = append(decNodeParam3.Name, "e")
+	decNodeParam3.Attr.ProcAttr = &tree_node.ProcAttr{
+		ParamType: tree_node.ValParamType,
+	}
+	//定义节点4
+	decNodeParam4 := tree_node.NewTreeNode()
+	decNodeParam4.NodeKind = tree_node.DecK
+	decNodeParam4.Kind = tree_node.RecordK
+	decNodeParam4.Name = append(decNodeParam4.Name, "v1", "v2")
+	decNodeParam4.Attr.ProcAttr = &tree_node.ProcAttr{
+		ParamType: tree_node.VarParamType,
+	}
+	decNodeParam4.Children = append(decNodeParam4.Children, decNodeParam1, decNodeParam2)
 
 	//类型节点
 	typeNode := tree_node.NewTreeNode()
 	typeNode.NodeKind = tree_node.TypeK
-	fmt.Print(typeNode.ToProgram("", nil))
+	typeNode.Children = append(typeNode.Children, decNodeParam1, decNodeParam2, decNodeParam3, decNodeParam4)
+	// fmt.Println(typeNode.ToProgram("", nil))
 
 	//变量节点
 	varNode := tree_node.NewTreeNode()
 	varNode.NodeKind = tree_node.VarK
-	fmt.Print(varNode.ToProgram("", nil))
+	varNode.Children = append(varNode.Children, decNodeParam1, decNodeParam2, decNodeParam3, decNodeParam4)
+	// fmt.Println(varNode.ToProgram("", nil))
 
 	//过程定义节点
 	procDecNode := tree_node.NewTreeNode()
 	procDecNode.NodeKind = tree_node.ProcDecK
 	procDecNode.Name = append(procDecNode.Name, "proc")
-	fmt.Print(procDecNode.ToProgram("", nil))
+	procDecNode.Children = append(procDecNode.Children, decNodeParam1, decNodeParam2, decNodeParam3, decNodeParam4)
+	procDecNode.Children = append(procDecNode.Children, typeNode, varNode)
+	// fmt.Println(procDecNode.ToProgram("", nil))
 
-	//表达式列表节点
-	stmtLNode := tree_node.NewTreeNode()
-	stmtLNode.NodeKind = tree_node.StmLK
-
+	//程序头节点
+	headNode := tree_node.NewTreeNode()
+	headNode.NodeKind = tree_node.PheadK
+	headNode.Name = append(headNode.Name, "testP")
+	headNode.Children = append(headNode.Children, typeNode, varNode, procDecNode)
+	fmt.Print(headNode.ToProgram("", nil))
 }
 
 /*

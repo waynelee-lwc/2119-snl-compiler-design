@@ -1,12 +1,10 @@
 ProK  
 	PheadK  bubble 
-
 	VarK  
 		DecK IntegerK i j num 
-		DecK ArrayK a 1 20 IntegerK 
+		DecK ArrayK a 1 20 integer 
 	ProcDecK  q 
 		DecK IntegerK num valparam 
-
 		VarK  
 			DecK IntegerK i j k 
 			DecK IntegerK t 
@@ -20,11 +18,11 @@ ProK
 					ExpK IdK num IdV 
 				StmtK AssignK 
 					ExpK IdK j IdV 
-					ExpK OpK - 
-						ExpK IdK num IdV 
-						ExpK OpK + 
+					ExpK OpK + 
+						ExpK OpK - 
+							ExpK IdK num IdV 
 							ExpK IdK i IdV 
-							ExpK ConstK 1 
+						ExpK ConstK 1 
 				StmtK AssignK 
 					ExpK IdK k IdV 
 					ExpK ConstK 1 
@@ -92,7 +90,7 @@ ProK
 					ExpK IdK i IdV 
 					ExpK ConstK 1 
 		StmtK CallK 
-			ExpK IdK q  
+			ExpK IdK q IdV 
 			ExpK IdK num IdV 
 		StmtK AssignK 
 			ExpK IdK i IdV 

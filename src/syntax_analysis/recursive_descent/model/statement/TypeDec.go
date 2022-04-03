@@ -181,7 +181,7 @@ func ArrayType(node *tree_node.TreeNode) error {
 		//BaseType
 		return fmt.Errorf("ArrayType  %v", err)
 	} else {
-		node.Attr.ArrayAttr.ChildType = baseType
+		node.Attr.ArrayAttr.ChildType = tree_node.BaseType2ChildType[baseType]
 	}
 
 	return nil

@@ -9,7 +9,7 @@ var StateVertexs = require('./model/stateVertexs')
  */
 function main(){
 
-    let program = rw.LoadSourceCode('../../outputs/program_for_hacking.snl')
+    let program = rw.LoadSourceCode('../../outputs/bubble_sort.snl')
     console.log(`parsing program \n'''\n${program}\n'''`)
     reader = new ProgramReader(program)
     parser = new LexicalAnalysiser(reader,StateVertexs.Start)
@@ -29,7 +29,7 @@ function main(){
     }
 
     //error...
-    rw.SaveTokens('../../outputs/program_for_hacking.tk',resp.tokenList)
+    rw.SaveTokens('../../outputs/bubble_sort.tk',resp.tokenList)
 
     //token list...
 

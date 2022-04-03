@@ -167,6 +167,7 @@ func ConditionalStm() (*tree_node.TreeNode, error) {
 		return nil, fmt.Errorf("ConditionalStm %v", err)
 	} else {
 		node.Children = append(node.Children, stmL...)
+		node.IdNum = len(stmL)
 	}
 	if _, err := Match(token_set.Else); err != nil { //ELSE
 		return nil, fmt.Errorf("ConditionalStm %v", err)
@@ -273,6 +274,8 @@ func CallStmRest(idNode *tree_node.TreeNode) (*tree_node.TreeNode, error) {
 	node.NodeKind = tree_node.StmtK
 	node.Kind = tree_node.CallK
 	node.Children = append(node.Children, idNode)
+
+	idNode.Attr.ExpAttr.VarKind = tree_node.IdV //需要交代标识符是id类型
 
 	if _, err := Match(token_set.LParen); err != nil {
 		return nil, fmt.Errorf("CallStmRest %v", err)
