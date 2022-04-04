@@ -7,7 +7,7 @@ exports.LoadSourceCode = function(filename){
     return fs.readFileSync(path).toString()
 }
 
-exports.SaveTokens = function(filename,tokens){
+exports.Save = function(filename,tokens){
     let path = pathTool.resolve(__dirname,filename)
     // console.log(path)
     let content = JSON.stringify(tokens)

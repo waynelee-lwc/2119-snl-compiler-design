@@ -9,31 +9,46 @@ var StateVertexs = require('./model/stateVertexs')
  */
 function main(){
 
-    let program = rw.LoadSourceCode('../../outputs/bubble_sort.snl')
+    let argv = process.argv
+    let programName = argv[2]
+
+    if(!programName){
+        console.log('usage: node {mainfile} {programname}')
+        return
+    }
+
+    let snlFile = `../../outputs/cache/${programName}/snl`      //源代码文件
+    let tkFile = `../../outputs/cache/${programName}/tk`        //token序列文件
+    let errorFile = `../../outputs/cache/${programName}/lexerr` //错误信息文件
+    let logFile = `../../outputs/cache/${programName}/lexlog`   //日志文件
+
+    let program = rw.LoadSourceCode(snlFile)
     console.log(`parsing program \n'''\n${program}\n'''`)
     reader = new ProgramReader(program)
     parser = new LexicalAnalysiser(reader,StateVertexs.Start)
     resp = parser.parse()
 
-    console.log('---------------------------error-----------')
-    for(let error of resp.errorList){
-        console.log(JSON.stringify(error))
-    }
-    console.log('---------------------------token-----------')
-    for(let token of resp.tokenList){
-        console.log(JSON.stringify(token))
-    }
-    console.log('---------------------------log-------------')
-    for(let log of resp.logList){
-        console.log(JSON.stringify(log))
-    }
-
-    //error...
-    rw.SaveTokens('../../outputs/bubble_sort.tk',resp.tokenList)
+    // console.log('---------------------------error-----------')
+    // for(let error of resp.errorList){
+    //     console.log(JSON.stringify(error))
+    // }
+    // console.log('---------------------------token-----------')
+    // for(let token of resp.tokenList){
+    //     console.log(JSON.stringify(token))
+    // }
+    // console.log('---------------------------log-------------')
+    // for(let log of resp.logList){
+    //     console.log(JSON.stringify(log))
+    // }
 
     //token list...
+    rw.Save(tkFile,resp.tokenList)
+
+    //error list...
+    rw.Save(errorFile,resp.errorList)
 
     //log list...
+    rw.Save(logFile,resp.logList)
 }
 
 main()
