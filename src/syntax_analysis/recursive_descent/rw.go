@@ -19,7 +19,7 @@ func LoadTokens(file string) ([]*token.Token, error) {
 	return tokens, err
 }
 
-func SaveSyntaxTree(filePath string, tree string) error {
+func Save(filePath string, tree string) error {
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err

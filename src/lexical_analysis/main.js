@@ -10,17 +10,17 @@ var StateVertexs = require('./model/stateVertexs')
 function main(){
 
     let argv = process.argv
-    let programName = argv[2]
+    let programPath = argv[2]
 
-    if(!programName){
-        console.log('usage: node {mainfile} {programname}')
+    if(!programPath){
+        console.log('usage: node {mainfile} {programPath}')
         return
     }
 
-    let snlFile = `../../outputs/cache/${programName}/snl`      //源代码文件
-    let tkFile = `../../outputs/cache/${programName}/tk`        //token序列文件
-    let errorFile = `../../outputs/cache/${programName}/lexerr` //错误信息文件
-    let logFile = `../../outputs/cache/${programName}/lexlog`   //日志文件
+    let snlFile = `${programPath}/snl`      //源代码文件
+    let tkFile = `${programPath}/tk`        //token序列文件
+    let errorFile = `${programPath}/lexerr` //错误信息文件
+    let logFile = `${programPath}/lexlog`   //日志文件
 
     let program = rw.LoadSourceCode(snlFile)
     console.log(`parsing program \n'''\n${program}\n'''`)

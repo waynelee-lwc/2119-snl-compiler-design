@@ -85,11 +85,11 @@ func TestTypeDec(t *testing.T) {
 
 	fmt.Println("error ", err)
 	// fmt.Println(program.ToString(""))
-	err = SaveSyntaxTree("../../../outputs/bubble_sort.tree", program.ToString(""))
+	err = Save("../../../outputs/bubble_sort.tree", program.ToString(""))
 	fmt.Println("error ", err)
 	fmt.Println(program.ToProgram("", nil))
 	generated := program.ToProgram("", nil)
-	err = SaveSyntaxTree("../../../outputs/bubble_sort.gene", generated)
+	err = Save("../../../outputs/bubble_sort.gene", generated)
 	fmt.Println(err)
 }
 
