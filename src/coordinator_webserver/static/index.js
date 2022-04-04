@@ -117,7 +117,7 @@ function resetLines(){
             $(`<div>${i}</div>`)
         )
     }
-    $(this).css({height:`${lines*1.5+0.125}rem`})
+    $('.code').css({height:`${lines*1.5+0.125}rem`})
 }
 
 resetLines(20)
