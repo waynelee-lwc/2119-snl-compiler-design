@@ -89,4 +89,76 @@ var (
 
 	IdMore2Nil    = PredictSet{Semi}
 	IdMore2IdList = PredictSet{Comma}
+
+	VarDec2Nil            = PredictSet{Procedure, Begin}
+	VarDec2VarDeclaration = PredictSet{Var}
+
+	VarDecMore2Nil        = PredictSet{Procedure, Begin}
+	VarDecMore2VarDecList = PredictSet{Integer, Char, Record, Array, ID}
+
+	VarIdMore2Nil       = PredictSet{Semi}
+	VarIdMore2VarIdList = PredictSet{Comma}
+
+	ProcDec2Nil             = PredictSet{Begin}
+	ProcDec2ProcDeclaration = PredictSet{Procedure}
+
+	ProcDecMore2Nil     = PredictSet{Begin}
+	ProcDecMore2ProcDec = PredictSet{Procedure}
+
+	ParamList2Nil          = PredictSet{RParen}
+	ParamList2ParamDecList = PredictSet{Integer, Char, Array, Record, ID, Var}
+
+	ParamMore2Nil          = PredictSet{RParen}
+	ParamMore2ParamDecList = PredictSet{Semi}
+
+	ParamVal = PredictSet{Integer, Char, Record, Array, ID}
+	ParamVar = PredictSet{Var}
+
+	FidMore2Nil      = PredictSet{Semi, RParen}
+	FidMore2FormList = PredictSet{Comma}
+
+	StmMore2Nil     = PredictSet{End, EndWhile, Else, Fi} //分支情况要考虑！
+	StmMore2StmList = PredictSet{Semi}
+
+	Stm2ConditionalStm = PredictSet{If}
+	Stm2LoopStm        = PredictSet{While}
+	Stm2InputStm       = PredictSet{Read}
+	Stm2OutputStm      = PredictSet{Write}
+	Stm2ReturnStm      = PredictSet{Return}
+	Stm2AssCal         = PredictSet{ID}
+
+	AssCall2AssignmentRest = PredictSet{Assign, Dot, LMidParen} //这个要加一个Dot，和左中括号，考虑左值是记录或者数组！
+	AssCall2CallStmRest    = PredictSet{LParen}
+
+	ActParamList2Nil          = PredictSet{RParen}
+	ActParamList2ActParamList = PredictSet{ID, Number}
+
+	ActParamMore2Nil          = PredictSet{RParen}
+	ActParamMore2ActParamList = PredictSet{Comma}
+
+	OtherTerm2Nil   = PredictSet{LT, Equal, RMidParen, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	OtherTerm2AddOp = PredictSet{Plus, Minus}
+
+	CmpOp2EQ = PredictSet{Equal}
+	CmpOp2LT = PredictSet{LT}
+
+	AddOp2Plus  = PredictSet{Plus}
+	AddOp2Minus = PredictSet{Minus}
+
+	MultOp2Times = PredictSet{Times}
+	MultOp2Over  = PredictSet{Over}
+
+	Factor2Exp      = PredictSet{LParen}
+	Factor2IntC     = PredictSet{Number}
+	Factor2Variable = PredictSet{ID}
+
+	OtherFactor2Nil    = PredictSet{Plus, Minus, LT, Equal, RMidParen, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
+	OtherFactor2MultOp = PredictSet{Times, Over}
+
+	VariMore2Nil      = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RMidParen, RParen, End, Semi, Comma}
+	VariMore2Exp      = PredictSet{LMidParen}
+	VariMore2FieldVar = PredictSet{Dot}
+
+	FieldVarMore2Nil = PredictSet{Assign, Times, Over, Plus, Minus, LT, Equal, Then, Else, Fi, Do, EndWhile, RMidParen, RParen, End, Semi, Comma}
+	FieldVarMore2Exp = PredictSet{LMidParen}
 )
