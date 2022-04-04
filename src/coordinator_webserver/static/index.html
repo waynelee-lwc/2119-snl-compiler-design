@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <title>snl compiler</title>
+        <link rel="stylesheet" href="./index.css">
+    </head>
+    <body>
+        <div class="nav">
+            <h2 class="nav-title">Compiler-Lab</h2>
+        </div>
+        <div class="main">
+            <!-- 控制板 -->
+            <div class="dashboard">
+                <!-- 标题和按钮 -->
+                <div class="header">
+                    <div class="title">The SNL Playground</div>
+                    <div class="controls">
+                        <button class="btn-analysis">Analysis</button>
+                        <button class="btn-format">Format</button>
+                        <button class="btn-reset">Reset</button>
+                    </div>
+                </div>
+                <!-- 编程区 -->
+                <div class="workarea">
+                    <div class="lines">
+                        <div>1</div>
+                    </div>
+                    <textarea id="code" class="code"></textarea>
+                </div>
+            </div>
+            <!-- 结果展示区 -->
+            <div class="outputs" name="outputs">
+                <div class="token-list">
+                    <h2 class="output-title">Token List</h2>
+                    <div class="token-head">
+                        <div class="idx">idx</div>
+                        <div class="type">Type</div>
+                        <div class="name">Name</div>
+                        <div class="line">line</div>
+                        <div class="col">col</div>
+                    </div>
+                    <div class="tokenlist">
+                        
+                    </div>
+                </div>
+                <div class="syntax-tree">
+                    <h2 class="output-title">Syntax Tree</h2>
+                    <textarea class="tree"disabled></textarea>
+                </div>
+                <div class="semantic-tables" >
+                    <h2 class="output-title">Semantic Tables</h2>
+                </div>
+            </div>
+
+
+        </div>
+    </body>
+</html>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="./index.js"></script>
