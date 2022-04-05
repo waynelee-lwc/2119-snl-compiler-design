@@ -25,17 +25,31 @@ func main() {
 	tokens, _ := LoadTokens(tkFile)
 	token_set.Initscanner(tokens)
 
-	errList := []error{}
+	errList := []string{}
 	program, err := statement.Program()
-	errList = append(errList, err)
+	if err != nil {
+		errList = append(errList, err.Error())
+	} else {
+		errList = append(errList, "")
+	}
+	// fmt.Println(err)
 
 	tree := program.ToString("")
 	gene := program.ToProgram("", nil)
 
-	errList = append(errList, Save(treeFile, tree))
-	errList = append(errList, Save(geneFile, gene))
-
-	errs, _ := json.Marshal(errList)
-	fmt.Println(os.Getwd())
+	if err := Save(treeFile, tree); err != nil {
+		errList = append(errList, err.Error())
+	} else {
+		errList = append(errList, "")
+	}
+	if err := Save(geneFile, gene); err != nil {
+		errList = append(errList, err.Error())
+	} else {
+		errList = append(errList, "")
+	}
+	// fmt.Println(errList)
+	errs, err := json.Marshal(errList)
+	fmt.Println(string(errs), err)
+	// fmt.Println(os.Getwd())
 	fmt.Println(Save(errorFile, string(errs)))
 }

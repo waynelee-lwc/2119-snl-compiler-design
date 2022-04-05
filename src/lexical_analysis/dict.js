@@ -29,7 +29,7 @@ exports.EqualSignReg = /\=/
 //合法字符
 exports.LegalCharacterReg = /[0-9a-zA-z]/
 exports.LegalCharacter = {}
-exports.LegalCharacterList = `+-*/<=()[]{}.',;: \n\0`
+exports.LegalCharacterList = `+-*/<=()[]{}.',;: \n\0\t`
 //保留字
 exports.ReservedReg = / /
 exports.Reserved = ['program','procedure','type','var','if','then','else','fi','while','do','endwh','begin','end','read','write','array','of','record','return','integer','char']

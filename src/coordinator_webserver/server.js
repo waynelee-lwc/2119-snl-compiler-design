@@ -73,6 +73,7 @@ app.post('/compile',(req,res)=>{
     let src = req.body.src
     let programName = geneProgramName()
     let programPath = pathTool.resolve(__dirname,`../../outputs/cache/${programName}`)
+    console.log(programPath)
     fs.mkdirSync(programPath)
 
     Save(programPath,`snl`,src) //保存程序文件
@@ -80,7 +81,7 @@ app.post('/compile',(req,res)=>{
     let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析
 
     // console.log(lexbuf.toString())
-    // console.log(synbuf.toString())
+    console.log(synbuf.toString())
     
     let result = {}
     let files = fs.readdirSync(programPath)
