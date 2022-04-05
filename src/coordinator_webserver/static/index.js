@@ -33,15 +33,20 @@ $('.btn-analysis').on('click',function(){
             src:program
         }),
         success:function(res){
-            
-            // console.log(res)
+            lexErrList = JSON.parse(res.lex_err)
+            synErrList = JSON.parse(res.syn_err)
+
+            if(!resetErrorPanel(lexErrList,synErrList[0],null)){
+                $('html, body').animate({scrollTop: $('.errors').offset().top}, 300) 
+                return
+            }
+
             tokenList = JSON.parse(res.tokens)
             tree = res.tree
-
             resetTokenList(tokenList)
             resetSyntaxTree(tree)
             
-            $('html, body').animate({scrollTop: $('.outputs').offset().top}, 300) 
+            $('html, body').animate({scrollTop: $('.errors').offset().top}, 300) 
         }
     })
 })
@@ -62,6 +67,13 @@ $('.btn-format').on('click',function(){
         }),
     
         success:function(res){
+            lexErrList = JSON.parse(res.lex_err)
+            synErrList = JSON.parse(res.syn_err)
+
+            if(!resetErrorPanel(lexErrList,synErrList[0],null)){
+                $('html, body').animate({scrollTop: $('.errors').offset().top}, 100) 
+                return
+            }
             gene = res.gene
             resetCode(gene)
         }
@@ -77,6 +89,45 @@ $('.btn-reset').on('click',function(){
     resetTokenList([])
     resetSyntaxTree('')
 })
+
+function resetErrorPanel(lexErr,synErr,semErr){
+    //清除errs类
+    $('.lex-errs').removeClass('errs')
+    $('.syn-errs').removeClass('errs')
+    $('.sem-errs').removeClass('errs')
+    //清空展示列表
+    $('.lex-err-list').empty()
+    $('.syn-err-list').text('')
+    //重置文字
+    $('.lex-errs h3').text('Great!No lexical error!')
+    $('.syn-errs h3').text('Great!No Syntax error!')
+    $('.sem-errs h3').text('Great!No Sematic error!')
+
+    let flag = true
+    //词法分析错误
+    if(lexErr && lexErr.length > 0){
+        $('.lex-errs').addClass('errs')
+        $('.lex-errs h3').text('Ops! lexical errros!')
+        for(let err of lexErr){
+            $('.lex-err-list').append(
+                $(`<div class="lex-error">
+                        <div class="lex-error-pos">${err.line},${err.col}</div>
+                        <div class="lex-error-detail">${err.err}</div>
+                    </div>`)
+            )
+        }
+        flag = false
+    }
+
+    //语法分析错误
+    if(synErr && synErr != ''){
+        $('.syn-errs').addClass('errs')
+        $('.syn-errs h3').text('Ops! syntax errors!')
+        $('.syn-err-list').text(synErr)
+        flag = false
+    }
+    return flag
+}
 
 function resetCode(program){
     $('.code').val(program)

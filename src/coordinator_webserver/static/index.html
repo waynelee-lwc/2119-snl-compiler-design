@@ -27,11 +27,35 @@
                     <textarea id="code" class="code"></textarea>
                 </div>
             </div>
+            <!-- 错误展示区 -->
+            <div class="errors">
+                <!-- 词法错误 -->
+                <div class="lex-errs">
+                    <h3>Great! No lexical errors</h3>
+                    <div class="lex-err-list">
+                        <!-- <div class="lex-error">
+                            <div class="lex-error-pos">2,8</div>
+                            <div class="lex-error-detail">illegsadasda sdasdaal characdddddfdfdfdfdfdfdfdfdfd fdfdfdf dfdfdfdfdfdfdfdfdfdfdfdfdfdter '&'</div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- 语法错误 -->
+                <div class="syn-errs">
+                    <h3>Great! No syntax errors!</h3>
+                    <div class="syn-err-list">
+                        <!-- Program  DeclarePart  TypeDec  TypeDecList  TypeId match failed! token not match! wanted:\\u0026{ID  0 0}, but:\\u0026{SEPERATOR * 2 6} -->
+                    </div>
+                </div>
+                <!-- 语意错误 -->
+                <div class="sem-errs">
+                    <h3>Great! No semantic errors</h3>
+                </div>
+            </div>
             <!-- 结果展示区 -->
             <div class="outputs" name="outputs">
                 <div class="token-list">
                     <h2 class="output-title">Token List</h2>
-                    <div class="token-head">
+                    <div class="token-head token">
                         <div class="idx">idx</div>
                         <div class="type">Type</div>
                         <div class="name">Name</div>

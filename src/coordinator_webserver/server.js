@@ -78,16 +78,49 @@ app.post('/compile',(req,res)=>{
 
     Save(programPath,`snl`,src) //保存程序文件
     let lexbuf = execSync(`node ../lexical_analysis/main.js ${programPath}`) //词法分析
-    let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析
 
-    // console.log(lexbuf.toString())
-    console.log(synbuf.toString())
-    
+    //处理词法分析结果，如果有错，不继续进行语法分析
     let result = {}
     let files = fs.readdirSync(programPath)
     for(let file of files){
         str = Load(programPath,file)
         result[file] = str
+    }
+    if(JSON.parse(result['lexerr']).length != 0){
+        let resp = {
+            lex_err:result['lexerr'],
+            syn_err:JSON.stringify(['','','']),
+            sem_err:JSON.stringify({}),
+            program_name : programName
+        }
+        res.send(resp)
+        fs.rmdirSync(programPath,{ recursive: true, force: true })
+        return
+    }
+
+
+    let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析
+
+    // console.log(lexbuf.toString())
+    // console.log(synbuf.toString())
+    
+    //处理语法分析结果，如果有错，不继续进行语义分析
+    files = fs.readdirSync(programPath)
+    for(let file of files){
+        str = Load(programPath,file)
+        result[file] = str
+    }
+    let synErr = JSON.parse(result['synerr'])
+    if(!synErr || synErr.length < 1 || synErr[0] != ''){
+        let resp = {
+            lex_err:result['lexerr'],
+            syn_err:result['synerr'],
+            sem_err:JSON.stringify({}),
+            program_name : programName
+        }
+        res.send(resp)
+        fs.rmdirSync(programPath,{ recursive: true, force: true })
+        return
     }
 
     let resp = {

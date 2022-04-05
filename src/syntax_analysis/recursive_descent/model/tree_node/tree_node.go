@@ -256,9 +256,13 @@ func (node *TreeNode) ToProgram(prefix string, fa *TreeNode) string { //生成�
 
 	switch node.NodeKind {
 	case ProK: //程序跟节点
-		for _, child := range node.Children {
-			res += child.ToProgram(prefix, node) + "\n"
+		for idx, child := range node.Children {
+			res += child.ToProgram(prefix, node)
+			if idx != len(node.Children)-1 {
+				res += "\n"
+			}
 		}
+		res += "."
 	case PheadK: //程序头节点
 		res += "program " + node.Name[0]
 		// for _, child := range node.Children {
