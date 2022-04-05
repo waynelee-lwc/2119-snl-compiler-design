@@ -95,7 +95,7 @@ app.post('/compile',(req,res)=>{
         tokens : result['tk'],
         gene : result['gene'],
         lex_err:result['lexerr'],
-        syn_err:result['syn_err'],
+        syn_err:result['synerr'],
         program_name : programName
     }
     fs.rmdirSync(programPath,{ recursive: true, force: true })
