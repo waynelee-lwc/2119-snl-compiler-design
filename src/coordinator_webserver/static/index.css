@@ -137,7 +137,7 @@ html,body{
 .main>.outputs>.token-list{
     position: absolute;
     border: 1px solid;
-    width: 25rem;
+    width: 30%;
     top: 1rem;
     left: 1rem;
 }
@@ -147,7 +147,7 @@ html,body{
     top: 1rem;
     left: 30rem;
     border: 1px solid;
-    width: 60rem;
+    width: 65%;
 }
 
 .main>.outputs>.semantic-tables{
@@ -278,12 +278,12 @@ html,body{
 }
 
 .lex-error-pos{
-    width: 10%;
+    width: 15%;
     text-align: center;
 }
 
 .lex-error-detail{
-    width: 90%;
+    width: 84%;
     text-align: left;
 }
 

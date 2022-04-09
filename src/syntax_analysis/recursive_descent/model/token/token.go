@@ -10,7 +10,7 @@ const (
 	Seperator  TokenType = "SEPERATOR"
 	EOF        TokenType = "EOF"
 	UnderRange TokenType = "UNDERANGE"
-	Char       TokenType = "CHARc"
+	Char       TokenType = "CHARC"
 	Reserved   TokenType = "RESERVED"
 )
 

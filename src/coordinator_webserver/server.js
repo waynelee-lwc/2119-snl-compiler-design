@@ -113,6 +113,7 @@ app.post('/compile',(req,res)=>{
     let synErr = JSON.parse(result['synerr'])
     if(!synErr || synErr.length < 1 || synErr[0] != ''){
         let resp = {
+            tokens :result['tk'],
             lex_err:result['lexerr'],
             syn_err:result['synerr'],
             sem_err:JSON.stringify({}),

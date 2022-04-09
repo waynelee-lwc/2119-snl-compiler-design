@@ -124,6 +124,10 @@ class StateVertex{
     getUndefinedError(ch){
         return new Error(`caught an undefined error ! ${ch}`,this.line,this.beginCol)
     }
+    //解析数字出错
+    getErrorInNum(ch){
+        return new Error(`error when parsing a number ${this.tokenStr} but ${ch}`,this.line,this.beginCol)
+    }
     //程序不完整
     getNeedDotError(){
         return new Error(`need a dot at the end of program!`,this.line,this.beginCol)

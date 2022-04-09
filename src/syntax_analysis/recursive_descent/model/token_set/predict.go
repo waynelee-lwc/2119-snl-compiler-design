@@ -150,6 +150,7 @@ var (
 
 	Factor2Exp      = PredictSet{LParen}
 	Factor2IntC     = PredictSet{Number}
+	Factor2CharC    = PredictSet{Charc} //这里要添加单个字符的情况
 	Factor2Variable = PredictSet{ID}
 
 	OtherFactor2Nil    = PredictSet{Plus, Minus, LT, Equal, RMidParen, Then, Else, Fi, Do, EndWhile, RParen, End, Semi, Comma}
