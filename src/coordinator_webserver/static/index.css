@@ -125,6 +125,27 @@ html,body{
     letter-spacing: 1px;
 }
 
+.main>.dashboard>.header>.demos{
+    float: right;
+    margin-right: 1rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.main>.dashboard>.header>.demos>.demo-programs{
+    height: 80%;
+    width: 25rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    font-size: 1.125rem;
+    border: 1px solid #979797;
+}
+/* 
+.main>.dashboard>.header>.demos>.demo-programs>option{
+
+} */
+
 
 .main>.outputs{
     border: 1px solid;

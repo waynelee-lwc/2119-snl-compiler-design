@@ -135,7 +135,26 @@ app.post('/compile',(req,res)=>{
         program_name : programName
     }
     fs.rmdirSync(programPath,{ recursive: true, force: true })
-    res.send(resp)
+    res.send(resp).end()
+})
+
+app.get('/demoProgramList',(req,res)=>{
+    let dir = pathTool.resolve(__dirname,`../../outputs/demos`)
+    files = fs.readdirSync(dir)
+    res.send(files).end()
+    return
+})
+
+app.get('/demoProgram',(req,res)=>{
+    let dir = pathTool.resolve(__dirname,`../../outputs/demos`)
+    files = fs.readdirSync(dir)
+    file = req.query.file
+    if(files.indexOf(file) != -1){
+        res.send({demo:Load(dir,file)}).end()
+    }else{
+        res.send('').end()
+    }
+    return
 })
 
 let server = app.listen(PORT,()=>{

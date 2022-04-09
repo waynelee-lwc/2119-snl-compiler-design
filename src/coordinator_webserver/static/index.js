@@ -87,9 +87,25 @@ $('.btn-reset').on('click',function(){
     if(!confirm('是否清空当前内容？')){
         return
     }
-    resetCode('')
+    resetCode('',[])
     resetTokenList([])
     resetSyntaxTree('')
+})
+
+//选择模板
+$('.demo-programs').on('change',function(){
+    file = $('.demo-programs').val()
+    $.ajax({
+        url:'http://localhost:3008/demoProgram',
+        type:'get',
+        data:{
+            file:file
+        },
+        success:function(res){
+            // console.log(res)
+            resetCode(res.demo,[])
+        }
+    })
 })
 
 function resetErrorPanel(lexErr,synErr,semErr){
@@ -188,4 +204,24 @@ function resetLines(){
     $('.code').css({height:`${lines*1.5+0.125}rem`})
 }
 
+function resetDemoList(){
+    $('.demo-programs').empty()
+    $.ajax({
+        url:'http://localhost:3008/demoProgramList',
+        type:'get',
+        success:(res)=>{
+            // console.log(res)
+            for(let program of res){
+                $('.demo-programs').append(
+                    $(`<option value="${program}">${program}</option>`)
+                )
+            }
+            if(res.length >= 1){
+                $('.demo-programs').change()
+            }
+        }
+    })
+}
+
 resetLines(20)
+resetDemoList()
