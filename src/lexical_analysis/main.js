@@ -21,6 +21,7 @@ function main(){
     let tkFile = `${programPath}/tk`        //token序列文件
     let errorFile = `${programPath}/lexerr` //错误信息文件
     let logFile = `${programPath}/lexlog`   //日志文件
+    let commentFile = `${programPath}/cmt`  //注释文件
 
     let program = rw.LoadSourceCode(snlFile)
     console.log(`parsing program \n'''\n${program}\n'''`)
@@ -49,6 +50,9 @@ function main(){
 
     //log list...
     rw.Save(logFile,resp.logList)
+
+    //comment list..
+    rw.Save(commentFile,resp.commentList)
 }
 
 main()

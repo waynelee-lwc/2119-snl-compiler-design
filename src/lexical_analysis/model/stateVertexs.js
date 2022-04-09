@@ -241,6 +241,7 @@ const InComment     = new models.StateVertex(INCOMMENT  ,function(ch){
         res.isTokenEnd  = true
         res.nextState   = Start
         res.log         = this.getTransitionLog
+        res.comment     = {comment:this.tokenStr ,line : this.line}
         return res
     }
     //其他符号

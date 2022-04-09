@@ -76,7 +76,8 @@ $('.btn-format').on('click',function(){
                 return
             }
             gene = res.gene
-            resetCode(gene)
+            comments = JSON.parse(res.comments)
+            resetCode(gene,comments)
         }
     })
 })
@@ -130,7 +131,21 @@ function resetErrorPanel(lexErr,synErr,semErr){
     return flag
 }
 
-function resetCode(program){
+function resetCode(program,comments){
+    lines = program.split('\n')
+    // console.log(lines)
+    // console.log(comments)
+    program = ''
+    for(let i = 0;i < lines.length;i++){
+        let line = i + 1
+        for(let comment of comments){
+            if(comment.line == line){
+                lines[i] += ` {${comment.comment}}`
+            }
+        }
+        program += lines[i] + '\n'
+    }
+
     $('.code').val(program)
     resetLines()
 }
