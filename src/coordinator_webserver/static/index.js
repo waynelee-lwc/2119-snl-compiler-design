@@ -24,8 +24,8 @@ $('.btn-analysis').on('click',function(){
     let program = $('#code').val()
 
     $.ajax({
-        // url:'http://60.205.211.19:3008/compile',
-        url:'http://localhost:3008/compile',
+        url:'http://60.205.211.19:3008/compile',
+        // url:'http://localhost:3008/compile',
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -57,8 +57,8 @@ $('.btn-format').on('click',function(){
     let program = $('#code').val()
 
     $.ajax({
-        // url:'http://60.205.211.19:3008/compile',
-        url:'http://localhost:3008/compile',
+        url:'http://60.205.211.19:3008/compile',
+        // url:'http://localhost:3008/compile',
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -96,7 +96,8 @@ $('.btn-reset').on('click',function(){
 $('.demo-programs').on('change',function(){
     file = $('.demo-programs').val()
     $.ajax({
-        url:'http://localhost:3008/demoProgram',
+        // url:'http://localhost:3008/demoProgram',
+        url:'http://60.205.211.19:3008/demoProgram',
         type:'get',
         data:{
             file:file
@@ -201,13 +202,14 @@ function resetLines(){
             $(`<div>${i}</div>`)
         )
     }
-    $('.code').css({height:`${lines*1.5+0.125}rem`})
+    $('.code').css({height:`${lines*1.5+0.25}rem`})
 }
 
 function resetDemoList(){
     $('.demo-programs').empty()
     $.ajax({
-        url:'http://localhost:3008/demoProgramList',
+        // url:'http://localhost:3008/demoProgramList',
+        url:'http://60.205.211.19:3008/demoProgramList',
         type:'get',
         success:(res)=>{
             // console.log(res)
