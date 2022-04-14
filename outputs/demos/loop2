@@ -1,4 +1,4 @@
-{ 循环不变式外提优化的测试程序,有过程调用情形}
+{ 寰幆涓嶅彉寮忓鎻愪紭鍖栫殑娴嬭瘯绋嬪簭,鏈夎繃绋嬭皟鐢ㄦ儏褰
 program  pp
 var integer i,n,m,j,k;
     array [1..10] of integer a;
@@ -16,7 +16,7 @@ begin
       	   m:=10*(5+j); 
            m:=k+5;     
            n:=i;
-           q();        {有过程调用，不优化打开的循环}
+           q();        {鏈夎繃绋嬭皟鐢紝涓嶄紭鍖栨墦寮�鐨勫惊鐜瘆
            write(n);
            i:=i+1
       endwh;
@@ -25,7 +25,7 @@ begin
    endwh;
 
    write(m);
-   while j<4 do   {可以优化}
+   while j<4 do   {鍙互浼樺寲}
      m:=1+k;
      j:=j+1
    endwh;

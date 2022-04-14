@@ -1,6 +1,6 @@
-{在一个过程声明中又有一过程声明测试}
-{输入n,若n<10,则输出n+10,n+10;
-            否则输出n-10,n-10}
+{鍦ㄤ竴涓繃绋嬪０鏄庝腑鍙堟湁涓�杩囩▼澹版槑娴嬭瘯}
+{杈撳叆n,鑻<10,鍒欒緭鍑簄+10,n+10;
+            鍚﹀垯杈撳嚭n-10,n-10}
 
 program  example
 type w1=record
@@ -11,7 +11,7 @@ var
      integer a;
      integer b;
      w1 c;
-     {w2 d;语义错误}
+     {w2 d;璇箟閿欒}
 procedure sd(integer s1;var integer s2); 
 var integer ss;
 procedure sss(integer a);

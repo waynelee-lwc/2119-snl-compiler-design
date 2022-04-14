@@ -1,4 +1,4 @@
-{简单的过程调用，测试变参的传递}
+{绠�鍗曠殑杩囩▼璋冪敤锛屾祴璇曞彉鍙傜殑浼犻�拀
 program pp
 var   integer  v1;
 char  c;

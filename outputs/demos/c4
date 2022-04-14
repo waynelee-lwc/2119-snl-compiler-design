@@ -1,5 +1,5 @@
-{域变量的测试程序}
-{功能：对于输入m,n ;  输出m+1,n+1,和m+1+n+1的值}
+{鍩熷彉閲忕殑娴嬭瘯绋嬪簭}
+{鍔熻兘锛氬浜庤緭鍏,n ;  杈撳嚭m+1,n+1,鍜宮+1+n+1鐨勫�紏
 program  example
 type 
      w2=record

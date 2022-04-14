@@ -1,4 +1,4 @@
-{���Ա���ʽ�ļ��㣬���н��Ϊ15��7}
+{测试表达式的计算，运行结果为15，7}
 program pp
 type t1=integer;
      t2=t1;

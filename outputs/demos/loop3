@@ -1,4 +1,4 @@
-{ 循环不变式外提优化的测试程序1,测试地址加外提}
+{ 寰幆涓嶅彉寮忓鎻愪紭鍖栫殑娴嬭瘯绋嬪簭1,娴嬭瘯鍦板潃鍔犲鎻恾
 program  pp
 var integer i,n,m,j,k,r;
     array [1..10] of integer a;
@@ -10,8 +10,8 @@ begin
    while k<3  do
       while i<5 do 
            a[k]:=k;           
-      	   m:=10*(5+j); {运算提两层}
-           m:=k+5;      {运算提一层}
+      	   m:=10*(5+j); {杩愮畻鎻愪袱灞倉
+           m:=k+5;      {杩愮畻鎻愪竴灞倉
            n:=i;
       
            write(n);
