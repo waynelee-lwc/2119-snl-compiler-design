@@ -15,5 +15,5 @@ func Match(expected *tokens.Token) (*tokens.Token, error) {
 		fmt.Println("match!", expected, token)
 		return token, nil
 	}
-	return nil, fmt.Errorf("token not match! %v:%v", expected, token)
+	return nil, fmt.Errorf("token not match! wanted:%v, but:%v", expected, token)
 }

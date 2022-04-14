@@ -64,7 +64,8 @@ func TestTokenReader(t *testing.T) {
 }
 
 func TestTypeDec(t *testing.T) {
-	tokens, _ := LoadTokens("../../../outputs/bubble_sort.tk")
+	// tokens, _ := LoadTokens("../../../outputs/bubble_sort.tk")
+	tokens, _ := LoadTokens("/Users/bytedance/codes/jlu-2119-compiler-design/outputs/cache/2022-03-02_12:32:43_GIWGCYYHLQ/tk")
 	token_set.Initscanner(tokens)
 	for _, token := range tokens {
 		fmt.Println(token)
@@ -85,12 +86,12 @@ func TestTypeDec(t *testing.T) {
 
 	fmt.Println("error ", err)
 	// fmt.Println(program.ToString(""))
-	err = SaveSyntaxTree("../../../outputs/bubble_sort.tree", program.ToString(""))
+	// err = Save("../../../outputs/bubble_sort.tree", program.ToString(""))
 	fmt.Println("error ", err)
 	fmt.Println(program.ToProgram("", nil))
-	generated := program.ToProgram("", nil)
-	err = SaveSyntaxTree("../../../outputs/bubble_sort.gene", generated)
-	fmt.Println(err)
+	// generated := program.ToProgram("", nil)
+	// err = Save("../../../outputs/bubble_sort.gene", generated)
+	// fmt.Println(err)
 }
 
 func TestCreateNameList(t *testing.T) {

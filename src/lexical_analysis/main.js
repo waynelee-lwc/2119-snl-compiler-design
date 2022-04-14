@@ -9,31 +9,50 @@ var StateVertexs = require('./model/stateVertexs')
  */
 function main(){
 
-    let program = rw.LoadSourceCode('../../outputs/bubble_sort.snl')
+    let argv = process.argv
+    let programPath = argv[2]
+
+    if(!programPath){
+        console.log('usage: node {mainfile} {programPath}')
+        return
+    }
+
+    let snlFile = `${programPath}/snl`      //源代码文件
+    let tkFile = `${programPath}/tk`        //token序列文件
+    let errorFile = `${programPath}/lexerr` //错误信息文件
+    let logFile = `${programPath}/lexlog`   //日志文件
+    let commentFile = `${programPath}/cmt`  //注释文件
+
+    let program = rw.LoadSourceCode(snlFile)
     console.log(`parsing program \n'''\n${program}\n'''`)
     reader = new ProgramReader(program)
     parser = new LexicalAnalysiser(reader,StateVertexs.Start)
     resp = parser.parse()
 
-    console.log('---------------------------error-----------')
-    for(let error of resp.errorList){
-        console.log(JSON.stringify(error))
-    }
-    console.log('---------------------------token-----------')
-    for(let token of resp.tokenList){
-        console.log(JSON.stringify(token))
-    }
-    console.log('---------------------------log-------------')
-    for(let log of resp.logList){
-        console.log(JSON.stringify(log))
-    }
-
-    //error...
-    rw.SaveTokens('../../outputs/bubble_sort.tk',resp.tokenList)
+    // console.log('---------------------------error-----------')
+    // for(let error of resp.errorList){
+    //     console.log(JSON.stringify(error))
+    // }
+    // console.log('---------------------------token-----------')
+    // for(let token of resp.tokenList){
+    //     console.log(JSON.stringify(token))
+    // }
+    // console.log('---------------------------log-------------')
+    // for(let log of resp.logList){
+    //     console.log(JSON.stringify(log))
+    // }
 
     //token list...
+    rw.Save(tkFile,resp.tokenList)
+
+    //error list...
+    rw.Save(errorFile,resp.errorList)
 
     //log list...
+    rw.Save(logFile,resp.logList)
+
+    //comment list..
+    rw.Save(commentFile,resp.commentList)
 }
 
 main()

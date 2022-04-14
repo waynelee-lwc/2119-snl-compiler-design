@@ -61,7 +61,7 @@ exports.IsCommentHeader = (ch)=>{
     return dict.CommentHeaderReg.test(ch)
 }
 //注释尾符
-exports.IsCommentEnder = (token)=>{
+exports.IsCommentEnder = (ch)=>{
     return dict.CommentEnderReg.test(ch)
 }
 //数组下标界限符

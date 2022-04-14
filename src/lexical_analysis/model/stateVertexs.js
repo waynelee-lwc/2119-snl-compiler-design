@@ -182,7 +182,16 @@ const InNum         = new models.StateVertex(INNUM      ,function(ch){
         res.log     = this.getParseLog(ch)
         return res
     }
-    //其他字符
+    //字母，报错
+    if(checking.IsLetter(ch)){
+        res.isTokenEnd  = true
+        res.nextState   = Start
+        res.error       = this.getErrorInNum(ch)
+        res.log         = this.getErrorLog(res.error)
+        res.goback      = 1
+        return res
+    }
+    //其他字符，生成token
     res.isTokenEnd  = true
     res.nextState   = Start
     res.log         = this.getTransitionLog(Start)
@@ -220,18 +229,19 @@ const InSeperator   = new models.StateVertex(INSEPERATOR,function(ch){
 const InComment     = new models.StateVertex(INCOMMENT  ,function(ch){
     res = this.newResponse()
     //非法字符
-    if(!checking.IsLegal(ch)){
-        res.isTokenEnd  = true
-        res.nextState   = Start
-        res.error       = this.getIllegalCharacterError(ch)
-        res.log         = this.getErrorLog(res.error)
-        return res
-    }
+    // if(!checking.IsLegal(ch)){
+    //     res.isTokenEnd  = true
+    //     res.nextState   = Start
+    //     res.error       = this.getIllegalCharacterError(ch)
+    //     res.log         = this.getErrorLog(res.error)
+    //     return res
+    // }
     //注释尾符
     if(checking.IsCommentEnder(ch)){
         res.isTokenEnd  = true
         res.nextState   = Start
         res.log         = this.getTransitionLog
+        res.comment     = {comment:this.tokenStr ,line : this.line}
         return res
     }
     //其他符号

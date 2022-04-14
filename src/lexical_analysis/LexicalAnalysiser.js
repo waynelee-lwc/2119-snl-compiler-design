@@ -20,9 +20,10 @@ class LexicalAnalysiser{
         let currState = this.initState
         currState.init(1,1,'')
 
-        let errorList = []
-        let tokenList = []
-        let logList   = []
+        let errorList   = []
+        let tokenList   = []
+        let logList     = []
+        let commentList = []
 
         let needInit = true
         let tokenStr = ''
@@ -52,6 +53,11 @@ class LexicalAnalysiser{
                 errorList.push(res.error)
             }
 
+            //注释内容处理
+            if(res.comment){
+                commentList.push(res.comment)
+            }
+
             //回退处理
             this.reader.goback(res.goback)
             //生成token处理
@@ -78,9 +84,10 @@ class LexicalAnalysiser{
 
         //...
         return {
-            errorList : errorList,
-            tokenList : tokenList,
-            logList   : logList
+            errorList   : errorList,
+            tokenList   : tokenList,
+            logList     : logList,
+            commentList : commentList
         }
     }
 

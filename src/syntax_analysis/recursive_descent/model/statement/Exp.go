@@ -123,6 +123,19 @@ func Factor() (*tree_node.TreeNode, error) {
 			return variable, nil
 		}
 	}
+	if token_set.Factor2CharC.Predict(currToken) {
+		//赋值可以是单个字符
+		node := tree_node.NewTreeNode()
+		node.NodeKind = tree_node.ExpK
+		node.Kind = tree_node.ConstK
+		node.Attr.ExpAttr = &tree_node.ExpAttr{}
+		if charc, err := Match(token_set.Charc); err != nil {
+			return nil, fmt.Errorf("Factor %v", err)
+		} else {
+			node.Attr.ExpAttr.Val = "'" + charc.Name + "'"
+			return node, nil
+		}
+	}
 
 	return nil, fmt.Errorf("Factor match failed! %v", currToken)
 }
