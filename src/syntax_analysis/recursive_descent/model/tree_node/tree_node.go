@@ -1,6 +1,7 @@
 package tree_node
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 )
@@ -230,6 +231,21 @@ func (attr *Attr) ToString(node *TreeNode) string {
 	}
 	if attr.ProcAttr != nil {
 		res += string(attr.ProcAttr.ParamType) + " "
+	}
+
+	return res
+}
+
+func (node *TreeNode) ToJSON(prefix string) string {
+	res := prefix
+
+	children := node.Children
+	node.Children = nil
+	str, _ := json.Marshal(node)
+
+	res += string(str)
+	for _, child := range children {
+		res += "\n" + child.ToJSON(prefix+Indentation)
 	}
 
 	return res

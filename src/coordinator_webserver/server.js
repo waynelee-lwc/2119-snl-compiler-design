@@ -132,9 +132,10 @@ app.post('/compile',(req,res)=>{
         lex_err:result['lexerr'],
         syn_err:result['synerr'],
         comments: result['cmt'],
+        // tson : result['tson'],
         program_name : programName
     }
-    fs.rmdirSync(programPath,{ recursive: true, force: true })
+    // fs.rmdirSync(programPath,{ recursive: true, force: true })
     res.send(resp).end()
 })
 

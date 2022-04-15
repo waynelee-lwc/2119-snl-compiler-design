@@ -21,6 +21,7 @@ func main() {
 	treeFile := fmt.Sprintf("%v/tree", programName)
 	errorFile := fmt.Sprintf("%v/synerr", programName)
 	geneFile := fmt.Sprintf("%v/gene", programName)
+	tsonFile := fmt.Sprintf("%v/tson", programName)
 
 	tokens, _ := LoadTokens(tkFile)
 	token_set.Initscanner(tokens)
@@ -31,22 +32,28 @@ func main() {
 		errList = append(errList, err.Error())
 	} else {
 		errList = append(errList, "")
+		tree := program.ToString("")
+		gene := program.ToProgram("", nil)
+		tson := program.ToJSON("")
+
+		if err := Save(treeFile, tree); err != nil {
+			errList = append(errList, err.Error())
+		} else {
+			errList = append(errList, "")
+		}
+		if err := Save(geneFile, gene); err != nil {
+			errList = append(errList, err.Error())
+		} else {
+			errList = append(errList, "")
+		}
+		if err := Save(tsonFile, tson); err != nil {
+			errList = append(errList, err.Error())
+		} else {
+			errList = append(errList, "")
+		}
 	}
 	// fmt.Println(err)
 
-	tree := program.ToString("")
-	gene := program.ToProgram("", nil)
-
-	if err := Save(treeFile, tree); err != nil {
-		errList = append(errList, err.Error())
-	} else {
-		errList = append(errList, "")
-	}
-	if err := Save(geneFile, gene); err != nil {
-		errList = append(errList, err.Error())
-	} else {
-		errList = append(errList, "")
-	}
 	// fmt.Println(errList)
 	errs, err := json.Marshal(errList)
 	fmt.Println(string(errs), err)

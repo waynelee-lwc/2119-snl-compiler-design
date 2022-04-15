@@ -36,10 +36,13 @@ func ProcDeclaration() ([]*tree_node.TreeNode, error) {
 	if _, err := Match(token_set.LParen); err != nil {
 		return nil, fmt.Errorf("ProDeclaration  %v", err)
 	}
-	if childern, err := ParamDecList(); err != nil {
+	// if childern, err := ParamDecList(); err != nil {
+	// 	return nil, fmt.Errorf("ProDeclaration  %v", err)
+	// } else {
+	// 	node.Children = append(node.Children, childern...)
+	// }
+	if err := ParamList(node); err != nil {
 		return nil, fmt.Errorf("ProDeclaration  %v", err)
-	} else {
-		node.Children = append(node.Children, childern...)
 	}
 	if _, err := Match(token_set.RParen); err != nil {
 		return nil, fmt.Errorf("ProDeclaration  %v", err)

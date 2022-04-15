@@ -1,0 +1,35 @@
+program p
+procedure p1();
+	procedure p11();
+		procedure p111();
+			var integer a,b;
+			begin
+				a := b;
+				b := a
+			end
+		procedure p112();
+			var integer a,b;
+			begin
+				a := b;
+				b := a
+			end
+		begin
+			a := b;
+		end
+	procedure p12();
+		begin
+				a := b;
+		end
+	begin
+				a := b;
+	end
+procedure p2();
+	procedure p21();
+		begin
+				a := b;
+		end
+	begin
+	end
+begin
+				a := b;
+end.
