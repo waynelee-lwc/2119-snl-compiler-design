@@ -1,0 +1,46 @@
+ProK  
+	PheadK  example 
+	TypeK  
+		DecK RecordK w1 
+			DecK IntegerK x  
+			DecK IntegerK y  
+	VarK  
+		DecK IntegerK a 
+		DecK IntegerK b 
+		DecK IdK c 
+	ProcDecK  sd 
+		DecK IntegerK s1 valparam 
+		DecK IntegerK s2 varparam 
+		VarK  
+			DecK IntegerK ss 
+		ProcDecK  sss 
+			DecK IntegerK a valparam 
+			StmLK  
+				StmtK WriteK 
+					ExpK IdK a IdV 
+		StmLK  
+			StmtK IfK 
+				ExpK OpK < 
+					ExpK IdK s1 IdV 
+					ExpK ConstK 10 
+				StmtK AssignK 
+					ExpK IdK s2 IdV 
+					ExpK OpK + 
+						ExpK IdK s1 IdV 
+						ExpK ConstK 10 
+				StmtK AssignK 
+					ExpK IdK s2 IdV 
+					ExpK OpK - 
+						ExpK IdK s1 IdV 
+						ExpK ConstK 10 
+			StmtK CallK 
+				ExpK IdK sss IdV 
+				ExpK IdK s2 IdV 
+	StmLK  
+		StmtK ReadK a 
+		StmtK CallK 
+			ExpK IdK sd IdV 
+			ExpK IdK a IdV 
+			ExpK IdK b IdV 
+		StmtK WriteK 
+			ExpK IdK b IdV 
