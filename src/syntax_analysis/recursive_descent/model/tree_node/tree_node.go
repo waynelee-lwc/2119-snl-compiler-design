@@ -163,11 +163,11 @@ func (node *TreeNode) ToString(prefix string) string {
 	res := prefix
 	res += string(node.NodeKind) + " "
 	res += string(node.Kind) + " "
+	if node.NodeKind == DecK && node.Kind == IdK {
+		res += node.TypeName + " "
+	}
 	for _, name := range node.Name {
 		res += name + " "
-	}
-	if node.NodeKind == DecK && node.Kind == Kind(IdV) {
-		res += node.TypeName + " "
 	}
 	res += node.Attr.ToString(node)
 	for _, child := range node.Children {

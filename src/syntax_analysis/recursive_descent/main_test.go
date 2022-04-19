@@ -167,6 +167,7 @@ func TestGeneProgram(t *testing.T) {
 	headNode.NodeKind = tree_node.PheadK
 	headNode.Name = append(headNode.Name, "testP")
 	headNode.Children = append(headNode.Children, typeNode, varNode, procDecNode)
+	fmt.Println(headNode.ToString(""))
 	fmt.Println(headNode.ToProgram("", nil))
 	fmt.Println(headNode.ToJSON(""))
 }
