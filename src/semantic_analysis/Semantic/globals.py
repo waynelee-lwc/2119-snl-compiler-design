@@ -250,7 +250,7 @@ def picroot(node, depth=1, s=None, file=None):
             printWord("PheadK  ")
             printWord(node.name[0] + "  ")
         elif node.nodeKind == NodeKind.DecK:
-            printWord("Deck ")
+            printWord("DecK ")
 
             if node.kind["dec"] == DecKind.ArrayK:
                 printWord("ArrayK ")
@@ -292,7 +292,7 @@ def picroot(node, depth=1, s=None, file=None):
                           str(node.table[0].attrIR["More"]["VarAttr"]["level"]) + "  ")
 
         elif node.nodeKind == NodeKind.ProcDecK:
-            printWord("ProcDeck ")
+            printWord("ProcDecK ")
             printWord(node.name[0] + "  ")
             if node.table[0] != None:
                 printWord(str(node.table[0].attrIR["More"]["ProcAttr"]["mOff"]) + "  " + \
@@ -383,7 +383,7 @@ def picroot(node, depth=1, s=None, file=None):
 
 
 def loadroot():
-    file = open('tmp.txt', 'r')
+    file = open('/Users/bytedance/codes/jlu-2119-compiler-design/src/semantic_analysis/Semantic/tmp.txt', 'r')
     prock_flag = False
     pre_indented = -1
     pre_root = TreeNode()
@@ -401,7 +401,7 @@ def loadroot():
         elif nodetype == "PheadK":
             node.nodeKind = NodeKind.PheadK
             node.insertname(word[1])
-        elif nodetype == "Deck":
+        elif nodetype == "DecK":
             node.nodeKind = NodeKind.DecK
 
             if word[-1] == "varparam":
@@ -442,7 +442,7 @@ def loadroot():
             node.nodeKind = NodeKind.TypeK
         elif nodetype == "VarK":
             node.nodeKind = NodeKind.VarK
-        elif nodetype == "ProcDeck":
+        elif nodetype == "ProcDecK":
             node.nodeKind = NodeKind.ProcDecK
             node.insertname(word[1])
             prock_flag = True
