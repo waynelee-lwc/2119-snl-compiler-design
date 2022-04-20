@@ -56,8 +56,8 @@ const (
 	ExpBoolean     ExpType = "Boolean"
 	DefaultExpType ExpType = ""
 
-	ChildTypeChar    ChildType = "char"
-	ChildTypeInteger ChildType = "integer"
+	ChildTypeChar    ChildType = "CharK"
+	ChildTypeInteger ChildType = "IntegerK"
 
 	Indentation = "\t"
 )
