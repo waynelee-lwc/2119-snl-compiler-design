@@ -1,3 +1,6 @@
+
+var lastProgramName = ''
+
 $('#code').on('keydown', function(e) {
     if (e.key == 'Tab') {
       e.preventDefault();
@@ -21,11 +24,12 @@ $('#code').on('input',function(e){
 
 //分析程序按钮
 $('.btn-analysis').on('click',function(){
+    $('.download-outputs').attr('disabled','disabled')
     let program = $('#code').val()
 
     $.ajax({
-        url:'http://60.205.211.19:3008/compile',
-        // url:'http://localhost:3008/compile',
+        // url:'http://60.205.211.19:3008/compile',
+        url:'http://localhost:3008/compile',
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -34,6 +38,8 @@ $('.btn-analysis').on('click',function(){
             src:program
         }),
         success:function(res){
+            $('.download-outputs').removeAttr('disabled')
+            lastProgramName = res.program_name
             lexErrList = JSON.parse(res.lex_err)
             synErrList = JSON.parse(res.syn_err)
 
@@ -54,6 +60,7 @@ $('.btn-analysis').on('click',function(){
 
 //格式化程序按钮
 $('.btn-format').on('click',function(){
+    $('.download-outputs').attr('disabled','disabled')
     let program = $('#code').val()
 
     $.ajax({
@@ -82,11 +89,21 @@ $('.btn-format').on('click',function(){
     })
 })
 
+//下载编译产物
+$('.download-outputs').on('click',function(){
+    let host = 'localhost'
+    // let host = '60.205.211.19'
+    url = `http://${host}:3008/zips/${lastProgramName}.zip`
+
+    window.open(url)
+})
+
 //重置按钮
 $('.btn-reset').on('click',function(){
     if(!confirm('是否清空当前内容？')){
         return
     }
+    $('.download-outputs').attr('disabled','disabled')
     resetCode('',[])
     resetTokenList([])
     resetSyntaxTree('')
