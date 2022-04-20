@@ -24,8 +24,8 @@ $('.btn-analysis').on('click',function(){
     let program = $('#code').val()
 
     $.ajax({
-        url:'http://60.205.211.19:3008/compile',
-        // url:'http://localhost:3008/compile',
+        // url:'http://60.205.211.19:3008/compile',
+        url:'http://localhost:3008/compile',
         type:'post',
         headers:{
             'Content-Type':'application/json'
