@@ -77,6 +77,7 @@ app.post('/compile',(req,res)=>{
     let programPath = pathTool.resolve(__dirname,`../../outputs/cache/${programName}`)
     let programZip = pathTool.resolve(__dirname,`./static/zips/${programName}.zip`)
     let semanticAnalysis = pathTool.resolve(__dirname,`../semantic_analysis/analyze.py`)
+    let syntaxLL1Analysis = pathTool.resolve(__dirname,`../syntax_analysis/LL1/parse.py`)
 
     console.log(programPath)
     fs.mkdirSync(programPath)
@@ -104,7 +105,8 @@ app.post('/compile',(req,res)=>{
     }
 
 
-    let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析
+    let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析递归下降
+    let synll1 = execSync(`python3 ${syntaxLL1Analysis} ${programPath}`)    //语法分析LL1
 
 
     let sembuf = execSync(`python3 ${semanticAnalysis} ${programPath}`) //语法分析
@@ -139,6 +141,7 @@ app.post('/compile',(req,res)=>{
         lex_err:result['lexerr'],
         syn_err:result['synerr'],
         comments: result['cmt'],
+        treell1: result['treell1'],
         // tson : result['tson'],
         sem :result['sem'],
         program_name : programName

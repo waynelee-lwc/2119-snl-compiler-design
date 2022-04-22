@@ -1,5 +1,5 @@
 import json
-from src.parseLL1.LL1Support import *
+from LL1Support import *
 
 
 class LL1Table:
@@ -400,6 +400,7 @@ class LL1Parse:
     def gettoken(self):
         token = TokenType()
         p = self.tokens[self.fpnum]
+        print(p)
         token.lineshow = p['line']
         token.Sem = p['name']
         token.Lex = self.getLexType(p)
@@ -1187,15 +1188,19 @@ class LL1Parse:
 
 
 if __name__ == '__main__':
+    programPath = sys.argv[1]   #程序产物文件夹
+    tokenFile = programPath + '/tk' #token输入队列
+    treeFile = programPath + '/treell1'
+    # tokenFile = 'input1.txt'
     # input_path = "../outputs/bubble_sort.tk"
-    input_path = "input1.txt"
-    output_path = "tmp.txt"
+    # input_path = "input1.txt"
+    # output_path = "tmp.txt"
     # input_path = "../outputs/bubble_sort.tk"
 
-    with open(input_path, 'r') as f:
+    with open(tokenFile, 'r') as f:
         input_file = json.load(f)
 
     LL1 = LL1Parse()
     root = LL1.parse(input_file)
     IOClass = IONode()
-    IOClass.printRoot(root, file=output_path)
+    IOClass.printRoot(root, file=treeFile)
