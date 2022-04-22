@@ -3,6 +3,7 @@ let bodyParser = require('body-parser')
 let fs = require('fs')
 let pathTool = require('path')
 let {exec, execSync} = require('child_process')
+let {zip} = require('zip-a-folder')
 
 const { dir } = require('console')
 
@@ -71,8 +72,12 @@ function Load(dir,filename){
 app.post('/compile',(req,res)=>{
     // console.log(JSON.stringify(req.body))
     let src = req.body.src
+    let needCache = req.body.needCache  //是否需要缓存
     let programName = geneProgramName()
     let programPath = pathTool.resolve(__dirname,`../../outputs/cache/${programName}`)
+    let programZip = pathTool.resolve(__dirname,`./static/zips/${programName}.zip`)
+    let semanticAnalysis = pathTool.resolve(__dirname,`../semantic_analysis/analyze.py`)
+
     console.log(programPath)
     fs.mkdirSync(programPath)
 
@@ -101,6 +106,8 @@ app.post('/compile',(req,res)=>{
 
     let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析
 
+
+    let sembuf = execSync(`python3 ${semanticAnalysis} ${programPath}`) //语法分析
     // console.log(lexbuf.toString())
     // console.log(synbuf.toString())
     
@@ -132,9 +139,14 @@ app.post('/compile',(req,res)=>{
         lex_err:result['lexerr'],
         syn_err:result['synerr'],
         comments: result['cmt'],
+        // tson : result['tson'],
+        sem :result['sem'],
         program_name : programName
     }
-    fs.rmdirSync(programPath,{ recursive: true, force: true })
+    
+    zip(programPath,programZip).then(()=>{
+        fs.rmdirSync(programPath,{ recursive: true, force: true })
+    })
     res.send(resp).end()
 })
 

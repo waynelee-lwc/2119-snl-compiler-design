@@ -1,0 +1,78 @@
+Prok
+	PheadK p
+	TypeK
+		Deck IntegerK t1
+		Deck ArrayK t2 1 20 IntegerK
+		Deck CharK t3
+		Deck RecordK t4
+			Deck IntegerK a b
+			Deck CharK c d
+			Deck ArrayK e f 1 30 Chark
+		Deck IdK t1 t5
+	VarK
+		Deck IdK t1 v1
+		Deck IdK t2 v2
+		Deck IdK t3 v3
+		Deck IdK t4 v4
+		Deck IdK t5 v5
+		Deck IntegerK a b
+		Deck CharK c d
+		Deck ArrayK e f 1 20 IntegerK
+		Deck RecordK g h
+			Deck IntegerK a
+			Deck CharK b
+	ProcDeck p
+		Deck IntegerK a b valparam
+		Deck CharK c d valparam
+		Deck IdK t1 v1 varparam
+		Deck RecordK r1 valparam
+			Deck IntegerK a b
+		TypeK
+			Deck IntegerK t1
+		VarK
+			Deck IdK t1 v1 v2
+		StmLK
+			StmtK ReadK v1
+			StmtK AssignK
+				ExpK IdK v2 IdV
+				ExpK OpK +
+					ExpK IdK v1 IdV
+					ExpK ConstK 1
+			StmtK AssignK
+				ExpK IdK v3 IdV
+				ExpK OpK +
+					ExpK IdK v2 IdV
+					ExpK OpK +
+						ExpK ConstK 6
+						ExpK ConstK 5
+			StmtK WriteK
+				ExpK IdK v2 IdV
+	ProcDeck q
+		Deck CharK name varparam
+		Deck IntegerK age valparam
+		TypeK
+			Deck RecordK Person
+				Deck IntegerK age
+				Deck CharK name
+		VarK
+			Deck IdK Person person
+		StmLK
+			StmtK AssignK
+				ExpK IdK person FieldMembV
+					ExpK IdK name IdV
+				ExpK IdK name IdV
+			StmtK AssignK
+				ExpK IdK person FieldMembV
+					ExpK IdK age IdV
+				ExpK IdK age IdV
+			StmtK WriteK
+				ExpK IdK person FieldMembV
+					ExpK IdK name IdV
+			StmtK ReturnK
+	StmLK
+		StmtK ReadK c
+		StmtK ReadK a
+		StmtK CallK
+			ExpK IdK q IdV
+			ExpK IdK c IdV
+			ExpK IdK a IdV
