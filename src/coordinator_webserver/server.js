@@ -76,6 +76,8 @@ app.post('/compile',(req,res)=>{
     let programName = geneProgramName()
     let programPath = pathTool.resolve(__dirname,`../../outputs/cache/${programName}`)
     let programZip = pathTool.resolve(__dirname,`./static/zips/${programName}.zip`)
+    let semanticAnalysis = pathTool.resolve(__dirname,`../semantic_analysis/analyze.py`)
+
     console.log(programPath)
     fs.mkdirSync(programPath)
 
@@ -104,6 +106,8 @@ app.post('/compile',(req,res)=>{
 
     let synbuf = execSync(`../syntax_analysis/recursive_descent/runnable ${programPath}`) //语法分析
 
+
+    let sembuf = execSync(`python3 ${semanticAnalysis} ${programPath}`) //语法分析
     // console.log(lexbuf.toString())
     // console.log(synbuf.toString())
     
@@ -136,6 +140,7 @@ app.post('/compile',(req,res)=>{
         syn_err:result['synerr'],
         comments: result['cmt'],
         // tson : result['tson'],
+        sem :result['sem'],
         program_name : programName
     }
     

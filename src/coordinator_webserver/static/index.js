@@ -1,6 +1,10 @@
 
 var lastProgramName = ''
 
+// var host = '60.205.211.19'
+var host = 'localhost'
+var port = '3008'
+
 $('#code').on('keydown', function(e) {
     if (e.key == 'Tab') {
       e.preventDefault();
@@ -29,7 +33,8 @@ $('.btn-analysis').on('click',function(){
 
     $.ajax({
         // url:'http://60.205.211.19:3008/compile',
-        url:'http://localhost:3008/compile',
+        // url:'http://localhost:3008/compile',
+        url:`http://${host}:${port}/compile`,
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -64,8 +69,9 @@ $('.btn-format').on('click',function(){
     let program = $('#code').val()
 
     $.ajax({
-        url:'http://60.205.211.19:3008/compile',
+        // url:'http://60.205.211.19:3008/compile',
         // url:'http://localhost:3008/compile',
+        url:`http://${host}:${port}/compile`,
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -91,9 +97,7 @@ $('.btn-format').on('click',function(){
 
 //下载编译产物
 $('.download-outputs').on('click',function(){
-    let host = 'localhost'
-    // let host = '60.205.211.19'
-    url = `http://${host}:3008/zips/${lastProgramName}.zip`
+    url = `http://${host}:${port}/zips/${lastProgramName}.zip`
 
     window.open(url)
 })
@@ -114,7 +118,8 @@ $('.demo-programs').on('change',function(){
     file = $('.demo-programs').val()
     $.ajax({
         // url:'http://localhost:3008/demoProgram',
-        url:'http://60.205.211.19:3008/demoProgram',
+        // url:'http://60.205.211.19:3008/demoProgram',
+        url:`http://${host}:${port}/demoProgram`,
         type:'get',
         data:{
             file:file
@@ -226,7 +231,8 @@ function resetDemoList(){
     $('.demo-programs').empty()
     $.ajax({
         // url:'http://localhost:3008/demoProgramList',
-        url:'http://60.205.211.19:3008/demoProgramList',
+        // url:'http://60.205.211.19:3008/demoProgramList',
+        url:`http://${host}:${port}/demoProgramList`,
         type:'get',
         success:(res)=>{
             // console.log(res)
