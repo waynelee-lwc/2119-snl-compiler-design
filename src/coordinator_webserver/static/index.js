@@ -1,3 +1,10 @@
+
+var lastProgramName = ''
+
+// var host = '60.205.211.19'
+var host = 'localhost'
+var port = '3008'
+
 $('#code').on('keydown', function(e) {
     if (e.key == 'Tab') {
       e.preventDefault();
@@ -21,11 +28,13 @@ $('#code').on('input',function(e){
 
 //分析程序按钮
 $('.btn-analysis').on('click',function(){
+    $('.download-outputs').attr('disabled','disabled')
     let program = $('#code').val()
 
     $.ajax({
-        url:'http://60.205.211.19:3008/compile',
+        // url:'http://60.205.211.19:3008/compile',
         // url:'http://localhost:3008/compile',
+        url:`http://${host}:${port}/compile`,
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -34,6 +43,8 @@ $('.btn-analysis').on('click',function(){
             src:program
         }),
         success:function(res){
+            $('.download-outputs').removeAttr('disabled')
+            lastProgramName = res.program_name
             lexErrList = JSON.parse(res.lex_err)
             synErrList = JSON.parse(res.syn_err)
 
@@ -54,11 +65,13 @@ $('.btn-analysis').on('click',function(){
 
 //格式化程序按钮
 $('.btn-format').on('click',function(){
+    $('.download-outputs').attr('disabled','disabled')
     let program = $('#code').val()
 
     $.ajax({
-        url:'http://60.205.211.19:3008/compile',
+        // url:'http://60.205.211.19:3008/compile',
         // url:'http://localhost:3008/compile',
+        url:`http://${host}:${port}/compile`,
         type:'post',
         headers:{
             'Content-Type':'application/json'
@@ -82,11 +95,19 @@ $('.btn-format').on('click',function(){
     })
 })
 
+//下载编译产物
+$('.download-outputs').on('click',function(){
+    url = `http://${host}:${port}/zips/${lastProgramName}.zip`
+
+    window.open(url)
+})
+
 //重置按钮
 $('.btn-reset').on('click',function(){
     if(!confirm('是否清空当前内容？')){
         return
     }
+    $('.download-outputs').attr('disabled','disabled')
     resetCode('',[])
     resetTokenList([])
     resetSyntaxTree('')
@@ -97,7 +118,8 @@ $('.demo-programs').on('change',function(){
     file = $('.demo-programs').val()
     $.ajax({
         // url:'http://localhost:3008/demoProgram',
-        url:'http://60.205.211.19:3008/demoProgram',
+        // url:'http://60.205.211.19:3008/demoProgram',
+        url:`http://${host}:${port}/demoProgram`,
         type:'get',
         data:{
             file:file
@@ -209,7 +231,8 @@ function resetDemoList(){
     $('.demo-programs').empty()
     $.ajax({
         // url:'http://localhost:3008/demoProgramList',
-        url:'http://60.205.211.19:3008/demoProgramList',
+        // url:'http://60.205.211.19:3008/demoProgramList',
+        url:`http://${host}:${port}/demoProgramList`,
         type:'get',
         success:(res)=>{
             // console.log(res)

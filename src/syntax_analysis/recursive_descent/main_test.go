@@ -65,7 +65,7 @@ func TestTokenReader(t *testing.T) {
 
 func TestTypeDec(t *testing.T) {
 	// tokens, _ := LoadTokens("../../../outputs/bubble_sort.tk")
-	tokens, _ := LoadTokens("/Users/bytedance/codes/jlu-2119-compiler-design/outputs/cache/2022-03-02_12:32:43_GIWGCYYHLQ/tk")
+	tokens, _ := LoadTokens("/Users/bytedance/codes/jlu-2119-compiler-design/outputs/cache/2022-03-04_20:38:27_CNJJFOYZRZ/tk")
 	token_set.Initscanner(tokens)
 	for _, token := range tokens {
 		fmt.Println(token)
@@ -167,7 +167,9 @@ func TestGeneProgram(t *testing.T) {
 	headNode.NodeKind = tree_node.PheadK
 	headNode.Name = append(headNode.Name, "testP")
 	headNode.Children = append(headNode.Children, typeNode, varNode, procDecNode)
-	fmt.Print(headNode.ToProgram("", nil))
+	fmt.Println(headNode.ToString(""))
+	fmt.Println(headNode.ToProgram("", nil))
+	fmt.Println(headNode.ToJSON(""))
 }
 
 /*

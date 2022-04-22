@@ -159,13 +159,13 @@ html,body{
     position: absolute;
     border: 1px solid;
     width: 30%;
-    top: 1rem;
+    top: 3rem;
     left: 1rem;
 }
 
 .main>.outputs>.syntax-tree{
     position: absolute;
-    top: 1rem;
+    top: 3rem;
     left: 30rem;
     border: 1px solid;
     width: 65%;
@@ -175,6 +175,17 @@ html,body{
     position: absolute;
     top: 50rem;
     left: 1rem;
+}
+
+.main>.outputs>.download-outputs{
+    position: absolute;
+    top: 0.5rem;
+    left: 20%;
+    width: 60%;
+    height: 2rem;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 7px;
 }
 
 .output-title{
