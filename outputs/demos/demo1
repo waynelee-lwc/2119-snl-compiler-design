@@ -1,0 +1,28 @@
+program p
+type
+	t1 = integer;
+	w1 = record
+		integer x;
+		integer y;
+	end;
+var
+	integer v1, v2;
+	array[0..5]of integer a;
+procedure q(integer i; integer j);
+	var
+		integer a;
+	begin
+		a := i;
+		write(a)
+	end
+begin
+	read(v1);
+	write(v1+v2);
+	if v1<10 then
+		v1 := v1+10
+	else
+		v1 := v1-10
+	fi;
+	q(v1, 10);
+	a[2] := a[3]+4
+end.

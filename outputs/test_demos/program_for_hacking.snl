@@ -1,0 +1,13 @@
+program forHacking
+var
+    integer hack;
+    integer a,b,c;
+begin
+    hack := a-b-c;
+    hack := a-(b-c);
+    hack := a-b-c-d;
+    hack := a-b-c+d-e;
+    hack := a*b/c/d/e;
+    hack := a-b-c*d-e;
+    hack := a-b*c/d/e-f
+end
