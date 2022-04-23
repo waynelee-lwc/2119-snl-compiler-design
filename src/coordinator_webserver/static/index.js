@@ -1,3 +1,8 @@
+document.getElementsByTagName('html')[0].style.fontSize = (16/1920) * window.innerWidth + "px";
+window.onresize = function(){
+	// console.log("当前尺寸为：" + window.innerWidth);
+	document.getElementsByTagName('html')[0].style.fontSize = (16/1920) * window.innerWidth + "px";
+}
 
 var lastProgramName = ''
 
@@ -54,9 +59,10 @@ $('.btn-analysis').on('click',function(){
             }
 
             tokenList = JSON.parse(res.tokens)
-            tree = res.tree
+            rdtree = res.tree
+            ll1tree = res.treell1
             resetTokenList(tokenList)
-            resetSyntaxTree(tree)
+            resetSyntaxTree(rdtree,ll1tree)
             
             $('html, body').animate({scrollTop: $('.errors').offset().top}, 300) 
         }
@@ -170,6 +176,12 @@ function resetErrorPanel(lexErr,synErr,semErr){
     return flag
 }
 
+function currRemSize(){
+    let fontSize = $('html').css('font-size')
+    fontSize = fontSize.substring(0,fontSize.length-2)
+    return Number(fontSize)
+}
+
 function resetCode(program,comments){
     lines = program.split('\n')
     // console.log(lines)
@@ -189,8 +201,52 @@ function resetCode(program,comments){
     resetLines()
 }
 
-function resetSyntaxTree(tree){
-    $('.syntax-tree>.tree').val(tree)
+function resetSyntaxTree(rdtree,ll1tree){
+    // 递归下降处理
+    let rdwd = 0
+    let rdht = 0
+    lines = rdtree.split('\n')
+    for(line of lines){
+        let tmp = 0
+        for(ch of line){
+            tmp += ch == '\t' ? 4 : 1
+        }
+        rdwd = Math.max(rdwd,tmp)
+    }
+    rdht = lines.length
+    $('.syntax-tree-rd .tree').width(currRemSize() * 1 * rdwd)
+    $('.syntax-tree-rd .tree').height(currRemSize() * 1.125 * rdht + 5)
+    $('.syntax-tree-rd .linenos').height(currRemSize() * 1.125 * rdht + 5)
+    $('.syntax-tree-rd .tree').val(rdtree)
+    $('.syntax-tree-rd .linenos').empty()
+    for(let i = 1;i <= rdht;i++){
+        $('.syntax-tree-rd .linenos').append(
+            `<div class="lineno">${i}</div>`
+        )
+    }
+    //  ll1处理
+    let ll1wd = 0
+    let ll1ht = 0
+    lines = rdtree.split('\n')
+    for(line of lines){
+        let tmp = 0
+        for(ch of line){
+            tmp += ch == '\t' ? 4 : 1
+        }
+        ll1wd = Math.max(ll1wd,tmp)
+    }
+    ll1ht = lines.length
+    $('.syntax-tree-ll1 .tree').width(currRemSize() * 0.8 * ll1wd)
+    $('.syntax-tree-ll1 .tree').height(currRemSize() * 1.125 * ll1ht + 5)   
+    $('.syntax-tree-ll1 .linenos').height(currRemSize() * 1.125 * rdht + 5) 
+    $('.syntax-tree-ll1 .tree').val(ll1tree)
+    $('.syntax-tree-ll1 .linenos').empty()
+    for(let i = 1;i <= rdht;i++){
+        $('.syntax-tree-ll1 .linenos').append(
+            `<div class="lineno">${i}</div>`
+        )
+    }
+    
 }
 
 function resetTokenList(tokenList){
