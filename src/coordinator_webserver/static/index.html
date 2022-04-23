@@ -60,6 +60,7 @@
             <!-- 结果展示区 -->
             <div class="outputs" name="outputs">
                 <button class="download-outputs">下载编译产物</button>
+                <!-- token序列 -->
                 <div class="token-list">
                     <h2 class="output-title">Token List</h2>
                     <div class="token-head token">
@@ -73,10 +74,29 @@
                         
                     </div>
                 </div>
-                <div class="syntax-tree">
-                    <h2 class="output-title">Syntax Tree</h2>
-                    <textarea class="tree"disabled></textarea>
+                <!-- 语法树-递归下降 -->
+                <div class="syntax-tree syntax-tree-rd">
+                    <h2 class="output-title">Syntax Tree [ Recursive Descent ]</h2>
+                    <div class="tree-wrapper">
+                        <div class="linenos">
+                            <!-- <div class="lineno">1</div> -->
+                        </div>
+                        <textarea class="tree"disabled></textarea>
+                    </div>
                 </div>
+                <!-- 语法树-ll1 -->
+                <div class="syntax-tree syntax-tree-ll1">
+                    <h2 class="output-title">Syntax Tree [ LL1 ]</h2>
+                    <div class="tree-wrapper">
+                        <div class="linenos">
+                            <!-- <div class="lineno">1</div> -->
+                        </div>
+                        <!-- <div class="tree-box"> -->
+                        <textarea class="tree"disabled></textarea>
+                        <!-- </div> -->
+                    </div>
+                </div>
+                <!-- 语义分析 -->
                 <div class="semantic-tables" >
                     <h2 class="output-title">Semantic Tables</h2>
                 </div>
