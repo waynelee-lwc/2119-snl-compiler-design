@@ -1,0 +1,11 @@
+{
+  "name": "lexical_analysis",
+  "version": "1.0.0",
+  "description": "吉林大学编译原理课程设计词法分析",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "WayneLi,Ehlas,HabourFu",
+  "license": "ISC"
+}

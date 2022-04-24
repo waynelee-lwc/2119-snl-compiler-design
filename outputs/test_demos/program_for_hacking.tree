@@ -1,0 +1,76 @@
+ProK  
+	PheadK  forHacking 
+
+	VarK  
+		DecK IntegerK hack 
+		DecK IntegerK a b c 
+	StmLK  
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK - 
+				ExpK OpK - 
+					ExpK IdK a IdV 
+					ExpK IdK b IdV 
+				ExpK IdK c IdV 
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK - 
+				ExpK IdK a IdV 
+				ExpK OpK - 
+					ExpK IdK b IdV 
+					ExpK IdK c IdV 
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK - 
+				ExpK OpK - 
+					ExpK OpK - 
+						ExpK IdK a IdV 
+						ExpK IdK b IdV 
+					ExpK IdK c IdV 
+				ExpK IdK d IdV 
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK - 
+				ExpK OpK + 
+					ExpK OpK - 
+						ExpK OpK - 
+							ExpK IdK a IdV 
+							ExpK IdK b IdV 
+						ExpK IdK c IdV 
+					ExpK IdK d IdV 
+				ExpK IdK e IdV 
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK / 
+				ExpK OpK / 
+					ExpK OpK / 
+						ExpK OpK * 
+							ExpK IdK a IdV 
+							ExpK IdK b IdV 
+						ExpK IdK c IdV 
+					ExpK IdK d IdV 
+				ExpK IdK e IdV 
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK - 
+				ExpK OpK - 
+					ExpK OpK - 
+						ExpK IdK a IdV 
+						ExpK IdK b IdV 
+					ExpK OpK * 
+						ExpK IdK c IdV 
+						ExpK IdK d IdV 
+				ExpK IdK e IdV 
+		StmtK AssignK 
+			ExpK IdK hack IdV 
+			ExpK OpK - 
+				ExpK OpK - 
+					ExpK IdK a IdV 
+					ExpK OpK / 
+						ExpK OpK / 
+							ExpK OpK * 
+								ExpK IdK b IdV 
+								ExpK IdK c IdV 
+							ExpK IdK d IdV 
+						ExpK IdK e IdV 
+				ExpK IdK f IdV 
