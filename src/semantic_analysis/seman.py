@@ -1,6 +1,6 @@
+# from src.semantic_analysis.SemanticSupport import *
 from SemanticSupport import *
 
-#hello
 class Semantic:
     def __init__(self):
         self.Off = 0
@@ -819,7 +819,7 @@ if __name__ == '__main__':
     output_path = programPath + '/sem'
     error_path = programPath + '/semerr'
 
-    # input_path = "tmp1.txt"
+    #input_path = "tmp.txt"
     # output_path = None
     # error_path = None
     # output_path = "tmpp.txt"
@@ -830,7 +830,6 @@ if __name__ == '__main__':
 
     AAA = Semantic()
     AAA.analyze(root)
-
     table, error = AAA.GetResult()
 
     print(table)

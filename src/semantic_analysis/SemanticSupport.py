@@ -139,14 +139,6 @@ class AttributeIR:
         }
 
 
-class Log():
-    def e(self, tag, word):
-        sys.stderr.write("[error] from " + tag + " " + word + "\n")
-
-    def d(self, tag, word):
-        sys.stdout.write("[log] from " + tag + " " + word + "\n")
-
-
 class TypeKind(Enum):
     intTy = 1
     charTy = 2
@@ -572,7 +564,6 @@ class TreeNode:
         cur.brother = br
 
 
-
 class ParamTable:
     def __init__(self):
         entry = SymTableItem()
@@ -588,28 +579,17 @@ class SymTableItem:
 
 def NewTy(kind):
     table = TypeIR()
-    if table == None:
-        LOG.e(DEBUG, "Out of memory error !")
-        Error = True
-    else:
-        if kind == TypeKind.boolTy or \
-                kind == TypeKind.intTy or \
-                kind == TypeKind.charTy:
-            table.kind = kind
-            table.size = 1
-        elif kind == TypeKind.arrayTy:
-            table.kind = TypeKind.arrayTy
-            table.More["ArrayAttr"]["indexTy"] = None
-            table.More["ArrayAttr"]["elemTy"] = None
-        elif kind == TypeKind.recordTy:
-            table.kind = TypeKind.recordTy
-            table.More["body"] = None
+    if kind == TypeKind.boolTy or \
+            kind == TypeKind.intTy or \
+            kind == TypeKind.charTy:
+        table.kind = kind
+        table.size = 1
+    elif kind == TypeKind.arrayTy:
+        table.kind = TypeKind.arrayTy
+        table.More["ArrayAttr"]["indexTy"] = None
+        table.More["ArrayAttr"]["elemTy"] = None
+    elif kind == TypeKind.recordTy:
+        table.kind = TypeKind.recordTy
+        table.More["body"] = None
 
     return table
-
-def ErrorPrompt(line, name, message):
-    #LOG.e(TAG, ">>>Line: {} {} {}".format(str(line), name, message))
-    Error = True
-    exit(-1)
-
-
