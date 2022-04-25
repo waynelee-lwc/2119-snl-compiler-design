@@ -268,6 +268,7 @@ class IONode:
 
             else:
                 self.printWord("error5!")
+            self.printWord(str(node.linePos) + " " + str(node.colPos) + " ")
             self.printWord('\n')
             for i in range(3):
                 self.picroot(node.child[i], depth=depth + 1)
@@ -283,6 +284,8 @@ class IONode:
             cur_indented = line.count('\t')
             word = line.split()
             node = TreeNode()
+            colPos = int(word.pop())
+            linePos = int(word.pop())
             nodetype = word[0]
             if cur_indented <= 1 and prock_flag is True:
                 prock_flag = False
@@ -445,6 +448,8 @@ class IONode:
             pre_indented = cur_indented
             cur = node
 
+            node.linePos = linePos
+            node.colPos = colPos
         file.close()
         return pre_root.child[0]
 
@@ -455,6 +460,7 @@ class TreeNode:
         self.brother = None
         self.child = [None, None, None]
         self.linePos = 0
+        self.colPos = 0
         self.kind = {"dec": None, "stmt": None, "exp": None}
         self.nodeKind = nodeKind
         self.idnum = 0
@@ -546,6 +552,7 @@ MAXTOKENLEN = 15
 class TokenType:
     def __init__(self):
         self.lineshow = None
+        self.col = None
         self.Lex = None
         self.Sem = None # 字符串
 

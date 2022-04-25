@@ -1,5 +1,5 @@
 Prok
-	PheadK  p
+	PheadK p
 	TypeK
 		Deck IntegerK t1
 		Deck ArrayK t2 1 20 IntegerK
@@ -30,21 +30,21 @@ Prok
 		TypeK
 			Deck IntegerK t1
 		VarK
-			Deck IdK t1 v1 v2
+			Deck IdK t1 v2
 		StmLK
 			StmtK ReadK v1
 			StmtK AssignK
 				ExpK IdK v2 IdV
 				ExpK OpK +
 					ExpK IdK v1 IdV
-					ExpK ConstK IdK 1
+					ExpK ConstK 1
 			StmtK AssignK
 				ExpK IdK v3 IdV
 				ExpK OpK +
 					ExpK IdK v2 IdV
 					ExpK OpK +
-						ExpK ConstK IdK 6
-						ExpK ConstK IdK 5
+						ExpK ConstK 6
+						ExpK ConstK 5
 			StmtK WriteK
 				ExpK IdK v2 IdV
 	ProcDeck q
@@ -57,17 +57,6 @@ Prok
 		VarK
 			Deck IdK Person person
 		StmLK
-			StmtK AssignK
-				ExpK IdK person FieldMembV
-					ExpK IdK name IdV
-				ExpK IdK name IdV
-			StmtK AssignK
-				ExpK IdK person FieldMembV
-					ExpK IdK age IdV
-				ExpK IdK age IdV
-			StmtK WriteK
-				ExpK IdK person FieldMembV
-					ExpK IdK name IdV
 			StmtK ReturnK
 	StmLK
 		StmtK ReadK c

@@ -1,78 +1,114 @@
-Prok
-	PheadK p
-	TypeK
-		Deck IntegerK t1
-		Deck ArrayK t2 1 20 IntegerK
-		Deck CharK t3
-		Deck RecordK t4
-			Deck IntegerK a b
-			Deck CharK c d
-			Deck ArrayK e f 1 30 Chark
-		Deck IdK t1 t5
-	VarK
-		Deck IdK t1 v1
-		Deck IdK t2 v2
-		Deck IdK t3 v3
-		Deck IdK t4 v4
-		Deck IdK t5 v5
-		Deck IntegerK a b
-		Deck CharK c d
-		Deck ArrayK e f 1 20 IntegerK
-		Deck RecordK g h
-			Deck IntegerK a
-			Deck CharK b
-	ProcDeck p
-		Deck IntegerK a b valparam
-		Deck CharK c d valparam
-		Deck IdK t1 v1 varparam
-		Deck RecordK r1 valparam
-			Deck IntegerK a b
-		TypeK
-			Deck IntegerK t1
-		VarK
-			Deck IdK t1 v1 v2
-		StmLK
-			StmtK ReadK v1
-			StmtK AssignK
-				ExpK IdK v2 IdV
-				ExpK OpK +
-					ExpK IdK v1 IdV
-					ExpK ConstK 1
-			StmtK AssignK
-				ExpK IdK v3 IdV
-				ExpK OpK +
-					ExpK IdK v2 IdV
-					ExpK OpK +
-						ExpK ConstK 6
-						ExpK ConstK 5
-			StmtK WriteK
-				ExpK IdK v2 IdV
-	ProcDeck q
-		Deck CharK name varparam
-		Deck IntegerK age valparam
-		TypeK
-			Deck RecordK Person
-				Deck IntegerK age
-				Deck CharK name
-		VarK
-			Deck IdK Person person
-		StmLK
-			StmtK AssignK
-				ExpK IdK person FieldMembV
-					ExpK IdK name IdV
-				ExpK IdK name IdV
-			StmtK AssignK
-				ExpK IdK person FieldMembV
-					ExpK IdK age IdV
-				ExpK IdK age IdV
-			StmtK WriteK
-				ExpK IdK person FieldMembV
-					ExpK IdK name IdV
-			StmtK ReturnK
-	StmLK
-		StmtK ReadK c
-		StmtK ReadK a
-		StmtK CallK
-			ExpK IdK q IdV
-			ExpK IdK c IdV
-			ExpK IdK a IdV
+Prok 0 0
+	PheadK bubble 1 9
+	TypeK 0 0
+		Deck IntegerK t1 0 0
+		Deck ArrayK t2 21 20 IntegerK 0 0
+	VarK 0 0
+		Deck IntegerK i j num 3 13
+		Deck ArrayK a 1 20 IntegerK 4 24
+	ProcDeck q 5 11
+		Deck IntegerK num valparam 5 21
+		VarK 0 0
+			Deck IntegerK i j k 6 17
+			Deck IntegerK t 6 27
+		StmLK 0 0
+			StmtK AssignK 0 0
+				ExpK IdK i IdV 8 1
+				ExpK ConstK 1 8 6
+			StmtK WhileK 0 0
+				ExpK OpK < 9 8
+					ExpK IdK i IdV 9 7
+					ExpK IdK num IdV 9 9
+				StmtK AssignK 0 0
+					ExpK IdK j IdV 10 1
+					ExpK OpK + 10 9
+						ExpK OpK - 10 7
+							ExpK IdK num IdV 10 4
+							ExpK IdK i IdV 10 8
+						ExpK ConstK 1 10 10
+				StmtK AssignK 0 0
+					ExpK IdK k IdV 10 12
+					ExpK ConstK 1 10 15
+				StmtK WhileK 0 0
+					ExpK OpK < 11 8
+						ExpK IdK k IdV 11 7
+						ExpK IdK j IdV 11 9
+					StmtK IfK 0 0
+						ExpK OpK < 11 24
+							ExpK IdK a ArrayMembV 11 17
+								ExpK OpK + 11 20
+									ExpK IdK k IdV 11 19
+									ExpK ConstK 1 11 21
+							ExpK IdK a ArrayMembV 11 26
+								ExpK IdK k IdV 11 28
+						StmtK AssignK 0 0
+							ExpK IdK t IdV 13 1
+							ExpK IdK a ArrayMembV 13 4
+								ExpK IdK k IdV 13 6
+						StmtK AssignK 0 0
+							ExpK IdK a ArrayMembV 14 1
+								ExpK IdK k IdV 14 3
+							ExpK IdK a ArrayMembV 14 7
+								ExpK OpK + 14 10
+									ExpK IdK k IdV 14 9
+									ExpK ConstK 1 14 11
+						StmtK AssignK 0 0
+							ExpK IdK a ArrayMembV 15 1
+								ExpK OpK + 15 4
+									ExpK IdK k IdV 15 3
+									ExpK ConstK 1 15 5
+							ExpK IdK t IdV 15 9
+						StmtK AssignK 0 0
+							ExpK IdK temp IdV 17 1
+							ExpK ConstK 0 17 9
+					StmtK AssignK 0 0
+						ExpK IdK k IdV 19 1
+						ExpK OpK + 19 5
+							ExpK IdK k IdV 19 4
+							ExpK ConstK 1 19 6
+				StmtK AssignK 0 0
+					ExpK IdK i IdV 21 1
+					ExpK OpK + 21 5
+						ExpK IdK i IdV 21 4
+						ExpK ConstK 1 21 6
+	StmLK 0 0
+		StmtK ReadK num  25 6
+		StmtK AssignK 0 0
+			ExpK IdK i IdV 26 1
+			ExpK ConstK 1 26 4
+		StmtK WhileK 0 0
+			ExpK OpK < 27 9
+				ExpK IdK i IdV 27 7
+				ExpK OpK + 27 13
+					ExpK IdK num IdV 27 10
+					ExpK ConstK 1 27 14
+			StmtK ReadK j  28 6
+			StmtK AssignK 0 0
+				ExpK IdK a ArrayMembV 29 1
+					ExpK IdK i IdV 29 3
+				ExpK IdK j IdV 29 7
+			StmtK AssignK 0 0
+				ExpK IdK i IdV 30 1
+				ExpK OpK + 30 5
+					ExpK IdK i IdV 30 4
+					ExpK ConstK 1 30 6
+		StmtK CallK  0 0
+			ExpK IdK q IdV 32 1
+			ExpK IdK num IdV 32 3
+		StmtK AssignK 0 0
+			ExpK IdK i IdV 33 1
+			ExpK ConstK 1 33 4
+		StmtK WhileK 0 0
+			ExpK OpK < 34 9
+				ExpK IdK i IdV 34 7
+				ExpK OpK + 34 13
+					ExpK IdK num IdV 34 10
+					ExpK ConstK 1 34 14
+			StmtK WriteK 35 1
+				ExpK IdK a ArrayMembV 35 7
+					ExpK IdK i IdV 35 9
+			StmtK AssignK 0 0
+				ExpK IdK i IdV 36 1
+				ExpK OpK + 36 5
+					ExpK IdK i IdV 36 4
+					ExpK ConstK 1 36 6

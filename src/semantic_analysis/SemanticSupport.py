@@ -347,6 +347,7 @@ class IONode:
 
             else:
                 self.printWord("error5!")
+            self.printWord(str(node.linePos) + " " + str(node.colPos) + " ")
             self.printWord('\n')
             for i in range(3):
                 self.picroot(node.child[i], depth=depth + 1)
@@ -362,6 +363,8 @@ class IONode:
             cur_indented = line.count('\t')
             word = line.split()
             node = TreeNode()
+            colPos = int(word.pop())
+            linePos = int(word.pop())
             nodetype = word[0]
             if cur_indented <= 1 and prock_flag is True:
                 prock_flag = False
@@ -524,6 +527,8 @@ class IONode:
             pre_indented = cur_indented
             cur = node
 
+            node.linePos = linePos
+            node.colPos = colPos
         file.close()
         return pre_root.child[0]
 
@@ -534,6 +539,7 @@ class TreeNode:
         self.brother = None
         self.child = [None, None, None]
         self.linePos = 0
+        self.colPos = 0
         self.kind = {"dec": None, "stmt": None, "exp": None}
         self.nodeKind = nodeKind
         self.idnum = 0
@@ -564,4 +570,46 @@ class TreeNode:
         while cur.brother is not None:
             cur = cur.brother
         cur.brother = br
+
+
+
+class ParamTable:
+    def __init__(self):
+        entry = SymTableItem()
+        next = None
+
+
+class SymTableItem:
+    def __init__(self):
+        self.idName = ""
+        self.attrIR = AttributeIR()
+        self.next = None
+
+
+def NewTy(kind):
+    table = TypeIR()
+    if table == None:
+        LOG.e(DEBUG, "Out of memory error !")
+        Error = True
+    else:
+        if kind == TypeKind.boolTy or \
+                kind == TypeKind.intTy or \
+                kind == TypeKind.charTy:
+            table.kind = kind
+            table.size = 1
+        elif kind == TypeKind.arrayTy:
+            table.kind = TypeKind.arrayTy
+            table.More["ArrayAttr"]["indexTy"] = None
+            table.More["ArrayAttr"]["elemTy"] = None
+        elif kind == TypeKind.recordTy:
+            table.kind = TypeKind.recordTy
+            table.More["body"] = None
+
+    return table
+
+def ErrorPrompt(line, name, message):
+    #LOG.e(TAG, ">>>Line: {} {} {}".format(str(line), name, message))
+    Error = True
+    exit(-1)
+
 

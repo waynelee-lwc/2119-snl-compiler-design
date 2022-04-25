@@ -76,8 +76,8 @@ app.post('/compile',(req,res)=>{
     let programName = geneProgramName()
     let programPath = pathTool.resolve(__dirname,`../../outputs/cache/${programName}`)
     let programZip = pathTool.resolve(__dirname,`./static/zips/${programName}.zip`)
-    let semanticAnalysis = pathTool.resolve(__dirname,`../semantic_analysis/analyze.py`)
-    let syntaxLL1Analysis = pathTool.resolve(__dirname,`../syntax_analysis/LL1/parse.py`)
+    let semanticAnalysis = pathTool.resolve(__dirname,`../semantic_analysis/seman.py`)
+    let syntaxLL1Analysis = pathTool.resolve(__dirname,`../syntax_analysis/parseLL1/parse.py`)
 
     console.log(programPath)
     fs.mkdirSync(programPath)

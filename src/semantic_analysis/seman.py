@@ -1,11 +1,11 @@
-from src.semantic_analysis.SymTable import *
-from src.semantic_analysis.SymTable import *
+from SemanticSupport import *
 
 
 class Semantic:
     def __init__(self):
         self.Off = 0
         self.Level = -1
+        self.beginLevel = 0
         self.SCOPSIZE = 1000
         self.scope = [None] * self.SCOPSIZE
 
@@ -17,46 +17,46 @@ class Semantic:
         self.savedOff = 0
         self.mainOff = 0
 
-        self.Error = None
+        self.error = []
+
+        self.out = []
+
     def TypeProcess(self, t, deckind):
-        Ptr = None
         if deckind == DecKind.IdK:
-            Ptr = self.nameType(t)
+            return self.nameType(t)
         elif deckind == DecKind.ArrayK:
-            Ptr = self.arrayType(t)
+            return self.arrayType(t)
         elif deckind == DecKind.RecordK:
-            Ptr = self.recordType(t)
+            return self.recordType(t)
         elif deckind == DecKind.IntegerK:
-            Ptr = self.intPtr
+            return self.intPtr
         elif deckind == DecKind.CharK:
-            Ptr = self.charPtr
+            return self.charPtr
+
+    def nameType(self, t):
+        Ptr = None
+        present, entry = self.FindEntry(t.attr['type_name'])
+
+        if present is True:
+            if entry.attrIR.kind != IdKind.typeKind:
+                self.error.append("in line:{0},col{1}, {2} used before typed\n".format(t.linePos, t.colPos, t.attr['type_name']))
+                #ErrorPrompt(t.linePos, t.attr['type_name'], "used before typed!\n")
+            else:
+                Ptr = entry.attrIR.idtype
+        else:
+            self.error.append(
+                "in line:{0},col{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.attr['type_name']))
+            # ErrorPrompt(t.linePos, t.attr['type_name'], "type name is not declared!\n")
 
         return Ptr
 
-    def nameType(self, t):
-            Ptr = None
-            entry = None
-            present, entry = self.FindEntry(t.attr['type_name'], entry)
-    
-            if present == True:
-                if entry.attrIR.kind != IdKind.typeKind:
-                    ErrorPrompt(t.linePos, t.attr['type_name'], "used before typed!\n")
-                else:
-                    Ptr = entry.attrIR.idtype
-    
-            else:
-                ErrorPrompt(t.linePos, t.attr['type_name'], "type name is not declared!\n")
-    
-            return Ptr
-
     def arrayType(self, t):
-        ptr0 = None
-        ptr1 = None
         ptr = None
         if t.attr['ArrayAttr']['low'] > t.attr['ArrayAttr']['up']:
-            ErrorPrompt(t.linePos, "", "array subscript error!\n")
-            Error = True
-    
+            self.error.append(
+                "in line:{0},col{1}, array {2} has wrong index\n".format(t.linePos, t.colPos,t.name[0]))
+            # ErrorPrompt(t.linePos, "", "array subscript error!\n")
+
         else:
             ptr0 = self.TypeProcess(t, DecKind.IntegerK)
             ptr1 = self.TypeProcess(t, t.attr['ArrayAttr']['childtype'])
@@ -68,194 +68,173 @@ class Semantic:
             ptr.More['ArrayAttr']['elemTy'] = ptr1
             ptr.More['ArrayAttr']['low'] = t.attr['ArrayAttr']['low']
             ptr.More['ArrayAttr']['up'] = t.attr['ArrayAttr']['up']
-    
+
         return ptr
-    
-    
+
     def recordType(self, t):
         Ptr = NewTy(TypeKind.recordTy)
         t = t.child[0]
-    
+
         Ptr2 = None
         Ptr1 = None
         body = None
-    
-        while t != None:
-            i = 0
-            while i < t.idnum:
+
+        while t is not None:
+            for i in range(0, t.idnum):
                 Ptr2 = self.NewBody()
-                if body == None:
-                    body = Ptr1 = Ptr2
-    
-                t.name[i] = Ptr2.id
+                if body is None:
+                    Ptr1 = Ptr2
+                    body = Ptr2
+
+                Ptr2.id = t.name[i]
                 Ptr2.UnitType = self.TypeProcess(t, t.kind['dec'])
-    
+
                 Ptr2.Next = None
-    
+
                 if Ptr2 != Ptr1:
                     Ptr2.off = Ptr1.off + Ptr1.UnitType.size
                     Ptr1.Next = Ptr2
                     Ptr1 = Ptr2
-                i += 1
-    
+
             t = t.brother
         Ptr.size = Ptr2.off + Ptr2.UnitType.size
         Ptr.More['body'] = body
         return Ptr
-    
-    
+
     def TypeDecPart(self, t):
-        present = False
-        entry = None
-    
-        attrIr = AttributeIR()
-        attrIr.kind = IdKind.typeKind
-        while t != None:
-    
-            present, attrIr, entry = self.Enter(t.name[0], attrIr, entry)
-            if present != False:
-                ErrorPrompt(t.linePos, t.name[0], "is repetation declared!\n")
-                entry = None
+        attr = AttributeIR()
+        attr.kind = IdKind.typeKind
+        while t is not None:
+            present, attr, entry = self.Enter(t.name[0], attr, t.linePos, t.colPos)
+            if present is True:
+                self.error.append("in line:{0} col:{1}, {2}is repetation declared!\n".format(t.linePos, t.colPos, t.name[0]))
+                # ErrorPrompt(t.linePos, t.name[0], "is repetation declared!\n")
             else:
                 entry.attrIR.idtype = self.TypeProcess(t, t.kind['dec'])
             t = t.brother
-    
-    
+
     def varDecPart(self, t):
         self.VarDecList(t)
-    
-    
+
     def VarDecList(self, t):
-        attrIr = AttributeIR()
-        present = False
-        entry = None
-    
-        while t != None:
-            attrIr.kind = IdKind.varKind
-            i = 0
-            while i < t.idnum:
-                attrIr.idtype = self.TypeProcess(t, t.kind['dec'])
-    
+        attr = AttributeIR()
+
+        while t is not None:
+            attr.kind = IdKind.varKind
+            for i in range(0, t.idnum):
+                attr.idtype = self.TypeProcess(t, t.kind['dec'])
+
                 if t.attr['ProcAttr']['paramt'] == ParamType.varparamType:
-                    attrIr.More['VarAttr']['access'] = AccessKind.indir
-                    attrIr.More['VarAttr']['level'] = self.Level
-    
-                    attrIr.More['VarAttr']['off'] = self.Off
+                    attr.More['VarAttr']['access'] = AccessKind.indir
+                    attr.More['VarAttr']['level'] = self.Level
+                    attr.More['VarAttr']['off'] = self.Off
                     self.Off += 1
-    
                 else:
-                    attrIr.More['VarAttr']['access'] = AccessKind.dir
-                    attrIr.More['VarAttr']['level'] = self.Level
-    
-                    if attrIr.idtype != None:
-                        attrIr.More['VarAttr']['off'] = self.Off
-                        self.Off = self.Off + attrIr.idtype.size
-    
-                present, attrIr, entry = self.Enter(t.name[i], attrIr, entry)
-                if present != False:
-                    ErrorPrompt(t.linePos, t.name[i], " is defined repetation!\n")
+                    attr.More['VarAttr']['access'] = AccessKind.dir
+                    attr.More['VarAttr']['level'] = self.Level
+                    if attr.idtype is not None:
+                        attr.More['VarAttr']['off'] = self.Off
+                        self.Off = self.Off + attr.idtype.size
+
+                present, attr, entry = self.Enter(t.name[i], attr, t.linePos, t.colPos)
+                if present is True:
+                    self.error.append(
+                        "in line:{0} col:{1}, {2}is repetition defined\n".format(t.linePos, t.colPos, t.name[i]))
+                    # ErrorPrompt(t.linePos, t.name[i], " is defined repetation!\n")
                 else:
                     t.table[i] = entry
-    
-                i += 1
-    
-            if t != None:
+
+            if t is not None:
                 t = t.brother
-    
+
         if self.Level == 0:
             self.mainOff = self.Off
-            StoreNoff = self.Off
         else:
             self.savedOff = self.Off
-    
-    
-    def procDecPart(self, t):
-        p = t
 
+    def procDecPart(self, t):
+        self.CreatTable()
+        self.Off = 7
+        p = t
         entry = self.HeadProcess(t)
-    
+
         t = t.child[1]
-        while t != None:
+        while t is not None:
             if t.nodeKind == NodeKind.TypeK:
                 self.TypeDecPart(t.child[0])
-                return
+                t = t.brother
             elif t.nodeKind == NodeKind.VarK:
                 self.varDecPart(t.child[0])
                 t = t.brother
             elif t.nodeKind == NodeKind.ProcDecK:
-                pass
+                break
             else:
-                ErrorPrompt(t.linePos, "", "no this node kind in syntax tree!")
-    
+                self.error.append(
+                    "in line:{0}, no this part in procedure declaration part\n".format(t.linePos))
+                # ErrorPrompt(t.linePos, "", "no this node kind in syntax tree!")
         entry.attrIR.More['ProcAttr']['nOff'] = self.savedOff
         entry.attrIR.More['ProcAttr']['mOff'] = entry.attrIR.More['ProcAttr']['nOff'] + entry.attrIR.More['ProcAttr'][
             'level'] + 1
-    
-        while t != None:
+        while t is not None:
             self.procDecPart(t)
             t = t.brother
-    
+
         t = p
+
         self.Body(t.child[2])
         if self.Level != -1:
             self.DestroyTable()
-    
-    
+
     def HeadProcess(self, t):
         attrIr = AttributeIR()
-        present = False
         entry = None
-    
+
         attrIr.kind = IdKind.procKind
         attrIr.idtype = None
-        attrIr.More['ProcAttr']['level'] = self.Level + 1
-    
-        if t != None:
-            present, attrIr, entry = self.Enter(t.name[0], attrIr, entry)
+        attrIr.More['ProcAttr']['level'] = self.Level
+
+        if t is not None:
+            present, attrIr, entry = self.Enter(t.name[0], attrIr, t.linePos, t.colPos)
             t.table[0] = entry
 
         entry.attrIR.More['ProcAttr']['param'] = self.ParaDecList(t)
         return entry
-    
-    
+
     def ParaDecList(self, t):
         p = None
         Ptr1 = None
         Ptr2 = None
         head = None
-    
-        if t != None:
-            if t.child[0] != None:
+
+        if t is not None:
+            if t.child[0] is not None:
                 p = t.child[0]
-            self.CreatTable()
-            self.Off = 7
             self.varDecPart(p)
             Ptr0 = self.scope[self.Level]
-    
-            while Ptr0 != None:
+
+            while Ptr0 is not None:
                 Ptr2 = self.NewParam()
-                if head == None:
-                    head = Ptr1 = Ptr2
+                if head is None:
+                    Ptr1 = Ptr2
+                    head = Ptr2
                 Ptr2.entry = Ptr0
                 Ptr2.next = None
-    
+
                 if Ptr2 != Ptr1:
                     Ptr1.next = Ptr2
                     Ptr1 = Ptr2
-    
+
                 Ptr0 = Ptr0.next
-    
+
         return head
-    
-    
+
     def Body(self, t):
         if t.nodeKind == NodeKind.StmLK:
             p = t.child[0]
-            while p != None:
+            while p is not None:
                 self.statement(p)
                 p = p.brother
-    
-    
+
     def statement(self, t):
         if t.kind['stmt'] == StmtKind.IfK:
             self.ifstatement(t)
@@ -272,243 +251,285 @@ class Semantic:
         elif t.kind['stmt'] == StmtKind.ReturnK:
             self.returnstatement(t)
         else:
-            ErrorPrompt(t.linePos, "", "statement type error!\n")
-    
-    
+            self.error.append(
+                "in line:{0} col:{1}, {2} statement type error\n".format(t.linePos, t.colPos, t.name[0]))
+
+            #ErrorPrompt(t.linePos, "", "statement type error!\n")
+
     def expr(self, t, Ekind):
         present = False
         entry = None
-    
+
         Eptr0 = None
         Eptr1 = None
         Eptr = None
-        if t != None:
+        if t is not None:
             if t.kind['exp'] == ExpKind.ConstK:
                 Eptr = self.TypeProcess(t, DecKind.IntegerK)
                 Eptr.kind = TypeKind.intTy
-                if Ekind != None:
+                if Ekind is not None:
                     Ekind = AccessKind.dir
             elif t.kind['exp'] == ExpKind.VariK:
-                if t.child[0] == None:
-                    present, entry = self.FindEntry(t.name[0], entry)
+                if t.child[0] is not None:
+                    present, entry = self.FindEntry(t.name[0])
                     t.table[0] = entry
-    
-                    if present != False:
+
+                    if present is True:
                         if self.FindAttr(entry).kind != IdKind.varKind:
-                            ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
+                            self.error.append(
+                                "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos,
+                                                                                         t.name[0]))
+                            # ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
                             Eptr = None
                         else:
                             Eptr = entry.attrIR.idtype
-                            if Ekind != None:
+                            if Ekind is not None:
                                 Ekind = AccessKind.indir
-    
+
                     else:
-                        ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
-    
+                        self.error.append(
+                            "in line:{0} col:{1}, {2}is not declares\n".format(t.linePos, t.colPos,
+                                                                                     t.name[0]))
+
+                        #ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
+
                 else:
                     if t.attr['ExpAttr']['varkind'] == VarKind.ArrayMembV:
-                        Expr = self.arrayVar(t)
-                    else:
-                        if t.attr['ExpAttr']['varkind'] == VarKind.FieldMembV:
-                            Expr = self.recordVar(t)
-    
+                        Eptr = self.arrayVar(t)
+                    elif t.attr['ExpAttr']['varkind'] == VarKind.FieldMembV:
+                        Eptr = self.recordVar(t)
+
             elif t.kind['exp'] == ExpKind.OpK:
                 Eptr0 = self.expr(t.child[0], None)
-                if Eptr0 == None:
+                if Eptr0 is None:
                     return None
                 Eptr1 = self.expr(t.child[1], None)
-                if Eptr1 == None:
+                if Eptr1 is None:
                     return None
-    
+
                 present = self.Compat(Eptr0, Eptr1)
-                if present != False:
+                if present is True:
                     if t.attr['ExpAttr']['op'] == LexType.EQ:
                         Eptr = self.boolPtr
                     elif t.attr['ExpAttr']['op'] == LexType.OVER:
                         Eptr = self.intPtr
-    
-                    if Ekind != None:
+
+                    if Ekind is not None:
                         Ekind = AccessKind.dir
-    
+
                 else:
-                    ErrorPrompt(t.linePos, "", "operator is not compat!\n")
-    
+                    self.error.append(
+                        "in line:{0} col:{1}, {2} operator is not compat\n".format(t.linePos, t.colPos,
+                                                                                 t.name[0]))
+
+                    # ErrorPrompt(t.linePos, "", "operator is not compat!\n")
+
         return Eptr
-    
-    
+
     def arrayVar(self, t):
-        present = False
-        entry = None
-    
         Eptr0 = None
         Eptr1 = None
         Eptr = None
-    
-        present, entry = self.FindEntry(t.name[0], entry)
+
+        present, entry = self.FindEntry(t.name[0])
         t.table[0] = entry
-    
-        if present == False:
+
+        if present is False:
             if self.FindAttr(entry).kind != IdKind.varKind:
-                ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
+                self.error.append(
+                    "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos,
+                                                                             t.name[0]))
+
+                # ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
                 Eptr = None
-    
+
             else:
                 if self.FindAttr(entry).idtype.kind != TypeKind.arrayTy:
-                    ErrorPrompt(t.linePos, t.name[0], "is not array variable error !\n")
+                    self.error.append(
+                    "in line:{0} col:{1}, {2} is not array variable\n".format(t.linePos, t.colPos,
+                                                                             t.name[0]))
+
+                    # ErrorPrompt(t.linePos, t.name[0], "is not array variable error !\n")
                     Eptr = None
-    
+
                 else:
                     Eptr0 = entry.attrIR.idtype.More.ArrayAttr.indexTy
-                    if Eptr0 == None:
+                    if Eptr0 is None:
                         return None
                     Eptr1 = self.expr(t.child[0], None)
-                    if Eptr1 == None:
+                    if Eptr1 is None:
                         return None
                     present = self.Compat(Eptr0, Eptr1)
-                    if present != True:
-                        ErrorPrompt(t.linePos, "", "type is not matched with the array member error !\n")
+                    if present is False:
+                        self.error.append(
+                            "in line:{0} col:{1}, {2} type cannot match the array member\n".format(t.linePos, t.colPos,
+                                                                                      t.name[0]))
+                        # ErrorPrompt(t.linePos, "", "type is not matched with the array member error !\n")
                         Eptr = None
                     else:
                         Eptr = entry.attrIR.idtype.More.ArrayAttr.elemTy
-    
+
         else:
-            ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
+            self.error.append(
+                "in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos,
+                                                                          t.name[0]))
+            # ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
         return Eptr
-    
-    
+
     def recordVar(self, t):
-        present = False
         result = True
-        entry = None
-    
+
         Eptr0 = None
         Eptr1 = None
         Eptr = None
-        currentP = None
-    
-        present, entry = self.FindEntry(t.name[0], entry)
+        cur = None
+
+        present, entry = self.FindEntry(t.name[0])
         t.table[0] = entry
-    
-        if present != False:
+
+        if present is True:
             if self.FindAttr(entry).idtype.kind != IdKind.varKind:
-                ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
+                self.error.append(
+                    "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos,
+                                                                              t.name[0]))
+                # ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
                 Eptr = None
-    
+
             else:
                 if self.FindAttr(entry).idtype.kind != TypeKind.recordTy:
-                    ErrorPrompt(t.linePos, t.name[0], "is not record variable error !\n")
+                    self.error.append(
+                        "in line:{0} col:{1}, {2} is not record variable\n".format(t.linePos, t.colPos, t.name[0]))
+
+                    # ErrorPrompt(t.linePos, t.name[0], "is not record variable error !\n")
                     Eptr = None
-    
+
                 else:
                     Eptr0 = entry.attrIR.idtype
-                    currentP = Eptr0.More.body
-                    while currentP != None and result != False:
-                        result = (t.child[0].name[0] == currentP.id)
-                        if result == False:
-                            Eptr = currentP.UnitType
+                    cur = Eptr0.More.body
+                    while cur is not None and result is True:
+                        result = (t.child[0].name[0] == cur.id)
+                        if result is False:
+                            Eptr = cur.UnitType
                         else:
-                            currentP = currentP.Next
-    
-                    if currentP == None:
-                        if result != False:
-                            ErrorPrompt(t.child[0].linePos, t.child[0].name[0], "is not field type!\n")
+                            cur = cur.Next
+
+                    if cur is not None:
+                        if result is True:
+                            self.error.append(
+                                "in line:{0} col:{1}, {2} is not field type\n".format(t.linePos, t.colPos,
+                                                                                    t.name[0]))
+
+                            # ErrorPrompt(t.child[0].linePos, t.child[0].name[0], "is not field type!\n")
                             Eptr = self.arrayVar(t.child[0])
-    
+
         else:
-            ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
+            self.error.append(
+                "in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos,
+                                                                    t.name[0]))
+
+            # ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
         return Eptr
-    
-    
+
     def assignstatement(self, t):
-        entry = None
-    
-        present = False
-        ptr = None
         Eptr = None
-    
-        child1 = None
-        child2 = None
-    
+
         child1 = t.child[0]
         child2 = t.child[1]
-    
+
         if child1.child[0] is None:
-            present, entry = self.FindEntry(child1.name[0], entry)
-    
+            present, entry = self.FindEntry(child1.name[0])
+
             if present is True:
                 if self.FindAttr(entry).kind != IdKind.varKind:
-                    ErrorPrompt(child1.lineon, child1.name[0], "is not variable error!\n")
+                    self.error.append(
+                        "in line:{0} col:{1}, {2} is not variable\n".format(child1.linePos, child1.colPos, child1.name[0]))
+
+                    # ErrorPrompt(child1.lineon, child1.name[0], "is not variable error!\n")
                     Eptr = None
-    
                 else:
                     Eptr = entry.attrIR.idtype
                     child1.table[0] = entry
-    
             else:
-                ErrorPrompt(child1.lineon, child1.name[0], "is not declarations!\n")
-    
+                self.error.append(
+                    "in line:{0} col:{1}, {2} is not declared\n".format(child1.linePos, child1.colPos, child1.name[0]))
+                #ErrorPrompt(child1.lineon, child1.name[0], "is not declarations!\n")
+
         else:
             if child1.attr['ExpAttr']['varkind'] == VarKind.ArrayMembV:
                 Eptr = self.arrayVar(child1)
             else:
                 if child1.attr['ExpAttr']['varkind'] == VarKind.FieldMembV:
                     Eptr = self.recordVar(child1)
-    
+
         if Eptr is not None:
             if t.nodeKind == NodeKind.StmLK and t.kind['stmt'] == StmtKind.AssignK:
                 ptr = self.expr(child2, None)
                 if self.Compat(ptr, Eptr):
                     pass
                 else:
-                    ErrorPrompt(t.linePos, "", "ass_expression error!\n")
-    
-    
+                    self.error.append(
+                        "in line:{0} assignment wrong\n".format(t.linePos))
+
+                    # ErrorPrompt(t.linePos, "", "ass_expression error!\n")
+
     def callstatement(self, t):
         Ekind = AccessKind
-        present = False
-        entry = None
-    
-        present, entry = self.FindEntry(t.child[0].name[0], entry)
+
+        present, entry = self.FindEntry(t.child[0].name[0])
         t.child[0].table[0] = entry
-    
-        if present == False:
-            ErrorPrompt(t.linePos, t.chlid[0].name[0], "function is not declarationed!\n")
-    
+
+        if present is False:
+            self.error.append(
+                "in line:{0} col:{1}, {2} function is not declared\n".format(t.linePos, t.colPos, t.child[0].name[0]))
+
+            #ErrorPrompt(t.linePos, t.chlid[0].name[0], "function is not declarationed!\n")
+
         else:
             if self.FindAttr(entry).kind != IdKind.procKind:
-                ErrorPrompt(t.linePos, t.name[0], "is not function name!\n")
+                self.error.append(
+                    "in line:{0} col:{1}, {2} is not function name\n".format(t.linePos, t.colPos, t.name[0]))
+                #ErrorPrompt(t.linePos, t.name[0], "is not function name!\n")
             else:
                 p = t.child[1]
-                paramP = self.FindAttr(entry.More.ProcAttr.param)
-                while p != None and paramP != None:
-                    paraEntry = paramP.entry
+                Param = self.FindAttr(entry.More.ProcAttr.param)
+                while p is not None and Param is not None:
+                    paramEntry = Param.entry
                     Etp = self.expr(p, Ekind)
-                    if self.FindAttr(paraEntry).More.Varattr.access == AccessKind.indir and Ekind == AccessKind.dir:
-                        ErrorPrompt(p.lineon, "", "param kind is not match!\n")
-                    else:
-                        if self.FindAttr(paraEntry).idtype != Etp:
-                            ErrorPrompt(p.lineon, "", "param type is not match!\n")
-    
+                    if self.FindAttr(paramEntry).More.Varattr.access == AccessKind.indir and Ekind == AccessKind.dir:
+                        self.error.append(
+                            "in line:{0} col:{1}, {2} kind match wrong\n".format(p.linePos, p.colPos, p.name[0]))
+                        # ErrorPrompt(p.lineon, "", "param kind is not match!\n")
+                    elif self.FindAttr(paramEntry).idtype != Etp:
+                        self.error.append(
+                            "in line:{0} col:{1}, {2} type match wrong\n".format(p.linePos, p.colPos, p.name[0]))
+
+                        # ErrorPrompt(p.lineon, "", "param type is not match!\n")
+
                     p = p.brother
-                    paramP = paramP.next
-    
-                if p != None or paramP != None:
-                    ErrorPrompt(t.child[1].lineon, "", "param num is not match!\n")
+                    Param = Param.next
+
+                if p is not None or Param is not None:
+                    self.error.append(
+                        "in line:{0}, wrong in matching parameters because of num\n".format(t.child[1].linePos))
+
+                    #ErrorPrompt(t.child[1].lineon, "", "param num is not match!\n")
 
     def ifstatement(self, t):
-        Ekind = None
-        Etp = self.expr(t.child[0], Ekind)
+        Etp = self.expr(t.child[0], None)
         if Etp is not None:
             if Etp.kind != TypeKind.boolTy:
-                ErrorPrompt(t.linePos, "", "condition expressrion error!\n")
+                self.error.append(
+                    "in line:{0}, condition is not a bool expression\n".format(t.linePos))
+
+                # ErrorPrompt(t.linePos, "", "condition expressrion error!\n")
             else:
                 p = t.child[1]
                 while p is not None:
                     self.statement(p)
                     p = p.brother
-    
+
                 t = t.child[2]
-    
+
                 while t is not None:
                     self.statement(t)
                     t = t.brother
@@ -517,7 +538,10 @@ class Semantic:
         Etp = self.expr(t.child[0], None)
         if Etp is not None:
             if Etp.kind != TypeKind.boolTy:
-                ErrorPrompt(t.linePos, "", "condition expression error!\n")
+                self.error.append(
+                    "in line:{0}, while condition error\n".format(t.linePos))
+
+                # ErrorPrompt(t.linePos, "", "condition expression error!\n")
             else:
                 t = t.child[1]
                 while t is not None:
@@ -525,37 +549,44 @@ class Semantic:
                     t = t.brother
 
     def readstatement(self, t):
-        entry = None
-        present = False
-    
-        present, entry = self.FindEntry(t.name[0], entry)
+        present, entry = self.FindEntry(t.name[0])
         t.table[0] = entry
-    
-        if present == False:
-            ErrorPrompt(t.linePos, t.name[0], " is not declarationed!\n")
+
+        if present is False:
+            self.error.append(
+                "in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.name[0]))
+
+            # ErrorPrompt(t.linePos, t.name[0], " is not declarationed!\n")
         else:
             if entry.attrIR.kind != IdKind.varKind:
-                ErrorPrompt(t.linePos, t.name[0], "is not var name!\n ")
-    
+                self.error.append(
+                    "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
+
+                # ErrorPrompt(t.linePos, t.name[0], "is not var name!\n ")
+
     def writestatement(self, t):
         Etp = self.expr(t.child[0], None)
         if Etp is not None:
             if Etp.kind == TypeKind.boolTy:
-                ErrorPrompt(t.linePos, "", "exprssion type error!")
-    
+                self.error.append("in line:{0}, \n".format(t.linePost))
+                self.error.append(
+                    "in line:{0}, cannot write bool expression\n".format(t.linePos))
+                # ErrorPrompt(t.linePos, "", "write error!")
+
     def returnstatement(self, t):
         if self.Level == 0:
-            ErrorPrompt(t.linePos, "", "return statement error!")
+            self.error.append(
+                "in line:{0}, wrong return statement\n".format(t.linePos))
 
     def analyze(self, t):
         entry = None
         p = None
         pp = t
-    
+
         self.CreatTable()
-    
+
         p = t.child[1]
-    
+
         while p is not None:
             if p.nodeKind == NodeKind.TypeK:
                 self.TypeDecPart(p.child[0])
@@ -564,32 +595,31 @@ class Semantic:
             elif p.nodeKind == NodeKind.ProcDecK:
                 self.procDecPart(p)
             else:
-                ErrorPrompt(p.lineon, "", "no this node kind in syntax tree!")
-    
+                self.error.append(
+                    "in line:{0} col:{1}, {2} no this in syntax tree\n".format(p.linePos, t.colPos, t.name[0]))
+
+                # ErrorPrompt(p.linePos, "", "no this node kind in syntax tree!")
+
             p = p.brother
 
         t = t.child[2]
         if t.nodeKind == NodeKind.StmtK:
             self.Body(t)
-    
+
         if self.Level != -1:
             self.DestroyTable()
-    
-        if self.Error is True:
-            LOG.e(DEBUG, "\nanalyze error:\n")
+
+        if len(self.error) != 0:
+            print(self.error)
+            # LOG.e(DEBUG, "\nanalyze error:\n")
         else:
             pass
-            #LOG.d(TAG, "\nanalyze has no error!\n")
-
+            # LOG.d(TAG, "\nanalyze has no error!\n")
     @staticmethod
-    def NewTable():
-        table = Symbtable()
-
-        table.next = None
+    def GetTableItem():
+        table = SymTableItem()
 
         table.attrIR.kind = IdKind.typeKind
-        table.attrIR.idtype = None
-        table.next = None
         table.attrIR.More["VarAttr"]["isParam"] = False
 
         return table
@@ -600,79 +630,74 @@ class Semantic:
         self.Off = self.initOff
 
     def DestroyTable(self):
+        self.PrintOneLayer(self.Level)
+        self.scope[self.Level] = None
         self.Level -= 1
+        # self.PrintOneLayer(self.Level)
 
-    def Enter(self, id, attribP, entry):
+    def Enter(self, id, attribP, line, col):
         present = False
-        result = False
-        curentry = self.scope[self.Level]
-        prentry = self.scope[self.Level]
+        cur = self.scope[self.Level]
+        pre = self.scope[self.Level]
 
-        if self.scope[self.Level] == None:
-            curentry = self.NewTable()
-            self.scope[self.Level] = curentry
+        if self.scope[self.Level] is None:
+            cur = self.GetTableItem()
+            self.scope[self.Level] = cur
         else:
-            while curentry is not None:
-                prentry = curentry
-                result = (id == curentry.idName)
-                if result:
-                    LOG.e(DEBUG, "repetition declaration error !")
-                    Error = True
+            while cur is not None:
+                pre = cur
+                # result = (id == cur.idName)
+                if id == cur.idName:
+                    self.error.append("\(line:{0} col:{1}\),word {2}, repetition declaration error !".format(line, col, id))
+                    # LOG.e(DEBUG, "repetition declaration error !")
                     present = True
-                    exit(-1)
+                    return present, cur.attrIR, cur
                 else:
-                    curentry = prentry.next
+                    cur = pre.next
 
             if present is False:
-                curentry = self.NewTable()
-                prentry.next = curentry
+                cur = self.GetTableItem()
+                pre.next = cur
 
-        curentry.idName = id
+        cur.idName = id
+        cur.attrIR.idtype = attribP.idtype
 
-        curentry.attrIR.idtype = attribP.idtype
-        curentry.attrIR.kind = attribP.kind
+        cur.attrIR.kind = attribP.kind
         if attribP.kind == IdKind.typeKind:
             pass
         elif attribP.kind == IdKind.varKind:
-            curentry.attrIR.More["VarAttr"]["level"] = attribP.More["VarAttr"]["level"]
-            curentry.attrIR.More["VarAttr"]["off"] = attribP.More["VarAttr"]["off"]
-            curentry.attrIR.More["VarAttr"]["access"] = attribP.More["VarAttr"]["access"]
+            cur.attrIR.More["VarAttr"]["level"] = attribP.More["VarAttr"]["level"]
+            cur.attrIR.More["VarAttr"]["off"] = attribP.More["VarAttr"]["off"]
+            cur.attrIR.More["VarAttr"]["access"] = attribP.More["VarAttr"]["access"]
 
         elif attribP.kind == IdKind.procKind:
-            curentry.attrIR.More["ProcAttr"]["level"] = attribP.More["ProcAttr"]["level"]
-            curentry.attrIR.More["ProcAttr"]["param"] = attribP.More["ProcAttr"]["param"]
+            cur.attrIR.More["ProcAttr"]["level"] = attribP.More["ProcAttr"]["level"]
+            cur.attrIR.More["ProcAttr"]["param"] = attribP.More["ProcAttr"]["param"]
 
-        else:
-            pass
+        return present, attribP, cur
 
-        entry = curentry
-
-        return present, attribP, entry
-
-    def FindEntry(self, id, entry):
+    def FindEntry(self, id):
+        r1 = False
         present = False
-        result = False
-        lev = self.Level
+        level = self.Level
 
-        findentry = self.scope[lev]
-        while lev != -1 and present != True:
-            while findentry != None and present != True:
-                result = (id == findentry.idName)
-                if result != False:
-                    present = True
+        entry = self.scope[level]
+        while level != -1 and r1 is False:
+            while entry is not None and r1 is not True:
+                present = (id == entry.idName)
+                if present is True:
+                    r1 = True
                 else:
-                    findentry = findentry.next
+                    entry = entry.next
 
-            if present != True:
-                lev -= 1
-                findentry = self.scope[lev]
+            if r1 is False:
+                level -= 1
+                entry = self.scope[level]
 
-        if present != True:
+        if r1 is False:
             entry = None
-        else:
-            entry = findentry
 
-        return result, entry
+        return present, entry
 
     def FindField(self, Id, head, Entry):
         present = False
@@ -693,27 +718,14 @@ class Semantic:
 
     def NewBody(self):
         Ptr = fieldchain()
-        if Ptr == None:
-            LOG.e(DEBUG, "Out of memory error !")
-            Error = True
-
-        else:
-            Ptr.Next = None
-            Ptr.off = 0
-            Ptr.UnitType = None
-
+        Ptr.off = 0
         return Ptr
 
     def NewParam(self):
         Ptr = ParamTable()
 
-        if Ptr == None:
-            LOG.e(DEBUG, "Out of memory error !")
-            Error = True
-
-        else:
-            Ptr.entry = None
-            Ptr.next = None
+        Ptr.entry = None
+        Ptr.next = None
 
         return Ptr
 
@@ -725,69 +737,70 @@ class Semantic:
             present = True
         return present
 
-    def printInLine(self, word):
+    def printWord(self, word):
         print(word, end="")
 
-    def PrintFieldChain(self, currentP):
-        self.printInLine("\n--------------Field  chain--------------------\n")
-        t = currentP
-
-        while t != None:
-            self.printInLine(t.id + ":  ")
-            if t.UnitType.kind == TypeKind.intTy:
-                LOG.d(TAG, "intTy     ")
-            elif t.UnitType.kind == TypeKind.charTy:
-                LOG.d(TAG, "charTy    ")
-            elif t.UnitType.kind == TypeKind.arrayTy:
-                LOG.d(TAG, "arrayTy   ")
-            elif t.UnitType.kind == TypeKind.recordTy:
-                LOG.d(TAG, "recordTy  ")
-            else:
-                LOG.e(DEBUG, "error type!  ")
-
-            self.printInLine("off = " + t.off + "\n")
-            t = t.Next
+    @staticmethod
+    def getOneJson(level_flag='', name='', type_='', kind='', level='', offset='', dir=''):
+        tmp = {'level_flag': level_flag, 'name': name, 'type': type_, 'kind': kind, 'level': level, 'offset': offset,
+               'dir': dir, 'noff': ''}
+        return tmp
 
     def PrintOneLayer(self, level):
         t = self.scope[level]
-        self.printInLine("\n -------SymbTable in level " + str(level) + " ---------\n")
-        while t != None:
-            self.printInLine(t.idName + ":   ")
+        self.printWord("\n -------SymbTable in level " + str(level) + " ---------\n")
+        self.out.append(self.getOneJson(level_flag=str(level)))
+        while t is not None:
+            tmp_json = self.getOneJson()
+            self.printWord(t.idName + ":   ")
+            tmp_json["name"] = t.idName
             Attrib = t.attrIR
-            if Attrib.idtype != None:
+            if Attrib.idtype is not None:
                 if Attrib.idtype.kind == TypeKind.intTy:
-                    self.printInLine("intTy  ")
+                    self.printWord("intTy  ")
+                    tmp_json["type_"] = "intTy"
                 elif Attrib.idtype.kind == TypeKind.charTy:
-                    self.printInLine("charTy  ")
+                    self.printWord("charTy  ")
+                    tmp_json["type_"] = "charTy"
                 elif Attrib.idtype.kind == TypeKind.arrayTy:
-                    self.printInLine("arrayTy  ")
+                    self.printWord("arrayTy  ")
+                    tmp_json["type_"] = "arrayTy"
                 elif Attrib.idtype.kind == TypeKind.recordTy:
-                    self.printInLine("recordTy  ")
+                    self.printWord("recordTy  ")
+                    tmp_json["type_"] = "recordTy"
                 else:
-                    self.printInLine("error type!  ")
-
+                    self.printWord("error type!  ")
             if Attrib.kind == IdKind.typeKind:
-                self.printInLine("typekind  ")
+                self.printWord("typekind  ")
+                tmp_json["kind"] = "typekind"
             elif Attrib.kind == IdKind.varKind:
-                self.printInLine("varkind  ")
-                self.printInLine("Level = " + str(Attrib.More["VarAttr"]["level"]) + "  ")
-                self.printInLine("Offset = " + str(Attrib.More["VarAttr"]["off"]) + "  ")
+                self.printWord("varkind  ")
+                self.printWord("Level = " + str(Attrib.More["VarAttr"]["level"]) + "  ")
+                self.printWord("Offset = " + str(Attrib.More["VarAttr"]["off"]) + "  ")
+                tmp_json["kind"] = "varkind"
+                tmp_json["level"] = str(Attrib.More["VarAttr"]["level"])
+                tmp_json["offset"] = str(Attrib.More["VarAttr"]["off"])
                 if Attrib.More["VarAttr"]["access"] == AccessKind.dir:
-                    self.printInLine("dir  ")
+                    self.printWord("dir  ")
+                    tmp_json["dir"] = "dir"
                 elif Attrib.More['VarAttr']['access'] == AccessKind.indir:
-                    self.printInLine("indir  ")
+                    self.printWord("indir  ")
+                    tmp_json["dir"] = "indir"
                 else:
-                    self.printInLine("errorkind  ")
+                    self.printWord("errorkind  ")
             elif Attrib.kind == IdKind.procKind:
-                self.printInLine("funckind   ")
-                self.printInLine("Level = " + str(Attrib.More["ProcAttr"]["level"]) + "  ")
-                self.printInLine("Noff = " + str(Attrib.More["ProcAttr"]["nOff"]))
+                self.printWord("funckind   ")
+                self.printWord("Level = " + str(Attrib.More["ProcAttr"]["level"]) + "  ")
+                self.printWord("Noff = " + str(Attrib.More["ProcAttr"]["nOff"]))
+                tmp_json["kind"] = "funckind"
+                tmp_json["level"] = str(Attrib.More["VarAttr"]["level"])
+                tmp_json["noff"] = str(Attrib.More["ProcAttr"]["nOff"])
             else:
-                self.printInLine("error  ")
+                self.printWord("error  ")
 
-            self.printInLine("\n")
+            self.printWord("\n")
             t = t.next
-
+            self.out.append(tmp_json)
 
     def PrintSymbTable(self):
         level = 0
@@ -795,20 +808,41 @@ class Semantic:
             self.PrintOneLayer(level)
             level += 1
 
-    def printTab(self, tabnum):
-        space = []
-        for i in space[tabnum - 1]:
-            print(" ")
+    def GetResult(self):
+        return self.out, self.error
 
 
 if __name__ == '__main__':
-    input_path = "tmp.txt"
-    output_path = "tmpp.txt"
+
+    programPath = sys.argv[1]   #程序产物文件夹
+    input_path = programPath + '/treell1'
+    output_path = programPath + '/sem'
+    error_path = programPath + '/semerr'
+
+    # input_path = "tmp1.txt"
+    # output_path = None
+    # error_path = None
+    # output_path = "tmpp.txt"
     # input_path = "../outputs/bubble_sort.tk"
 
     IOClass = IONode()
-    root = IOClass.loadroot(input_path="tmp.txt")
+    root = IOClass.loadroot(input_path=input_path)
 
     AAA = Semantic()
     AAA.analyze(root)
-    AAA.PrintSymbTable()
+
+    table, error = AAA.GetResult()
+
+    print(table)
+    print(error)
+
+    # with open(output_path, 'w') as f:
+    #     print(table, file=f)
+    # if len(error) != 0:
+    #     with open(error_path, 'w') as f:
+    #         print(error, file=f)
+
+    # AAA.PrintSymbTable()
+    # js1 = open("js1", 'w')
+    # print(AAA.out, file=js1)
+    # js1.close()

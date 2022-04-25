@@ -365,11 +365,7 @@ class LL1Parse:
         self.fpnum = 0
         self.tokens = None
 
-        self.Error = False
-
-    def syntaxError(self, s):
-        self.Error = True
-        print(s)
+        self.error = []
 
     def getLexType(self, token):
         lex = ""
@@ -400,8 +396,8 @@ class LL1Parse:
     def gettoken(self):
         token = TokenType()
         p = self.tokens[self.fpnum]
-        print(p)
         token.lineshow = p['line']
+        token.col = p['col']
         token.Sem = p['name']
         token.Lex = self.getLexType(p)
         # print(p)
@@ -430,7 +426,9 @@ class LL1Parse:
         elif op == LexType.TIMES or op == LexType.OVER:
             return 3
         else:
-            self.syntaxError("no this operator in".format(self.currentToken.lineshow, self.currentToken.Sem))
+            self.error.append(
+                "in line:{0} col{1}, {2} no this operator".format(self.currentToken.linePos, self.currentToken.colPos,
+                                                       self.currentToken.Sem))
 
     def process1(self):
         self.stack.append(StackNode(2, LexType.DOT))
@@ -449,6 +447,8 @@ class LL1Parse:
         self.stack.append(StackNode(2, LexType.ID))
 
         self.currentP.name[0] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process4(self):
@@ -493,6 +493,8 @@ class LL1Parse:
     def process11(self):
         self.stack.append(StackNode(2, LexType.ID))
         self.currentP.name[0] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process12(self):
@@ -507,6 +509,8 @@ class LL1Parse:
         self.stack.append(StackNode(2, LexType.ID))
         self.currentP.kind["dec"] = DecKind.IdK
         self.currentP.attr["type_name"] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
     def process15(self):
         self.stack.append(StackNode(2, LexType.INTEGER))
@@ -549,10 +553,14 @@ class LL1Parse:
     def process20(self):
         self.stack.append(StackNode(2, LexType.INTC))
         self.currentP.attr["ArrayAttr"]["low"] = int(self.currentToken.Sem)
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
     def process21(self):
         self.stack.append(StackNode(2, LexType.INTC))
         self.currentP.attr["ArrayAttr"]["up"] = int(self.currentToken.Sem)
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
     def process22(self):
         self.stack.append(StackNode(2, LexType.END))
@@ -601,6 +609,8 @@ class LL1Parse:
         self.stack.append(StackNode(2, LexType.ID))
 
         self.currentP.name[self.currentP.idnum] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process28(self):
@@ -647,6 +657,8 @@ class LL1Parse:
         self.stack.append(StackNode(1, NontmlType.VarIdMore))
         self.stack.append(StackNode(2, LexType.ID))
         self.currentP.name[self.currentP.idnum] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process37(self):
@@ -694,6 +706,8 @@ class LL1Parse:
         self.stack.append(StackNode(2, LexType.ID))
 
         self.currentP.name[0] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process45(self):
@@ -741,6 +755,8 @@ class LL1Parse:
         self.stack.append(StackNode(2, LexType.ID))
 
         self.currentP.name[self.currentP.idnum] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process53(self):
@@ -803,6 +819,8 @@ class LL1Parse:
     def process64(self):
         self.stack.append(StackNode(1, NontmlType.OutputStm))
         self.currentP = newStmtNode(StmtKind.WriteK)
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
         self.popNode(self.currentP)
         self.stack_node.append((self.currentP, -1))
@@ -810,6 +828,8 @@ class LL1Parse:
     def process65(self):
         self.stack.append(StackNode(1, NontmlType.ReturnStm))
         self.currentP = newStmtNode(StmtKind.ReturnK)
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
         self.popNode(self.currentP)
         self.stack_node.append((self.currentP, -1))
@@ -817,10 +837,13 @@ class LL1Parse:
     def process66(self):
         self.stack.append(StackNode(1, NontmlType.AssCall))
         self.stack.append(StackNode(2, LexType.ID))
+
         self.currentP = newStmtNode(StmtKind.AssignK)
 
         t1 = newExpNode(ExpKind.VariK)
         t1.name[0] = self.currentToken.Sem
+        t1.linePos = self.currentToken.lineshow
+        t1.colPos = self.currentToken.col
         t1.idnum += 1
 
         self.currentP.child[0] = t1
@@ -837,6 +860,7 @@ class LL1Parse:
         self.stack.append(StackNode(1, NontmlType.CallStmRest))
         self.currentP.child[0].attr["ExpAttr"]["varkind"] = VarKind.IdV
         self.currentP.kind["stmt"] = StmtKind.CallK
+
 
     def process69(self):
         self.stack.append(StackNode(1, NontmlType.Exp))
@@ -882,6 +906,8 @@ class LL1Parse:
     def process73(self):
         self.stack.append(StackNode(2, LexType.ID))
         self.currentP.name[0] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
     def process74(self):
@@ -942,6 +968,8 @@ class LL1Parse:
 
         self.currentP = newExpNode(ExpKind.OpK)
         self.currentP.attr["ExpAttr"]["op"] = self.currentToken.Lex
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
         sTop = self.stack_op[-1].attr["ExpAttr"]["op"]
         while self.Priosity(sTop) >= self.Priosity(self.currentToken.Lex):
@@ -991,6 +1019,8 @@ class LL1Parse:
 
         self.currentP = newExpNode(ExpKind.OpK)
         self.currentP.attr["ExpAttr"]["op"] = self.currentToken.Lex
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
         sTop = self.stack_op[-1].attr["ExpAttr"]["op"]
         while self.Priosity(sTop) >= self.Priosity(self.currentToken.Lex):
@@ -1016,6 +1046,8 @@ class LL1Parse:
 
         self.currentP = newExpNode(ExpKind.OpK)
         self.currentP.attr["ExpAttr"]["op"] = self.currentToken.Lex
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
 
         sTop = self.stack_op[-1].attr["ExpAttr"]["op"]
         while self.Priosity(sTop) >= self.Priosity(self.currentToken.Lex):
@@ -1035,6 +1067,8 @@ class LL1Parse:
 
         t = newExpNode(ExpKind.OpK)
         t.attr["ExpAttr"]["op"] = self.currentToken.Lex
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.stack_op.append(t)
         self.expflag += 1
 
@@ -1043,6 +1077,8 @@ class LL1Parse:
 
         t = newExpNode(ExpKind.ConstK)
         t.attr["ExpAttr"]["val"] = int(self.currentToken.Sem)
+        t.linePos = self.currentToken.lineshow
+        t.colPos = self.currentToken.col
         self.stack_num.append(t)
 
     def process91(self):
@@ -1054,6 +1090,8 @@ class LL1Parse:
 
         self.currentP = newExpNode(ExpKind.VariK)
         self.currentP.name[0] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
 
         self.stack_num.append(self.currentP)
@@ -1088,6 +1126,8 @@ class LL1Parse:
 
         self.currentP = newExpNode(ExpKind.VariK)
         self.currentP.name[0] = self.currentToken.Sem
+        self.currentP.linePos = self.currentToken.lineshow
+        self.currentP.colPos = self.currentToken.col
         self.currentP.idnum += 1
         self.popNode(self.currentP)
 
@@ -1130,7 +1170,9 @@ class LL1Parse:
         if 1 <= num <= 104:
             eval("self.process" + str(num))()
         else:
-            self.syntaxError("wrongpredict")
+            self.error.append(
+                "in line:{0} col{1}, {2} wrong".format(self.currentToken.linePos, self.currentToken.colPos,
+                                                       self.currentToken.Sem))
 
     def printstack(self):
         for t in self.stack:
@@ -1161,7 +1203,6 @@ class LL1Parse:
         lineno = self.currentToken.lineshow
 
         wrong_Flag = False
-        pnum = 0
         while len(self.stack) != 0 and wrong_Flag is False:
             toptoken = self.stack[-1]
             #if self.currentToken.lineshow == 32:
@@ -1174,10 +1215,8 @@ class LL1Parse:
                 if self.stacktopT == self.currentToken.Lex:
                     self.stack.pop()
                     self.currentToken = self.gettoken()
-                    lineno = self.currentToken.lineshow
                 else:
-                    self.syntaxError("wrong1")
-                    wrong_Flag = True
+                    self.error.append("in line:{0} col{1}, {2} wrong".format(self.currentToken.linePos, self.currentToken.colPos, self.currentToken.Sem))
             else:
                 self.stacktopN = toptoken.Ntmlvar
                 pnum = table.getPredict(self.stacktopN, self.currentToken.Lex)
@@ -1189,18 +1228,28 @@ class LL1Parse:
 
 if __name__ == '__main__':
     programPath = sys.argv[1]   #程序产物文件夹
-    tokenFile = programPath + '/tk' #token输入队列
-    treeFile = programPath + '/treell1'
-    # tokenFile = 'input1.txt'
-    # input_path = "../outputs/bubble_sort.tk"
+    input_path = programPath + '/tk'
+    output_path = programPath + '/treell1'
+    error_path = programPath + '/treell1err'
+
+    # input_path = "../../../outputs/test_demos/bubble_sort.tk"
     # input_path = "input1.txt"
-    # output_path = "tmp.txt"
+    # input_path = "../../../outputs/test_demos/test_output_tokens2.txt"
+    # output_path = "out2.txt"
+    # output_path = "bubble.out"
     # input_path = "../outputs/bubble_sort.tk"
 
-    with open(tokenFile, 'r') as f:
+    with open(input_path, 'r') as f:
         input_file = json.load(f)
 
     LL1 = LL1Parse()
     root = LL1.parse(input_file)
     IOClass = IONode()
-    IOClass.printRoot(root, file=treeFile)
+    IOClass.printRoot(root, file=output_path)
+    if len(LL1.error) != 0:
+        with open(error_path, 'w') as f:
+            print(LL1.error, file=f)
+    #IOClass.printRoot(root)
+    # rr = IOClass.loadroot("tmp.txt")
+    # IOClass.printRoot(rr)
+
