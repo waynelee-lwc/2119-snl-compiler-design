@@ -171,7 +171,6 @@ class Semantic:
             else:
                 self.error.append(
                     "in line:{0}, no this part in procedure declaration part\n".format(t.linePos))
-
                 # ErrorPrompt(t.linePos, "", "no this node kind in syntax tree!")
         entry.attrIR.More['ProcAttr']['nOff'] = self.savedOff
         entry.attrIR.More['ProcAttr']['mOff'] = entry.attrIR.More['ProcAttr']['nOff'] + entry.attrIR.More['ProcAttr'][
@@ -637,7 +636,7 @@ class Semantic:
         # self.PrintOneLayer(self.Level)
 
     def Enter(self, id, attribP, line, col):
-        flag = False
+        present = False
         cur = self.scope[self.Level]
         pre = self.scope[self.Level]
 
@@ -647,22 +646,22 @@ class Semantic:
         else:
             while cur is not None:
                 pre = cur
-                result = (id == cur.idName)
-                if result is True:
-                    self.error.append("\(line:{0} col:{1}\),word{2}, repetition declaration error !".format(line, col, id))
+                # result = (id == cur.idName)
+                if id == cur.idName:
+                    self.error.append("\(line:{0} col:{1}\),word {2}, repetition declaration error !".format(line, col, id))
                     # LOG.e(DEBUG, "repetition declaration error !")
-                    flag = True
-                    exit(0)
+                    present = True
+                    return present, cur.attrIR, cur
                 else:
                     cur = pre.next
 
-            if flag is False:
+            if present is False:
                 cur = self.GetTableItem()
                 pre.next = cur
 
         cur.idName = id
-
         cur.attrIR.idtype = attribP.idtype
+
         cur.attrIR.kind = attribP.kind
         if attribP.kind == IdKind.typeKind:
             pass
@@ -675,7 +674,7 @@ class Semantic:
             cur.attrIR.More["ProcAttr"]["level"] = attribP.More["ProcAttr"]["level"]
             cur.attrIR.More["ProcAttr"]["param"] = attribP.More["ProcAttr"]["param"]
 
-        return flag, attribP, cur
+        return present, attribP, cur
 
     def FindEntry(self, id):
         r1 = False
@@ -820,7 +819,9 @@ if __name__ == '__main__':
     output_path = programPath + '/sem'
     error_path = programPath + '/semerr'
 
-    # input_path = "tmp.txt"
+    # input_path = "tmp1.txt"
+    # output_path = None
+    # error_path = None
     # output_path = "tmpp.txt"
     # input_path = "../outputs/bubble_sort.tk"
 
@@ -829,14 +830,17 @@ if __name__ == '__main__':
 
     AAA = Semantic()
     AAA.analyze(root)
+
     table, error = AAA.GetResult()
-    # print(table)
-    # print(error)
-    with open(output_path, 'w') as f:
-        print(table, file=f)
-    if len(error) != 0:
-        with open(error_path, 'w') as f:
-            print(error, file=f)
+
+    print(table)
+    print(error)
+
+    # with open(output_path, 'w') as f:
+    #     print(table, file=f)
+    # if len(error) != 0:
+    #     with open(error_path, 'w') as f:
+    #         print(error, file=f)
 
     # AAA.PrintSymbTable()
     # js1 = open("js1", 'w')
