@@ -1,6 +1,6 @@
 import json
-# from LL1Support import *
-from src.syntax_analysis.parseLL1.LL1Support import *
+from LL1Support import *
+# from src.syntax_analysis.parseLL1.LL1Support import *
 
 class LL1Table:
     def __init__(self):
@@ -1227,13 +1227,13 @@ class LL1Parse:
 
 
 if __name__ == '__main__':
-    # programPath = sys.argv[1]   #程序产物文件夹
-    # input_path = programPath + '/tk'
-    # output_path = programPath + '/treell1'
-    # error_path = programPath + '/treell1err'
+    programPath = sys.argv[1]   #程序产物文件夹
+    input_path = programPath + '/tk'
+    output_path = programPath + '/treell1'
+    error_path = programPath + '/treell1err'
 
-    input_path = "../../../outputs/test_demos/bubble_sort.tk"
-    output_path = None
+    # input_path = "../../../outputs/test_demos/bubble_sort.tk"
+    # output_path = None
     # input_path = "input1.txt"
     # input_path = "../../../outputs/test_demos/test_output_tokens2.txt"
     # output_path = "out2.txt"
