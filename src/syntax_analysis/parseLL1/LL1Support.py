@@ -101,12 +101,148 @@ class ExpType(Enum):
     Boolean = 3
 
 
-class Log():
-    def e(self, tag, word):
-        sys.stderr.write("[error] from " + tag + " " + word + "\n")
+class TokenType:
+    def __init__(self):
+        self.lineshow = None
+        self.col = None
+        self.Lex = None
+        self.Sem = None # 字符串
 
-    def d(self, tag, word):
-        sys.stdout.write("[log] from " + tag + " " + word + "\n")
+
+class NontmlType(Enum):
+    Program = 1
+    ProgramHead = 2
+    ProgramName = 3
+    DeclarePart = 4
+    TypeDec = 5
+    TypeDeclaration = 6
+    TypeDecList = 7
+    TypeDecMore = 8
+    TypeId = 9
+    TypeName = 10
+    BaseType = 11
+    StructureType = 12
+    ArrayType = 13
+    Low = 14
+    Top = 15
+    RecType = 16
+    FieldDecList = 17
+    FieldDecMore = 18
+    IdList = 19
+    IdMore = 20
+    VarDec = 21
+    VarDeclaration = 22
+    VarDecList = 23
+    VarDecMore = 24
+    VarIdList = 25
+    VarIdMore = 26
+    ProcDec = 27
+    ProcDeclaration = 28
+    ProcDecMore = 29
+    ProcName = 30
+    ParamList = 31
+    ParamDecList = 32
+    ParamMore = 33
+    Param = 34
+    FormList = 35
+    FidMore = 36
+    ProcDecPart = 37
+    ProcBody = 38
+    ProgramBody = 39
+    StmList = 40
+    StmMore = 41
+    Stm = 42
+    AssCall = 43
+    AssignmentRest = 44
+    ConditionalStm = 45
+    StmL = 46
+    LoopStm = 47
+    InputStm = 48
+    InVar = 49
+    OutputStm = 50
+    ReturnStm = 51
+    CallStmRest = 52
+    ActParamList = 53
+    ActParamMore = 54
+    RelExp = 55
+    OtherRelE = 56
+    Exp = 57
+    OtherTerm = 58
+    Term = 59
+    OtherFactor = 60
+    Factor = 61
+    Variable = 62
+    VariMore = 63
+    FieldVar = 64
+    FieldVarMore = 65
+    CmpOp = 66
+    AddOp = 67
+    MultOp = 68
+
+
+class StackNode:
+    def __init__(self, flag=0, kind=None):
+        self.flag = flag
+        self.Ntmlvar = None
+        self.tmlvar = None
+        self.underNode = None
+        if flag == 1:
+            self.Ntmlvar = kind
+        elif flag == 2:
+            self.tmlvar = kind
+
+
+def newRootNode():
+    return TreeNode(NodeKind.ProK)
+
+
+def newPheadNode():
+    return TreeNode(NodeKind.PheadK)
+
+
+def newDecANode(kind):
+    return TreeNode(kind)
+
+
+def newDecNode():
+    return TreeNode(NodeKind.DecK)
+
+
+def newProcNode():
+    return TreeNode(NodeKind.ProcDecK)
+
+
+def newStmtNode(kind=None):
+    t = TreeNode(NodeKind.StmtK)
+    t.kind["stmt"] = kind
+    return t
+
+
+def newStmlNode():
+    t = TreeNode(NodeKind.StmLK)
+    return t
+
+
+def newExpNode(kind):
+    t = TreeNode(NodeKind.ExpK)
+    t.kind["exp"] = kind
+    t.attr["ExpAttr"]["varkind"] = VarKind.IdV
+    t.attr["ExpAttr"]["type"] = ExpType.Void
+    return t
+
+
+def newVarNode():
+    t = TreeNode()
+    t.nodeKind = NodeKind.VarK
+    # t.linePos = lineshow
+    return t
+
+
+def newTypeNode():
+    t = TreeNode()
+    t.nodeKind = NodeKind.TypeK
+    # t.linePos = lineshow
+    return t
 
 
 class IONode:
@@ -474,7 +610,7 @@ class TreeNode:
                 "type_name": ""
             }
         self.file = None
-        
+
     def insertname(self, s):
         self.name[self.idnum] = s
         self.idnum += 1
@@ -493,149 +629,7 @@ class TreeNode:
         cur.brother = br
 
 
-def newRootNode():
-    return TreeNode(NodeKind.ProK)
 
 
-def newPheadNode():
-    return TreeNode(NodeKind.PheadK)
 
-
-def newDecANode(kind):
-    return TreeNode(kind)
-
-
-def newDecNode():
-    return TreeNode(NodeKind.DecK)
-
-
-def newProcNode():
-    return TreeNode(NodeKind.ProcDecK)
-
-
-def newStmtNode(kind=None):
-    t = TreeNode(NodeKind.StmtK)
-    t.kind["stmt"] = kind
-    return t
-
-
-def newStmlNode():
-    t = TreeNode(NodeKind.StmLK)
-    return t
-
-
-def newExpNode(kind):
-    t = TreeNode(NodeKind.ExpK)
-    t.kind["exp"] = kind
-    t.attr["ExpAttr"]["varkind"] = VarKind.IdV
-    t.attr["ExpAttr"]["type"] = ExpType.Void
-    return t
-
-
-def newVarNode():
-    t = TreeNode()
-    t.nodeKind = NodeKind.VarK
-    # t.linePos = lineshow
-    return t
-
-
-def newTypeNode():
-    t = TreeNode()
-    t.nodeKind = NodeKind.TypeK
-    # t.linePos = lineshow
-    return t
-
-
-MAXTOKENLEN = 15
-
-
-class TokenType:
-    def __init__(self):
-        self.lineshow = None
-        self.col = None
-        self.Lex = None
-        self.Sem = None # 字符串
-
-
-class StackNode:
-    def __init__(self, flag=0, kind=None):
-        self.flag = flag
-        self.Ntmlvar = None
-        self.tmlvar = None
-        self.underNode = None
-        if flag == 1:
-            self.Ntmlvar = kind
-        elif flag == 2:
-            self.tmlvar = kind
-
-
-class NontmlType(Enum):
-    Program = 1
-    ProgramHead = 2
-    ProgramName = 3
-    DeclarePart = 4
-    TypeDec = 5
-    TypeDeclaration = 6
-    TypeDecList = 7
-    TypeDecMore = 8
-    TypeId = 9
-    TypeName = 10
-    BaseType = 11
-    StructureType = 12
-    ArrayType = 13
-    Low = 14
-    Top = 15
-    RecType = 16
-    FieldDecList = 17
-    FieldDecMore = 18
-    IdList = 19
-    IdMore = 20
-    VarDec = 21
-    VarDeclaration = 22
-    VarDecList = 23
-    VarDecMore = 24
-    VarIdList = 25
-    VarIdMore = 26
-    ProcDec = 27
-    ProcDeclaration = 28
-    ProcDecMore = 29
-    ProcName = 30
-    ParamList = 31
-    ParamDecList = 32
-    ParamMore = 33
-    Param = 34
-    FormList = 35
-    FidMore = 36
-    ProcDecPart = 37
-    ProcBody = 38
-    ProgramBody = 39
-    StmList = 40
-    StmMore = 41
-    Stm = 42
-    AssCall = 43
-    AssignmentRest = 44
-    ConditionalStm = 45
-    StmL = 46
-    LoopStm = 47
-    InputStm = 48
-    InVar = 49
-    OutputStm = 50
-    ReturnStm = 51
-    CallStmRest = 52
-    ActParamList = 53
-    ActParamMore = 54
-    RelExp = 55
-    OtherRelE = 56
-    Exp = 57
-    OtherTerm = 58
-    Term = 59
-    OtherFactor = 60
-    Factor = 61
-    Variable = 62
-    VariMore = 63
-    FieldVar = 64
-    FieldVarMore = 65
-    CmpOp = 66
-    AddOp = 67
-    MultOp = 68
 
