@@ -150,7 +150,7 @@ app.post('/compile',(req,res)=>{
     }
     
     zip(programPath,programZip).then(()=>{
-        // fs.rmdirSync(programPath,{ recursive: true, force: true })
+        fs.rmdirSync(programPath,{ recursive: true, force: true })
     })
     res.send(resp).end()
 })

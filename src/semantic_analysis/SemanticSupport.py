@@ -481,7 +481,7 @@ class IONode:
                     while cur.brother is not None:
                         cur = cur.brother
                     cur.brother = node
-            elif prock_flag is True and cur_indented == 2:
+            elif prock_flag is True and cur_indented >= 2:
                 while pre_indented != cur_indented - 1:
                     pre_indented -= 1
                     cur = cur.father
