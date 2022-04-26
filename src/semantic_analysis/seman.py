@@ -1,5 +1,6 @@
 # from src.semantic_analysis.SemanticSupport import *
 from SemanticSupport import *
+import json
 
 class Semantic:
     def __init__(self):
@@ -834,6 +835,15 @@ if __name__ == '__main__':
 
     print(table)
     print(error)
+
+    output_file = open(output_path,'w')
+    error_file = open(error_path,'w')
+
+    output_file.write(json.dumps(table))
+    error_file.write(json.dumps(error))
+
+    output_file.close()
+    error_file.close()
 
     # with open(output_path, 'w') as f:
     #     print(table, file=f)

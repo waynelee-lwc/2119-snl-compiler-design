@@ -112,6 +112,7 @@ app.post('/compile',(req,res)=>{
     let sembuf = execSync(`python3 ${semanticAnalysis} ${programPath}`) //语法分析
     // console.log(lexbuf.toString())
     // console.log(synbuf.toString())
+    console.log(sembuf.toString())
     
     //处理语法分析结果，如果有错，不继续进行语义分析
     files = fs.readdirSync(programPath)
@@ -134,21 +135,22 @@ app.post('/compile',(req,res)=>{
     }
 
     let resp = {
-        snl : result['snl'],
-        tree : result['tree'],
-        tokens : result['tk'],
-        gene : result['gene'],
-        lex_err:result['lexerr'],
-        syn_err:result['synerr'],
-        comments: result['cmt'],
-        treell1: result['treell1'],
+        snl : result['snl'],        //源程序
+        tree : result['tree'],      //递归下降语法树
+        tokens : result['tk'],      //token序列
+        gene : result['gene'],      //生成格式化代码
+        lex_err:result['lexerr'],   //词法错误
+        syn_err:result['synerr'],   //语法错误
+        comments: result['cmt'],    //注释队列
+        treell1: result['treell1'], //ll1生成语法树
         // tson : result['tson'],
-        sem :result['sem'],
-        program_name : programName
+        sem :result['sem'],         //语义分析结果
+        semerr :result['semerr'],   //语义分析错误
+        program_name : programName  //程序分配名称
     }
     
     zip(programPath,programZip).then(()=>{
-        fs.rmdirSync(programPath,{ recursive: true, force: true })
+        // fs.rmdirSync(programPath,{ recursive: true, force: true })
     })
     res.send(resp).end()
 })

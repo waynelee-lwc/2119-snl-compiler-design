@@ -6,8 +6,8 @@ window.onresize = function(){
 
 var lastProgramName = ''
 
-var host = '60.205.211.19'
-// var host = 'localhost'
+// var host = '60.205.211.19'
+var host = 'localhost'
 var port = '3008'
 
 $('#code').on('keydown', function(e) {
