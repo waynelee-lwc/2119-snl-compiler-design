@@ -1,14 +1,13 @@
-# from src.semantic_analysis.SemanticSupport import *
-from SemanticSupport import *
+from src.semantic_analysis.SemanticSupport import *
+# from SemanticSupport import *
 import json
+
 
 class Semantic:
     def __init__(self):
         self.Off = 0
         self.Level = -1
-        self.beginLevel = 0
-        self.SCOPSIZE = 1000
-        self.scope = [None] * self.SCOPSIZE
+        self.scope = {-1: None}
 
         self.intPtr = NewTy(TypeKind.intTy)
         self.charPtr = NewTy(TypeKind.charTy)
@@ -20,7 +19,9 @@ class Semantic:
 
         self.error = []
 
-        self.out = []
+        self.dict_out = {}
+        self.list_out = []
+        self.id = 0
 
     def TypeProcess(self, t, deckind):
         if deckind == DecKind.IdK:
@@ -41,23 +42,17 @@ class Semantic:
         if present is True:
             if entry.attrIR.kind != IdKind.typeKind:
                 self.error.append("in line:{0},col{1}, {2} used before typed\n".format(t.linePos, t.colPos, t.attr['type_name']))
-                #ErrorPrompt(t.linePos, t.attr['type_name'], "used before typed!\n")
             else:
                 Ptr = entry.attrIR.idtype
         else:
-            self.error.append(
-                "in line:{0},col{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.attr['type_name']))
-            # ErrorPrompt(t.linePos, t.attr['type_name'], "type name is not declared!\n")
+            self.error.append("in line:{0},col{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.attr['type_name']))
 
         return Ptr
 
     def arrayType(self, t):
         ptr = None
         if t.attr['ArrayAttr']['low'] > t.attr['ArrayAttr']['up']:
-            self.error.append(
-                "in line:{0},col{1}, array {2} has wrong index\n".format(t.linePos, t.colPos,t.name[0]))
-            # ErrorPrompt(t.linePos, "", "array subscript error!\n")
-
+            self.error.append("in line:{0},col{1}, array {2} has wrong index\n".format(t.linePos, t.colPos, t.name[0]))
         else:
             ptr0 = self.TypeProcess(t, DecKind.IntegerK)
             ptr1 = self.TypeProcess(t, t.attr['ArrayAttr']['childtype'])
@@ -109,7 +104,6 @@ class Semantic:
             present, attr, entry = self.Enter(t.name[0], attr, t.linePos, t.colPos)
             if present is True:
                 self.error.append("in line:{0} col:{1}, {2}is repetation declared!\n".format(t.linePos, t.colPos, t.name[0]))
-                # ErrorPrompt(t.linePos, t.name[0], "is repetation declared!\n")
             else:
                 entry.attrIR.idtype = self.TypeProcess(t, t.kind['dec'])
             t = t.brother
@@ -139,9 +133,7 @@ class Semantic:
 
                 present, attr, entry = self.Enter(t.name[i], attr, t.linePos, t.colPos)
                 if present is True:
-                    self.error.append(
-                        "in line:{0} col:{1}, {2}is repetition defined\n".format(t.linePos, t.colPos, t.name[i]))
-                    # ErrorPrompt(t.linePos, t.name[i], " is defined repetation!\n")
+                    self.error.append("in line:{0} col:{1}, {2} is repetition defined\n".format(t.linePos, t.colPos, t.name[i]))
                 else:
                     t.table[i] = entry
 
@@ -170,9 +162,7 @@ class Semantic:
             elif t.nodeKind == NodeKind.ProcDecK:
                 break
             else:
-                self.error.append(
-                    "in line:{0}, no this part in procedure declaration part\n".format(t.linePos))
-                # ErrorPrompt(t.linePos, "", "no this node kind in syntax tree!")
+                self.error.append("in line:{0}, no this part in procedure declaration part\n".format(t.linePos))
         entry.attrIR.More['ProcAttr']['nOff'] = self.savedOff
         entry.attrIR.More['ProcAttr']['mOff'] = entry.attrIR.More['ProcAttr']['nOff'] + entry.attrIR.More['ProcAttr'][
             'level'] + 1
@@ -252,10 +242,7 @@ class Semantic:
         elif t.kind['stmt'] == StmtKind.ReturnK:
             self.returnstatement(t)
         else:
-            self.error.append(
-                "in line:{0} col:{1}, {2} statement type error\n".format(t.linePos, t.colPos, t.name[0]))
-
-            #ErrorPrompt(t.linePos, "", "statement type error!\n")
+            self.error.append("in line:{0} col:{1}, {2} statement type error\n".format(t.linePos, t.colPos, t.name[0]))
 
     def expr(self, t, Ekind):
         present = False
@@ -277,10 +264,7 @@ class Semantic:
 
                     if present is True:
                         if self.FindAttr(entry).kind != IdKind.varKind:
-                            self.error.append(
-                                "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos,
-                                                                                         t.name[0]))
-                            # ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
+                            self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
                             Eptr = None
                         else:
                             Eptr = entry.attrIR.idtype
@@ -288,11 +272,8 @@ class Semantic:
                                 Ekind = AccessKind.indir
 
                     else:
-                        self.error.append(
-                            "in line:{0} col:{1}, {2}is not declares\n".format(t.linePos, t.colPos,
+                        self.error.append("in line:{0} col:{1}, {2}is not declares\n".format(t.linePos, t.colPos,
                                                                                      t.name[0]))
-
-                        #ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
 
                 else:
                     if t.attr['ExpAttr']['varkind'] == VarKind.ArrayMembV:
@@ -319,11 +300,7 @@ class Semantic:
                         Ekind = AccessKind.dir
 
                 else:
-                    self.error.append(
-                        "in line:{0} col:{1}, {2} operator is not compat\n".format(t.linePos, t.colPos,
-                                                                                 t.name[0]))
-
-                    # ErrorPrompt(t.linePos, "", "operator is not compat!\n")
+                    self.error.append("in line:{0} col:{1}, {2} operator is not compat\n".format(t.linePos, t.colPos, t.name[0]))
 
         return Eptr
 
@@ -337,20 +314,13 @@ class Semantic:
 
         if present is False:
             if self.FindAttr(entry).kind != IdKind.varKind:
-                self.error.append(
-                    "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos,
-                                                                             t.name[0]))
+                self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
 
-                # ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
                 Eptr = None
 
             else:
                 if self.FindAttr(entry).idtype.kind != TypeKind.arrayTy:
-                    self.error.append(
-                    "in line:{0} col:{1}, {2} is not array variable\n".format(t.linePos, t.colPos,
-                                                                             t.name[0]))
-
-                    # ErrorPrompt(t.linePos, t.name[0], "is not array variable error !\n")
+                    self.error.append("in line:{0} col:{1}, {2} is not array variable\n".format(t.linePos, t.colPos, t.name[0]))
                     Eptr = None
 
                 else:
@@ -362,19 +332,13 @@ class Semantic:
                         return None
                     present = self.Compat(Eptr0, Eptr1)
                     if present is False:
-                        self.error.append(
-                            "in line:{0} col:{1}, {2} type cannot match the array member\n".format(t.linePos, t.colPos,
-                                                                                      t.name[0]))
-                        # ErrorPrompt(t.linePos, "", "type is not matched with the array member error !\n")
+                        self.error.append("in line:{0} col:{1}, {2} type cannot match the array member\n".format(t.linePos, t.colPos, t.name[0]))
                         Eptr = None
                     else:
                         Eptr = entry.attrIR.idtype.More.ArrayAttr.elemTy
 
         else:
-            self.error.append(
-                "in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos,
-                                                                          t.name[0]))
-            # ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
+            self.error.append("in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.name[0]))
         return Eptr
 
     def recordVar(self, t):
@@ -390,18 +354,12 @@ class Semantic:
 
         if present is True:
             if self.FindAttr(entry).idtype.kind != IdKind.varKind:
-                self.error.append(
-                    "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos,
-                                                                              t.name[0]))
-                # ErrorPrompt(t.linePos, t.name[0], "is not variable error!\n")
+                self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
                 Eptr = None
 
             else:
                 if self.FindAttr(entry).idtype.kind != TypeKind.recordTy:
-                    self.error.append(
-                        "in line:{0} col:{1}, {2} is not record variable\n".format(t.linePos, t.colPos, t.name[0]))
-
-                    # ErrorPrompt(t.linePos, t.name[0], "is not record variable error !\n")
+                    self.error.append("in line:{0} col:{1}, {2} is not record variable\n".format(t.linePos, t.colPos, t.name[0]))
                     Eptr = None
 
                 else:
@@ -416,24 +374,17 @@ class Semantic:
 
                     if cur is not None:
                         if result is True:
-                            self.error.append(
-                                "in line:{0} col:{1}, {2} is not field type\n".format(t.linePos, t.colPos,
-                                                                                    t.name[0]))
+                            self.error.append("in line:{0} col:{1}, {2} is not field type\n".format(t.linePos, t.colPos, t.name[0]))
 
-                            # ErrorPrompt(t.child[0].linePos, t.child[0].name[0], "is not field type!\n")
                             Eptr = self.arrayVar(t.child[0])
 
         else:
-            self.error.append(
-                "in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos,
-                                                                    t.name[0]))
+            self.error.append("in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.name[0]))
 
-            # ErrorPrompt(t.linePos, t.name[0], "is not declarations!\n")
         return Eptr
 
     def assignstatement(self, t):
         Eptr = None
-
         child1 = t.child[0]
         child2 = t.child[1]
 
@@ -442,19 +393,13 @@ class Semantic:
 
             if present is True:
                 if self.FindAttr(entry).kind != IdKind.varKind:
-                    self.error.append(
-                        "in line:{0} col:{1}, {2} is not variable\n".format(child1.linePos, child1.colPos, child1.name[0]))
-
-                    # ErrorPrompt(child1.lineon, child1.name[0], "is not variable error!\n")
+                    self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(child1.linePos, child1.colPos, child1.name[0]))
                     Eptr = None
                 else:
                     Eptr = entry.attrIR.idtype
                     child1.table[0] = entry
             else:
-                self.error.append(
-                    "in line:{0} col:{1}, {2} is not declared\n".format(child1.linePos, child1.colPos, child1.name[0]))
-                #ErrorPrompt(child1.lineon, child1.name[0], "is not declarations!\n")
-
+                self.error.append("in line:{0} col:{1}, {2} is not declared\n".format(child1.linePos, child1.colPos, child1.name[0]))
         else:
             if child1.attr['ExpAttr']['varkind'] == VarKind.ArrayMembV:
                 Eptr = self.arrayVar(child1)
@@ -468,10 +413,7 @@ class Semantic:
                 if self.Compat(ptr, Eptr):
                     pass
                 else:
-                    self.error.append(
-                        "in line:{0} assignment wrong\n".format(t.linePos))
-
-                    # ErrorPrompt(t.linePos, "", "ass_expression error!\n")
+                    self.error.append("in line:{0} assignment wrong\n".format(t.linePos))
 
     def callstatement(self, t):
         Ekind = AccessKind
@@ -482,14 +424,9 @@ class Semantic:
         if present is False:
             self.error.append(
                 "in line:{0} col:{1}, {2} function is not declared\n".format(t.linePos, t.colPos, t.child[0].name[0]))
-
-            #ErrorPrompt(t.linePos, t.chlid[0].name[0], "function is not declarationed!\n")
-
         else:
             if self.FindAttr(entry).kind != IdKind.procKind:
-                self.error.append(
-                    "in line:{0} col:{1}, {2} is not function name\n".format(t.linePos, t.colPos, t.name[0]))
-                #ErrorPrompt(t.linePos, t.name[0], "is not function name!\n")
+                self.error.append("in line:{0} col:{1}, {2} is not function name\n".format(t.linePos, t.colPos, t.name[0]))
             else:
                 p = t.child[1]
                 Param = self.FindAttr(entry.More.ProcAttr.param)
@@ -497,32 +434,20 @@ class Semantic:
                     paramEntry = Param.entry
                     Etp = self.expr(p, Ekind)
                     if self.FindAttr(paramEntry).More.Varattr.access == AccessKind.indir and Ekind == AccessKind.dir:
-                        self.error.append(
-                            "in line:{0} col:{1}, {2} kind match wrong\n".format(p.linePos, p.colPos, p.name[0]))
-                        # ErrorPrompt(p.lineon, "", "param kind is not match!\n")
+                        self.error.append("in line:{0} col:{1}, {2} kind match wrong\n".format(p.linePos, p.colPos, p.name[0]))
                     elif self.FindAttr(paramEntry).idtype != Etp:
-                        self.error.append(
-                            "in line:{0} col:{1}, {2} type match wrong\n".format(p.linePos, p.colPos, p.name[0]))
-
-                        # ErrorPrompt(p.lineon, "", "param type is not match!\n")
-
+                        self.error.append("in line:{0} col:{1}, {2} type match wrong\n".format(p.linePos, p.colPos, p.name[0]))
                     p = p.brother
                     Param = Param.next
 
                 if p is not None or Param is not None:
-                    self.error.append(
-                        "in line:{0}, wrong in matching parameters because of num\n".format(t.child[1].linePos))
-
-                    #ErrorPrompt(t.child[1].lineon, "", "param num is not match!\n")
+                    self.error.append("in line:{0}, wrong in matching parameters because of num\n".format(t.child[1].linePos))
 
     def ifstatement(self, t):
         Etp = self.expr(t.child[0], None)
         if Etp is not None:
             if Etp.kind != TypeKind.boolTy:
-                self.error.append(
-                    "in line:{0}, condition is not a bool expression\n".format(t.linePos))
-
-                # ErrorPrompt(t.linePos, "", "condition expressrion error!\n")
+                self.error.append( "in line:{0}, condition is not a bool expression\n".format(t.linePos))
             else:
                 p = t.child[1]
                 while p is not None:
@@ -539,10 +464,7 @@ class Semantic:
         Etp = self.expr(t.child[0], None)
         if Etp is not None:
             if Etp.kind != TypeKind.boolTy:
-                self.error.append(
-                    "in line:{0}, while condition error\n".format(t.linePos))
-
-                # ErrorPrompt(t.linePos, "", "condition expression error!\n")
+                self.error.append("in line:{0}, while condition error\n".format(t.linePos))
             else:
                 t = t.child[1]
                 while t is not None:
@@ -554,30 +476,22 @@ class Semantic:
         t.table[0] = entry
 
         if present is False:
-            self.error.append(
-                "in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.name[0]))
+            self.error.append("in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.name[0]))
 
-            # ErrorPrompt(t.linePos, t.name[0], " is not declarationed!\n")
         else:
             if entry.attrIR.kind != IdKind.varKind:
-                self.error.append(
-                    "in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
+                self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
 
-                # ErrorPrompt(t.linePos, t.name[0], "is not var name!\n ")
 
     def writestatement(self, t):
         Etp = self.expr(t.child[0], None)
         if Etp is not None:
             if Etp.kind == TypeKind.boolTy:
-                self.error.append("in line:{0}, \n".format(t.linePost))
-                self.error.append(
-                    "in line:{0}, cannot write bool expression\n".format(t.linePos))
-                # ErrorPrompt(t.linePos, "", "write error!")
+                self.error.append("in line:{0}, cannot write bool expression\n".format(t.linePos))
 
     def returnstatement(self, t):
         if self.Level == 0:
-            self.error.append(
-                "in line:{0}, wrong return statement\n".format(t.linePos))
+            self.error.append("in line:{0}, wrong return statement\n".format(t.linePos))
 
     def analyze(self, t):
         entry = None
@@ -596,11 +510,7 @@ class Semantic:
             elif p.nodeKind == NodeKind.ProcDecK:
                 self.procDecPart(p)
             else:
-                self.error.append(
-                    "in line:{0} col:{1}, {2} no this in syntax tree\n".format(p.linePos, t.colPos, t.name[0]))
-
-                # ErrorPrompt(p.linePos, "", "no this node kind in syntax tree!")
-
+                self.error.append("in line:{0} col:{1}, {2} no this in syntax tree\n".format(p.linePos, t.colPos, t.name[0]))
             p = p.brother
 
         t = t.child[2]
@@ -610,12 +520,6 @@ class Semantic:
         if self.Level != -1:
             self.DestroyTable()
 
-        if len(self.error) != 0:
-            print(self.error)
-            # LOG.e(DEBUG, "\nanalyze error:\n")
-        else:
-            pass
-            # LOG.d(TAG, "\nanalyze has no error!\n")
     @staticmethod
     def GetTableItem():
         table = SymTableItem()
@@ -628,6 +532,8 @@ class Semantic:
     def CreatTable(self):
         self.Level += 1
         self.scope[self.Level] = None
+        self.scope['id'+ str(self.Level)] = self.id
+        self.id += 1
         self.Off = self.initOff
 
     def DestroyTable(self):
@@ -647,10 +553,8 @@ class Semantic:
         else:
             while cur is not None:
                 pre = cur
-                # result = (id == cur.idName)
                 if id == cur.idName:
                     self.error.append("\(line:{0} col:{1}\),word {2}, repetition declaration error !".format(line, col, id))
-                    # LOG.e(DEBUG, "repetition declaration error !")
                     present = True
                     return present, cur.attrIR, cur
                 else:
@@ -749,8 +653,9 @@ class Semantic:
 
     def PrintOneLayer(self, level):
         t = self.scope[level]
+        out = []
         self.printWord("\n -------SymbTable in level " + str(level) + " ---------\n")
-        self.out.append(self.getOneJson(level_flag=str(level)))
+        out.append(self.getOneJson(level_flag=str(level)))
         while t is not None:
             tmp_json = self.getOneJson()
             self.printWord(t.idName + ":   ")
@@ -800,17 +705,21 @@ class Semantic:
                 self.printWord("error  ")
 
             self.printWord("\n")
+            out.append(tmp_json)
             t = t.next
-            self.out.append(tmp_json)
+        self.dict_out[self.scope['id' + str(level)]] = out
 
     def PrintSymbTable(self):
         level = 0
-        while self.scope[level] != None:
+        while self.scope[level] is not None:
             self.PrintOneLayer(level)
             level += 1
 
     def GetResult(self):
-        return self.out, self.error
+        self.dict_out = sorted(self.dict_out.items(), key=lambda x: x[0])
+        for _, v in self.dict_out:
+            self.list_out += v
+        return self.list_out, self.error
 
 
 if __name__ == '__main__':
@@ -820,11 +729,18 @@ if __name__ == '__main__':
     output_path = programPath + '/sem'
     error_path = programPath + '/semerr'
 
-    #input_path = "tmp.txt"
+    # input_path = "tmp2.txt"
+    # test_path = "../../outputs/cache/2022-03-02_10:46:00_XNFXAMEDEU/tk"
     # output_path = None
     # error_path = None
     # output_path = "tmpp.txt"
     # input_path = "../outputs/bubble_sort.tk"
+
+    # from src.syntax_analysis.parseLL1.parse import *
+    # with open(test_path, 'r') as f:
+    #     input_file = json.load(f)
+    # LL1 = LL1Parse()
+    # root = LL1.parse(input_file)
 
     IOClass = IONode()
     root = IOClass.loadroot(input_path=input_path)
@@ -833,11 +749,11 @@ if __name__ == '__main__':
     AAA.analyze(root)
     table, error = AAA.GetResult()
 
-    print(table)
-    print(error)
+    # print(table)
+    # print(error)
 
-    output_file = open(output_path,'w')
-    error_file = open(error_path,'w')
+    output_file = open(output_path, 'w')
+    error_file = open(error_path, 'w')
 
     output_file.write(json.dumps(table))
     error_file.write(json.dumps(error))

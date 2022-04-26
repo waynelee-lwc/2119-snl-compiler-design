@@ -486,19 +486,21 @@ class IONode:
                     pre_indented -= 1
                     cur = cur.father
                 node.father = cur
-                if node.nodeKind == NodeKind.DecK:
-                    if cur.child[0] is None:
-                        cur.child[0] = node
-                    else:
-                        cur.child[0].addbrother(node)
-                elif node.nodeKind == NodeKind.StmLK:
+                if node.nodeKind == NodeKind.StmLK:
                     cur.child[2] = node
                     node.father = cur
-                else:
+                elif node.nodeKind in [NodeKind.TypeK, NodeKind.VarK, NodeKind.ProcDecK]:
                     if cur.child[1] is None:
                         cur.child[1] = node
                     else:
                         cur.child[1].addbrother(node)
+                else:
+                    # node.nodeKind == NodeKind.DecK:
+                    if cur.child[0] is None:
+                        cur.child[0] = node
+                    else:
+                        cur.child[0].addbrother(node)
+
 
             elif cur_indented == pre_indented + 1:
                 node.father = cur

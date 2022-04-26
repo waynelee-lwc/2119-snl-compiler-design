@@ -546,24 +546,26 @@ class IONode:
                     while cur.brother is not None:
                         cur = cur.brother
                     cur.brother = node
-            elif prock_flag is True and cur_indented == 2:
+            elif prock_flag is True and cur_indented >= 2:
                 while pre_indented != cur_indented - 1:
                     pre_indented -= 1
                     cur = cur.father
                 node.father = cur
-                if node.nodeKind == NodeKind.DecK:
-                    if cur.child[0] is None:
-                        cur.child[0] = node
-                    else:
-                        cur.child[0].addbrother(node)
-                elif node.nodeKind == NodeKind.StmLK:
+                if node.nodeKind == NodeKind.StmLK:
                     cur.child[2] = node
                     node.father = cur
-                else:
+                elif node.nodeKind in [NodeKind.TypeK, NodeKind.VarK, NodeKind.ProcDecK]:
                     if cur.child[1] is None:
                         cur.child[1] = node
                     else:
                         cur.child[1].addbrother(node)
+                else:
+                    # node.nodeKind == NodeKind.DecK:
+                    if cur.child[0] is None:
+                        cur.child[0] = node
+                    else:
+                        cur.child[0].addbrother(node)
+
 
             elif cur_indented == pre_indented + 1:
                 node.father = cur
@@ -627,9 +629,5 @@ class TreeNode:
         while cur.brother is not None:
             cur = cur.brother
         cur.brother = br
-
-
-
-
 
 

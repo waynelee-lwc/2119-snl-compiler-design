@@ -2,6 +2,7 @@ import json
 from LL1Support import *
 # from src.syntax_analysis.parseLL1.LL1Support import *
 
+
 class LL1Table:
     def __init__(self):
         self.Table = {}
