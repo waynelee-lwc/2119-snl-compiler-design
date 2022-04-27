@@ -109,10 +109,8 @@ app.post('/compile',(req,res)=>{
     let synll1 = execSync(`python3 ${syntaxLL1Analysis} ${programPath}`)    //语法分析LL1
 
 
-    let sembuf = execSync(`python3 ${semanticAnalysis} ${programPath}`) //语法分析
     // console.log(lexbuf.toString())
     // console.log(synbuf.toString())
-    console.log(sembuf.toString())
     
     //处理语法分析结果，如果有错，不继续进行语义分析
     files = fs.readdirSync(programPath)
@@ -121,6 +119,7 @@ app.post('/compile',(req,res)=>{
         result[file] = str
     }
     let synErr = JSON.parse(result['synerr'])
+    // console.log(synErr)
     if(!synErr || synErr.length < 1 || synErr[0] != ''){
         let resp = {
             tokens :result['tk'],
@@ -134,6 +133,8 @@ app.post('/compile',(req,res)=>{
         return
     }
 
+    let sembuf = execSync(`python3 ${semanticAnalysis} ${programPath}`) //语义分析
+    console.log(sembuf.toString())
     let resp = {
         snl : result['snl'],        //源程序
         tree : result['tree'],      //递归下降语法树

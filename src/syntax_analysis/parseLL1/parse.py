@@ -1218,9 +1218,16 @@ class LL1Parse:
                     self.currentToken = self.gettoken()
                 else:
                     self.error.append("in line:{0} col{1}, {2} wrong".format(self.currentToken.lineshow, self.currentToken.col, self.currentToken.Sem))
+                    return root
             else:
                 self.stacktopN = toptoken.Ntmlvar
                 pnum = table.getPredict(self.stacktopN, self.currentToken.Lex)
+                if pnum == 0:
+                    self.error.append(
+                        "in line:{0} col{1}, {2} wrong".format(self.currentToken.lineshow, self.currentToken.col,
+                                                               self.currentToken.Sem))
+                    return root
+
                 self.stack.pop()
                 self.predict(pnum)
 
