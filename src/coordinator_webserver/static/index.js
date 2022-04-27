@@ -50,9 +50,12 @@ $('.btn-analysis').on('click',function(){
         success:function(res){
             $('.download-outputs').removeAttr('disabled')
             lastProgramName = res.program_name
-            lexErrList = JSON.parse(res.lex_err)
-            synErrList = JSON.parse(res.syn_err)
+            //词法和语法错误
+            let lexErrList = JSON.parse(res.lex_err)
+            let synErrList = JSON.parse(res.syn_err)
+            let semErrList = JSON.parse(res.semerr)
 
+            //有词法和语法错误，报错，不展示语法树
             if(!resetErrorPanel(lexErrList,synErrList[0],null)){
                 $('html, body').animate({scrollTop: $('.errors').offset().top}, 300) 
                 return
@@ -65,6 +68,66 @@ $('.btn-analysis').on('click',function(){
             resetSyntaxTree(rdtree,ll1tree)
             
             $('html, body').animate({scrollTop: $('.errors').offset().top}, 300) 
+
+            //有语义错误，不展示语义表
+            $('.sem-err-list').empty()
+            if(semErrList && semErrList.length != 0){
+                console.log(semErrList)
+                $('.sem-errs').addClass('errs')
+                $('.sem-errs h3').text('Ops! semantic errros!')
+                for(let err of semErrList){
+                    $('.sem-err-list').append(
+                        $(`<div class="sem-err">${err}</div>`)
+                    )
+                }
+                // alert('语义错误！')
+                return
+            }
+            let sem = JSON.parse(res.sem)
+            console.log(sem)
+            let semlist = []
+            let semlen = 0
+            let currSemBlock
+            for(let i of sem){
+                if(i.level_flag.length > 0){
+                    currSemBlock = {
+                        level : i.level_flag,
+                        list: []
+                    }
+                    semlist[semlen++] = currSemBlock
+                    continue
+                }
+                currSemBlock.list.push(i)
+            }
+            console.log(semlist)
+            $('.sem-res-body').empty()
+            for(block of semlist){
+                for(let i = 0;i < block.list.length;i++){
+                    let semitem = block.list[i]
+                    let tr
+                    if(i == 0){
+                    tr = $(`<tr class="sem-item-level">
+                                <td ${i==0?'rowspan="'+block.list.length+'"':''}>${block.level}</td>
+                                <td>${semitem.name}</td>
+                                <td>${semitem.kind}</td>
+                                <td>${semitem.type_}</td>
+                                <td>${semitem.noff}</td>
+                                <td>${semitem.offset}</td>
+                                <td>${semitem.dir}</td>
+                            </tr>`)
+                    }else{
+                        tr = $(`<tr class="sem-item-non-level">
+                                <td>${semitem.name}</td>
+                                <td>${semitem.kind}</td>
+                                <td>${semitem.type_}</td>
+                                <td>${semitem.noff}</td>
+                                <td>${semitem.offset}</td>
+                                <td>${semitem.dir}</td>
+                            </tr>`)
+                    }
+                    $('.sem-res-body').append(tr)
+                }
+            }
         }
     })
 })

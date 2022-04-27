@@ -1,5 +1,5 @@
-from src.semantic_analysis.SemanticSupport import *
-# from SemanticSupport import *
+# from src.semantic_analysis.SemanticSupport import *
+from SemanticSupport import *
 import json
 
 

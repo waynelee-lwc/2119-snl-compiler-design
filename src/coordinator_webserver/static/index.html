@@ -55,6 +55,9 @@
                 <!-- 语意错误 -->
                 <div class="sem-errs">
                     <h3>Great! No semantic errors</h3>
+                    <div class="sem-err-list">
+                        <!-- <div class="sem-err">in line:32 col:3, a is not declared</div> -->
+                    </div>
                 </div>
             </div>
             <!-- 结果展示区 -->
@@ -99,6 +102,40 @@
                 <!-- 语义分析 -->
                 <div class="semantic-tables" >
                     <h2 class="output-title">Semantic Tables</h2>
+                    <div class="sem-wrapper">
+                        <table class="sem-res">
+                            <thead>
+                                <tr>
+                                    <td>level-info</td>
+                                    <td>name</td>
+                                    <td>kind</td>
+                                    <td>type</td>
+                                    <td>noff</td>
+                                    <td>offset</td>
+                                    <td>dir</td>
+                                </tr>
+                            </thead>
+                            <tbody class="sem-res-body">
+                                <!-- <tr class="sem-item-level">
+                                    <td rowspan="5">level-info</td>
+                                    <td>name</td>
+                                    <td>kind</td>
+                                    <td>type</td>
+                                    <td>noff</td>
+                                    <td>offset</td>
+                                    <td>dir</td>
+                                </tr>
+                                <tr class="sem-item-non-level"> 
+                                    <td>name</td>
+                                    <td>kind</td>
+                                    <td>type</td>
+                                    <td>noff</td>
+                                    <td>offset</td>
+                                    <td>dir</td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
