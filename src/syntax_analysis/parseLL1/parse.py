@@ -428,7 +428,7 @@ class LL1Parse:
             return 3
         else:
             self.error.append(
-                "in line:{0} col{1}, {2} no this operator".format(self.currentToken.linePos, self.currentToken.colPos,
+                "in line:{0} col{1}, {2} no this operator".format(self.currentToken.lineshow, self.currentToken.col,
                                                        self.currentToken.Sem))
 
     def process1(self):
@@ -1172,7 +1172,7 @@ class LL1Parse:
             eval("self.process" + str(num))()
         else:
             self.error.append(
-                "in line:{0} col{1}, {2} wrong".format(self.currentToken.linePos, self.currentToken.colPos,
+                "in line:{0} col{1}, {2} wrong".format(self.currentToken.lineshow, self.currentToken.col,
                                                        self.currentToken.Sem))
 
     def printstack(self):
@@ -1217,7 +1217,7 @@ class LL1Parse:
                     self.stack.pop()
                     self.currentToken = self.gettoken()
                 else:
-                    self.error.append("in line:{0} col{1}, {2} wrong".format(self.currentToken.linePos, self.currentToken.colPos, self.currentToken.Sem))
+                    self.error.append("in line:{0} col{1}, {2} wrong".format(self.currentToken.lineshow, self.currentToken.col, self.currentToken.Sem))
             else:
                 self.stacktopN = toptoken.Ntmlvar
                 pnum = table.getPredict(self.stacktopN, self.currentToken.Lex)
