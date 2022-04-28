@@ -312,11 +312,10 @@ class Semantic:
         Eptr0 = None
         Eptr1 = None
         Eptr = None
-
         present, entry = self.FindEntry(t.name[0])
         t.table[0] = entry
 
-        if present is False:
+        if present is True:
             if self.FindAttr(entry).kind != IdKind.varKind:
                 self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
 
@@ -328,7 +327,7 @@ class Semantic:
                     Eptr = None
 
                 else:
-                    Eptr0 = entry.attrIR.idtype.More.ArrayAttr.indexTy
+                    Eptr0 = entry.attrIR.idtype.More["ArrayAttr"]["indexTy"]
                     if Eptr0 is None:
                         return None
                     Eptr1, _ = self.expr(t.child[0])
@@ -339,7 +338,7 @@ class Semantic:
                         self.error.append("in line:{0} col:{1}, {2} type cannot match the array member\n".format(t.linePos, t.colPos, t.name[0]))
                         Eptr = None
                     else:
-                        Eptr = entry.attrIR.idtype.More.ArrayAttr.elemTy
+                        Eptr = entry.attrIR.idtype.More["ArrayAttr"]["elemTy"]
 
         else:
             self.error.append("in line:{0} col:{1}, {2} is not declared\n".format(t.linePos, t.colPos, t.name[0]))
