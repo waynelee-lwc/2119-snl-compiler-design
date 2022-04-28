@@ -260,7 +260,7 @@ class Semantic:
                 if Ekind is not None:
                     Ekind = AccessKind.dir
             elif t.kind['exp'] == ExpKind.VariK:
-                if t.child[0] is not None:
+                if t.child[0] is None:
                     present, entry = self.FindEntry(t.name[0])
                     t.table[0] = entry
 
