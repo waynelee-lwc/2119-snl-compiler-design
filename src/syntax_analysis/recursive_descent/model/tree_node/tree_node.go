@@ -62,6 +62,11 @@ const (
 	Indentation = "\t"
 )
 
+var childType2Type = map[ChildType]string{
+	ChildTypeChar:    "char",
+	ChildTypeInteger: "integer",
+}
+
 var BaseType2ChildType = map[Kind]ChildType{
 	CharK:    ChildTypeChar,
 	IntegerK: ChildTypeInteger,
@@ -325,7 +330,7 @@ func (node *TreeNode) ToProgram(prefix string, fa *TreeNode) string { //生成�
 			switch node.Kind {
 			case ArrayK: //类型定义数组节点
 				attr := node.Attr.ArrayAttr
-				res += fmt.Sprintf("%v = array[%v..%v]of %v;", CreateNameList(node.Name), attr.Low, attr.Top, attr.ChildType)
+				res += fmt.Sprintf("%v = array[%v..%v]of %v;", CreateNameList(node.Name), attr.Low, attr.Top, childType2Type[attr.ChildType])
 			case CharK: //类型定义字符节点
 				res += fmt.Sprintf("%v = char;", CreateNameList(node.Name))
 			case IntegerK: //类型定义整型节点
@@ -348,7 +353,7 @@ func (node *TreeNode) ToProgram(prefix string, fa *TreeNode) string { //生成�
 			switch node.Kind {
 			case ArrayK:
 				attr := node.Attr.ArrayAttr
-				res += fmt.Sprintf("array[%v..%v]of %v %v", attr.Low, attr.Top, attr.ChildType, CreateNameList(node.Name))
+				res += fmt.Sprintf("array[%v..%v]of %v %v", attr.Low, attr.Top, childType2Type[attr.ChildType], CreateNameList(node.Name))
 			case CharK:
 				res += fmt.Sprintf("char %v", CreateNameList(node.Name))
 			case IntegerK:
