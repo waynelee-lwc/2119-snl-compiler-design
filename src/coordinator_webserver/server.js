@@ -109,7 +109,7 @@ app.post('/compile',(req,res)=>{
         }
         res.send(resp)
         zip(programPath,programZip).then(()=>{
-            // fs.rmdirSync(programPath,{ recursive: true, force: true })
+            fs.rmdirSync(programPath,{ recursive: true, force: true })
         })
         return
     }
@@ -137,7 +137,7 @@ app.post('/compile',(req,res)=>{
         }
         res.send(resp)
         zip(programPath,programZip).then(()=>{
-            // fs.rmdirSync(programPath,{ recursive: true, force: true })
+            fs.rmdirSync(programPath,{ recursive: true, force: true })
         })
         return
     }
@@ -164,7 +164,7 @@ app.post('/compile',(req,res)=>{
     
     /************************  结果打包  ****************************/
     zip(programPath,programZip).then(()=>{
-        // fs.rmdirSync(programPath,{ recursive: true, force: true })
+        fs.rmdirSync(programPath,{ recursive: true, force: true })
     })
     res.send(resp).end()
 })
