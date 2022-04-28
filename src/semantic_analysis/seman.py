@@ -275,7 +275,7 @@ class Semantic:
 
                     else:
                         self.error.append("in line:{0} col:{1}, {2}is not declares\n".format(t.linePos, t.colPos,
-                                                                                     t.name[0]))
+                                                                                        t.name[0]))
 
                 else:
                     if t.attr['ExpAttr']['varkind'] == VarKind.ArrayMembV:
@@ -293,10 +293,12 @@ class Semantic:
 
                 present = self.Compat(Eptr0, Eptr1)
                 if present is True:
-                    if t.attr['ExpAttr']['op'] == LexType.EQ:
+                    if t.attr['ExpAttr']['op'] == LexType.EQ or t.attr['ExpAttr']['op'] == LexType.LT:
                         Eptr = self.boolPtr
                     elif t.attr['ExpAttr']['op'] == LexType.OVER:
                         Eptr = self.intPtr
+                    else:
+                        Eptr = Eptr0
 
                     if Ekind is not None:
                         Ekind = AccessKind.dir
