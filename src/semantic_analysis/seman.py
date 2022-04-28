@@ -431,8 +431,6 @@ class Semantic:
                 self.error.append("in line:{0} col:{1}, {2} is not function name\n".format(t.child[0].linePos, t.child[0].colPos, t.child[0].name[0]))
             else:
                 p = t.child[1]
-                bbb = entry.attrIR.More["ProcAttr"]["param"].entry
-                # Param = self.FindAttr(entry.attrIR.More["ProcAttr"]["param"].entry)
                 Param = entry.attrIR.More["ProcAttr"]["param"]
                 while p is not None and Param is not None:
                     paramEntry = Param.entry
@@ -446,7 +444,7 @@ class Semantic:
 
                 if p is not None or Param is not None:
                     self.error.append("in line:{0}, wrong in matching parameters because of num\n".format(t.child[1].linePos))
-
+    
     def ifstatement(self, t):
         Etp, _ = self.expr(t.child[0])
         if Etp is not None:
