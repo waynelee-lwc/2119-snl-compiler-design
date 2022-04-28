@@ -356,7 +356,7 @@ class Semantic:
         t.table[0] = entry
 
         if present is True:
-            if self.FindAttr(entry).idtype.kind != IdKind.varKind:
+            if self.FindAttr(entry).kind != IdKind.varKind:
                 self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
                 Eptr = None
 
@@ -367,7 +367,7 @@ class Semantic:
 
                 else:
                     Eptr0 = entry.attrIR.idtype
-                    cur = Eptr0.More.body
+                    cur = Eptr0.More["body"]
                     while cur is not None and result is True:
                         result = (t.child[0].name[0] == cur.id)
                         if result is False:
