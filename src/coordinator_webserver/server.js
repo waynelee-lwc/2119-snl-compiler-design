@@ -104,9 +104,7 @@ app.post('/compile',(req,res)=>{
     if(JSON.parse(result['lexerr']).length != 0){
         //存在词法错误，返回词法错误
         let resp = {
-            lex_err:result['lexerr'],
-            syn_err:JSON.stringify(['','','']),
-            sem_err:JSON.stringify({}),
+            lex_err:result['lexerr'],           //词法错误
             program_name : programName
         }
         res.send(resp)
@@ -130,10 +128,10 @@ app.post('/compile',(req,res)=>{
     if(!synErr || synErr.length < 1 || synErr[0] != ''){
         //语法分析错误，返回token列表和语法错误
         let resp = {
-            tokens :result['tk'],
-            lex_err:result['lexerr'],
-            syn_err:result['synerr'],
-            syn_ll1_err:result['treell1err'],
+            tokens :result['tk'],               //token序列
+            lex_err:result['lexerr'],           //词法错误
+            syn_err:result['synerr'],           //递归下降错误
+            syn_ll1_err:result['treell1err'],   //ll1错误
             sem_err:JSON.stringify({}),
             program_name : programName
         }
@@ -150,17 +148,18 @@ app.post('/compile',(req,res)=>{
     result = LoadDir(programPath)
     //无论是否出现错误，均返回全部结果
     let resp = {
-        snl : result['snl'],        //源程序
-        tree : result['tree'],      //递归下降语法树
-        tokens : result['tk'],      //token序列
-        gene : result['gene'],      //生成格式化代码
-        lex_err:result['lexerr'],   //词法错误
-        syn_err:result['synerr'],   //语法错误
-        comments: result['cmt'],    //注释队列
-        treell1: result['treell1'], //ll1生成语法树
-        sem :result['sem'],         //语义分析结果
-        semerr :result['semerr'],   //语义分析错误
-        program_name : programName  //程序分配名称
+        snl : result['snl'],                //源程序
+        tree : result['tree'],              //递归下降语法树
+        tokens : result['tk'],              //token序列
+        gene : result['gene'],              //生成格式化代码
+        lex_err:result['lexerr'],           //词法错误
+        syn_err:result['synerr'],           //语法错误
+        comments: result['cmt'],            //注释队列
+        treell1: result['treell1'],         //ll1生成语法树
+        syn_ll1_err:result['treell1err'],   //ll1语法分析错误
+        sem :result['sem'],                 //语义分析结果
+        semerr :result['semerr'],           //语义分析错误
+        program_name : programName          //程序分配名称
     }
     
     /************************  结果打包  ****************************/

@@ -1255,9 +1255,8 @@ if __name__ == '__main__':
     root = LL1.parse(input_file)
     IOClass = IONode()
     IOClass.printRoot(root, file=output_path)
-    if len(LL1.error) != 0:
-        with open(error_path, 'w') as f:
-            print(LL1.error, file=f)
+    with open(error_path, 'w') as f:
+        print(LL1.error, file=f)
     #IOClass.printRoot(root)
     # rr = IOClass.loadroot("tmp.txt")
     # IOClass.printRoot(rr)
