@@ -311,6 +311,8 @@ func (node *TreeNode) ToProgram(prefix string, fa *TreeNode) string { //生成�
 				} else {
 					res += ");"
 				}
+			} else if idx == 0 {
+				res += ");\n" + child.ToProgram(prefix+Indentation, node)
 			} else {
 				res += "\n" + child.ToProgram(prefix+Indentation, node)
 			}
