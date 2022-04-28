@@ -54,7 +54,6 @@ $('.btn-analysis').on('click',function(){
 
             /************************  词法分析  ***************************/
             let lexErrList = JSON.parse(res.lex_err)        //词法分析错误  
-            // if(!resetErrorPanel(lexErrList,synErrList[0],null)){
             if(lexErrList && lexErrList.length > 0){
                 //词法错误，报错
                 setLexErr(lexErrList)
@@ -109,13 +108,37 @@ $('.btn-format').on('click',function(){
         }),
     
         success:function(res){
-            lexErrList = JSON.parse(res.lex_err)
-            synErrList = JSON.parse(res.syn_err)
+            resetResult()  //重制所有结果展示
+            $('.download-outputs').removeAttr('disabled')
+            lastProgramName = res.program_name
 
-            if(!resetErrorPanel(lexErrList,synErrList[0],null)){
-                $('html, body').animate({scrollTop: $('.errors').offset().top}, 100) 
+            /************************  词法分析  ***************************/
+            let lexErrList = JSON.parse(res.lex_err)        //词法分析错误  
+            if(lexErrList && lexErrList.length > 0){
+                //词法错误，报错
+                setLexErr(lexErrList)
+                scrollToResult()    //结果展示
                 return
             }
+            let tokenList = JSON.parse(res.tokens)  //获得token序列
+            resetTokenList(tokenList)             //追加token列表
+
+            /************************  语法分析  ***************************/
+            let synErrList = JSON.parse(res.syn_err)//递归下降错误
+            let ll1ErrList = res.syn_ll1_err        //ll1错误
+            
+            console.log(synErrList)
+            if(synErrList[0] != ''){
+                //语法错误
+                setSynErr(synErrList,ll1ErrList)
+                scrollToResult()
+                return
+            }
+
+            let rdtree     = res.tree                       //递归下降语法树
+            let ll1tree    = res.treell1                    //ll1语法树
+            resetSyntaxTree(rdtree,ll1tree)
+
             gene = res.gene
             comments = JSON.parse(res.comments)
             resetCode(gene,comments)
@@ -155,6 +178,7 @@ $('.demo-programs').on('change',function(){
         success:function(res){
             // console.log(res)
             resetCode(res.demo,[])
+            resetResult()
         }
     })
 })
@@ -252,44 +276,44 @@ function scrollToResult(){
     $('html, body').animate({scrollTop: $('.errors').offset().top}, 300) 
 }
 
-function resetErrorPanel(lexErr,synErr,semErr){
-    //清除errs类
-    $('.lex-errs').removeClass('errs')
-    $('.syn-errs').removeClass('errs')
-    $('.sem-errs').removeClass('errs')
-    //清空展示列表
-    $('.lex-err-list').empty()
-    $('.syn-err-list').html('')
-    //重置文字
-    $('.lex-errs h3').text('Great!No lexical error!')
-    $('.syn-errs h3').text('Great!No Syntax error!')
-    $('.sem-errs h3').text('Great!No Sematic error!')
+// function resetErrorPanel(lexErr,synErr,semErr){
+//     //清除errs类
+//     $('.lex-errs').removeClass('errs')
+//     $('.syn-errs').removeClass('errs')
+//     $('.sem-errs').removeClass('errs')
+//     //清空展示列表
+//     $('.lex-err-list').empty()
+//     $('.syn-err-list').html('')
+//     //重置文字
+//     $('.lex-errs h3').text('Great!No lexical error!')
+//     $('.syn-errs h3').text('Great!No Syntax error!')
+//     $('.sem-errs h3').text('Great!No Sematic error!')
 
-    let flag = true
-    //词法分析错误
-    if(lexErr && lexErr.length > 0){
-        $('.lex-errs').addClass('errs')
-        $('.lex-errs h3').text('Ops! lexical errros!')
-        for(let err of lexErr){
-            $('.lex-err-list').append(
-                $(`<div class="lex-error">
-                        <div class="lex-error-pos">${err.line},${err.col}</div>
-                        <div class="lex-error-detail">${err.err}</div>
-                    </div>`)
-            )
-        }
-        flag = false
-    }
+//     let flag = true
+//     //词法分析错误
+//     if(lexErr && lexErr.length > 0){
+//         $('.lex-errs').addClass('errs')
+//         $('.lex-errs h3').text('Ops! lexical errros!')
+//         for(let err of lexErr){
+//             $('.lex-err-list').append(
+//                 $(`<div class="lex-error">
+//                         <div class="lex-error-pos">${err.line},${err.col}</div>
+//                         <div class="lex-error-detail">${err.err}</div>
+//                     </div>`)
+//             )
+//         }
+//         flag = false
+//     }
 
-    //语法分析错误
-    if(synErr && synErr != ''){
-        $('.syn-errs').addClass('errs')
-        $('.syn-errs h3').text('Ops! syntax errors!')
-        $('.syn-err-list').html(synErr)
-        flag = false
-    }
-    return flag
-}
+//     //语法分析错误
+//     if(synErr && synErr != ''){
+//         $('.syn-errs').addClass('errs')
+//         $('.syn-errs h3').text('Ops! syntax errors!')
+//         $('.syn-err-list').html(synErr)
+//         flag = false
+//     }
+//     return flag
+// }
 
 //重置结果区域
 function resetResult(){
