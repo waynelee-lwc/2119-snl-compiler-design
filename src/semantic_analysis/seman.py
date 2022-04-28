@@ -1,5 +1,6 @@
-# from src.semantic_analysis.SemanticSupport import *
 from SemanticSupport import *
+from parse import *
+# from SemanticSupport import *
 import json
 
 
@@ -146,8 +147,6 @@ class Semantic:
             self.savedOff = self.Off
 
     def procDecPart(self, t):
-        self.CreatTable()
-        self.Off = 7
         p = t
         entry = self.HeadProcess(t)
 
@@ -200,6 +199,8 @@ class Semantic:
         if t is not None:
             if t.child[0] is not None:
                 p = t.child[0]
+            self.CreatTable()
+            self.Off = 7
             self.varDecPart(p)
             Ptr0 = self.scope[self.Level]
 
@@ -244,10 +245,11 @@ class Semantic:
         else:
             self.error.append("in line:{0} col:{1}, {2} statement type error\n".format(t.linePos, t.colPos, t.name[0]))
 
-    def expr(self, t, Ekind):
+    def expr(self, t):
         present = False
         entry = None
 
+        Ekind = None
         Eptr0 = None
         Eptr1 = None
         Eptr = None
@@ -282,12 +284,12 @@ class Semantic:
                         Eptr = self.recordVar(t)
 
             elif t.kind['exp'] == ExpKind.OpK:
-                Eptr0 = self.expr(t.child[0], None)
+                Eptr0, _ = self.expr(t.child[0])
                 if Eptr0 is None:
-                    return None
-                Eptr1 = self.expr(t.child[1], None)
+                    return None, None
+                Eptr1, _ = self.expr(t.child[1])
                 if Eptr1 is None:
-                    return None
+                    return None, None
 
                 present = self.Compat(Eptr0, Eptr1)
                 if present is True:
@@ -302,7 +304,7 @@ class Semantic:
                 else:
                     self.error.append("in line:{0} col:{1}, {2} operator is not compat\n".format(t.linePos, t.colPos, t.name[0]))
 
-        return Eptr
+        return Eptr, Ekind
 
     def arrayVar(self, t):
         Eptr0 = None
@@ -327,7 +329,7 @@ class Semantic:
                     Eptr0 = entry.attrIR.idtype.More.ArrayAttr.indexTy
                     if Eptr0 is None:
                         return None
-                    Eptr1 = self.expr(t.child[0], None)
+                    Eptr1, _ = self.expr(t.child[0])
                     if Eptr1 is None:
                         return None
                     present = self.Compat(Eptr0, Eptr1)
@@ -390,7 +392,6 @@ class Semantic:
 
         if child1.child[0] is None:
             present, entry = self.FindEntry(child1.name[0])
-
             if present is True:
                 if self.FindAttr(entry).kind != IdKind.varKind:
                     self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(child1.linePos, child1.colPos, child1.name[0]))
@@ -408,12 +409,12 @@ class Semantic:
                     Eptr = self.recordVar(child1)
 
         if Eptr is not None:
-            if t.nodeKind == NodeKind.StmLK and t.kind['stmt'] == StmtKind.AssignK:
-                ptr = self.expr(child2, None)
+            if t.nodeKind == NodeKind.StmtK and t.kind['stmt'] == StmtKind.AssignK:
+                ptr, _ = self.expr(child2)
                 if self.Compat(ptr, Eptr):
                     pass
                 else:
-                    self.error.append("in line:{0} assignment wrong\n".format(t.linePos))
+                    self.error.append("in line:{0} assignment wrong\n".format(t.child[0].linePos))
 
     def callstatement(self, t):
         Ekind = AccessKind
@@ -426,14 +427,16 @@ class Semantic:
                 "in line:{0} col:{1}, {2} function is not declared\n".format(t.linePos, t.colPos, t.child[0].name[0]))
         else:
             if self.FindAttr(entry).kind != IdKind.procKind:
-                self.error.append("in line:{0} col:{1}, {2} is not function name\n".format(t.linePos, t.colPos, t.name[0]))
+                self.error.append("in line:{0} col:{1}, {2} is not function name\n".format(t.child[0].linePos, t.child[0].colPos, t.child[0].name[0]))
             else:
                 p = t.child[1]
-                Param = self.FindAttr(entry.More.ProcAttr.param)
+                bbb = entry.attrIR.More["ProcAttr"]["param"].entry
+                # Param = self.FindAttr(entry.attrIR.More["ProcAttr"]["param"].entry)
+                Param = entry.attrIR.More["ProcAttr"]["param"]
                 while p is not None and Param is not None:
                     paramEntry = Param.entry
-                    Etp = self.expr(p, Ekind)
-                    if self.FindAttr(paramEntry).More.Varattr.access == AccessKind.indir and Ekind == AccessKind.dir:
+                    Etp, Ekind = self.expr(p)
+                    if self.FindAttr(paramEntry).More["VarAttr"]["access"] == AccessKind.indir and Ekind == AccessKind.dir:
                         self.error.append("in line:{0} col:{1}, {2} kind match wrong\n".format(p.linePos, p.colPos, p.name[0]))
                     elif self.FindAttr(paramEntry).idtype != Etp:
                         self.error.append("in line:{0} col:{1}, {2} type match wrong\n".format(p.linePos, p.colPos, p.name[0]))
@@ -444,7 +447,7 @@ class Semantic:
                     self.error.append("in line:{0}, wrong in matching parameters because of num\n".format(t.child[1].linePos))
 
     def ifstatement(self, t):
-        Etp = self.expr(t.child[0], None)
+        Etp, _ = self.expr(t.child[0])
         if Etp is not None:
             if Etp.kind != TypeKind.boolTy:
                 self.error.append( "in line:{0}, condition is not a bool expression\n".format(t.linePos))
@@ -461,7 +464,7 @@ class Semantic:
                     t = t.brother
 
     def whilestatement(self, t):
-        Etp = self.expr(t.child[0], None)
+        Etp, _ = self.expr(t.child[0])
         if Etp is not None:
             if Etp.kind != TypeKind.boolTy:
                 self.error.append("in line:{0}, while condition error\n".format(t.linePos))
@@ -482,9 +485,8 @@ class Semantic:
             if entry.attrIR.kind != IdKind.varKind:
                 self.error.append("in line:{0} col:{1}, {2} is not variable\n".format(t.linePos, t.colPos, t.name[0]))
 
-
     def writestatement(self, t):
-        Etp = self.expr(t.child[0], None)
+        Etp, _ = self.expr(t.child[0])
         if Etp is not None:
             if Etp.kind == TypeKind.boolTy:
                 self.error.append("in line:{0}, cannot write bool expression\n".format(t.linePos))
@@ -514,7 +516,7 @@ class Semantic:
             p = p.brother
 
         t = t.child[2]
-        if t.nodeKind == NodeKind.StmtK:
+        if t.nodeKind == NodeKind.StmLK:
             self.Body(t)
 
         if self.Level != -1:
@@ -540,7 +542,6 @@ class Semantic:
         self.PrintOneLayer(self.Level)
         self.scope[self.Level] = None
         self.Level -= 1
-        # self.PrintOneLayer(self.Level)
 
     def Enter(self, id, attribP, line, col):
         present = False
@@ -637,10 +638,9 @@ class Semantic:
     @staticmethod
     def Compat(tp1, tp2):
         if tp1 != tp2:
-            present = False
+            return False
         else:
-            present = True
-        return present
+            return True
 
     def printWord(self, word):
         print(word, end="")
@@ -723,28 +723,29 @@ class Semantic:
 
 
 if __name__ == '__main__':
-
     programPath = sys.argv[1]   #程序产物文件夹
-    input_path = programPath + '/treell1'
+    # input_path = programPath + '/treell1'
+    input_path = programPath + '/tk'
     output_path = programPath + '/sem'
     error_path = programPath + '/semerr'
 
-    # input_path = "tmp2.txt"
+    # input_path = "tmp3.txt"
+
     # test_path = "../../outputs/cache/2022-03-02_10:46:00_XNFXAMEDEU/tk"
     # output_path = None
     # error_path = None
     # output_path = "tmpp.txt"
     # input_path = "../outputs/bubble_sort.tk"
 
-    # from src.syntax_analysis.parseLL1.parse import *
-    # with open(test_path, 'r') as f:
-    #     input_file = json.load(f)
-    # LL1 = LL1Parse()
-    # root = LL1.parse(input_file)
+    with open(input_path, 'r') as f:
+        input_file = json.load(f)
+    LL1 = LL1Parse()
+    root = LL1.parse(input_file)
 
-    IOClass = IONode()
-    root = IOClass.loadroot(input_path=input_path)
-
+    # IOClass = IONode()
+    # input_path = "tmp2.txt"
+    # root = IOClass.loadroot(input_path=input_path)
+    # IOClass.picroot(root)
     AAA = Semantic()
     AAA.analyze(root)
     table, error = AAA.GetResult()
