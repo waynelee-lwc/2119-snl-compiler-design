@@ -1,5 +1,6 @@
 program bubble
 var
+	integer temp;
 	integer i, j, num;
 	array[1..20]of integer a;
 procedure q(integer num);
