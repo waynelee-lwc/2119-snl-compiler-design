@@ -442,7 +442,7 @@ function resetLines(){
             $(`<div>${i}</div>`)
         )
     }
-    $('.code').css({height:`${lines*1.5+0.25}rem`})
+    $('.code').css({height:`${lines*1.5+0.5}rem`})
 }
 
 function resetDemoList(){
