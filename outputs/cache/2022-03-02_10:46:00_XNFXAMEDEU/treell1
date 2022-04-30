@@ -1,0 +1,51 @@
+Prok 0 0 
+	PheadK p 1 9 
+	ProcDeck p1 2 11 
+		ProcDeck p11 3 12 
+			ProcDeck p111 4 13 
+				VarK 0 0 
+					Deck IntegerK a b 5 18 
+				StmLK 0 0 
+					StmtK AssignK 0 0 
+						ExpK IdK a IdV 7 5 
+						ExpK IdK b IdV 7 10 
+					StmtK AssignK 0 0 
+						ExpK IdK b IdV 8 5 
+						ExpK IdK a IdV 8 10 
+			ProcDeck p112 10 13 
+				VarK 0 0 
+					Deck IntegerK a b 11 18 
+				StmLK 0 0 
+					StmtK AssignK 0 0 
+						ExpK IdK a IdV 13 5 
+						ExpK IdK b IdV 13 10 
+					StmtK AssignK 0 0 
+						ExpK IdK b IdV 14 5 
+						ExpK IdK a IdV 14 10 
+			StmLK 0 0 
+				StmtK AssignK 0 0 
+					ExpK IdK a IdV 17 4 
+					ExpK IdK b IdV 17 9 
+		ProcDeck p12 19 12 
+			StmLK 0 0 
+				StmtK AssignK 0 0 
+					ExpK IdK a IdV 21 5 
+					ExpK IdK b IdV 21 10 
+		StmLK 0 0 
+			StmtK AssignK 0 0 
+				ExpK IdK a IdV 24 5 
+				ExpK IdK b IdV 24 10 
+	ProcDeck p2 26 11 
+		ProcDeck p21 27 12 
+			StmLK 0 0 
+				StmtK AssignK 0 0 
+					ExpK IdK a IdV 29 5 
+					ExpK IdK b IdV 29 10 
+		StmLK 0 0 
+			StmtK AssignK 0 0 
+				ExpK IdK a IdV 32 3 
+				ExpK IdK b IdV 32 6 
+	StmLK 0 0 
+		StmtK AssignK 0 0 
+			ExpK IdK a IdV 35 5 
+			ExpK IdK b IdV 35 10 

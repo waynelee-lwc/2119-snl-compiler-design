@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7e6f576a-4142-4f47-8027-f662b0db3ee0" name="Default Changelist" comment="" />
+    <list default="true" id="7e6f576a-4142-4f47-8027-f662b0db3ee0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/semantic_analysis/seman.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/semantic_analysis/seman.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/semantic_analysis/tmp1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/semantic_analysis/tmp1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/syntax_analysis/parseLL1/LL1Support.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/syntax_analysis/parseLL1/LL1Support.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/syntax_analysis/parseLL1/input1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/syntax_analysis/parseLL1/input1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/syntax_analysis/parseLL1/parse.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/syntax_analysis/parseLL1/parse.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="JupyterTrust" id="5543bf2f-68d5-46dc-bae8-17258fabadf9" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JupyterTrust" id="47265d9d-0243-4344-bcb1-1d19a7570252" />
   <component name="ProjectId" id="289fCeBNBVSJlyVNIwpkpS0ojHa" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -15,6 +25,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/parseLL1" />
   </component>
@@ -24,7 +35,29 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.parse">
+  <component name="RunManager" selected="Python.parse (1)">
+    <configuration name="parse (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="jlu-2119-compiler-design-semantic_analysis 2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/syntax_analysis/parseLL1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/syntax_analysis/parseLL1/parse.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="parse" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="jlu-2119-compiler-design-semantic_analysis 2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -71,8 +104,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.parse" />
+        <item itemvalue="Python.parse (1)" />
         <item itemvalue="Python.seman" />
+        <item itemvalue="Python.parse" />
       </list>
     </recent_temporary>
   </component>
@@ -87,36 +121,125 @@
       <workItem from="1650633596988" duration="21000" />
       <workItem from="1650635543255" duration="707000" />
       <workItem from="1650636883740" duration="243000" />
+      <workItem from="1650899507841" duration="1392000" />
+      <workItem from="1650943001919" duration="11089000" />
+      <workItem from="1650968884172" duration="70000" />
+      <workItem from="1650978722096" duration="630000" />
+      <workItem from="1650984721959" duration="326000" />
+      <workItem from="1651070685648" duration="940000" />
+      <workItem from="1651072177041" duration="1283000" />
     </task>
+    <task id="LOCAL-00001" summary="test change">
+      <created>1650899546513</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1650899546513</updated>
+    </task>
+    <task id="LOCAL-00002" summary="test change">
+      <created>1650900024435</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1650900024435</updated>
+    </task>
+    <task id="LOCAL-00003" summary="test change">
+      <created>1650900203735</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1650900203735</updated>
+    </task>
+    <task id="LOCAL-00004" summary="test change">
+      <created>1650900239490</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1650900239490</updated>
+    </task>
+    <task id="LOCAL-00005" summary="test change">
+      <created>1650956711663</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1650956711663</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="test change" />
+    <option name="LAST_COMMIT_MESSAGE" value="test change" />
   </component>
   <component name="WindowStateProjectService">
     <state x="998" y="328" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1650637103689">
       <screen x="0" y="23" width="1920" height="999" />
     </state>
     <state x="998" y="328" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1920.999@0.23.1920.999" timestamp="1650637103689" />
-    <state width="1878" height="254" key="GridCell.Tab.0.bottom" timestamp="1650637126026">
+    <state x="357" y="147" key="CommitChangelistDialog2" timestamp="1650956711465">
       <screen x="0" y="23" width="1920" height="999" />
     </state>
-    <state width="1878" height="254" key="GridCell.Tab.0.bottom/0.23.1920.999@0.23.1920.999" timestamp="1650637126026" />
-    <state width="1878" height="254" key="GridCell.Tab.0.center" timestamp="1650637126026">
+    <state x="357" y="147" key="CommitChangelistDialog2/0.23.1920.999@0.23.1920.999" timestamp="1650956711465" />
+    <state width="332" height="778" key="GridCell.Tab.0.bottom" timestamp="1651073443881">
       <screen x="0" y="23" width="1920" height="999" />
     </state>
-    <state width="1878" height="254" key="GridCell.Tab.0.center/0.23.1920.999@0.23.1920.999" timestamp="1650637126026" />
-    <state width="1878" height="254" key="GridCell.Tab.0.left" timestamp="1650637126025">
+    <state width="332" height="778" key="GridCell.Tab.0.bottom/0.23.1920.999@0.23.1920.999" timestamp="1651073443881" />
+    <state width="332" height="778" key="GridCell.Tab.0.center" timestamp="1651073443881">
       <screen x="0" y="23" width="1920" height="999" />
     </state>
-    <state width="1878" height="254" key="GridCell.Tab.0.left/0.23.1920.999@0.23.1920.999" timestamp="1650637126025" />
-    <state width="1878" height="254" key="GridCell.Tab.0.right" timestamp="1650637126026">
+    <state width="332" height="778" key="GridCell.Tab.0.center/0.23.1920.999@0.23.1920.999" timestamp="1651073443881" />
+    <state width="332" height="778" key="GridCell.Tab.0.left" timestamp="1651073443880">
       <screen x="0" y="23" width="1920" height="999" />
     </state>
-    <state width="1878" height="254" key="GridCell.Tab.0.right/0.23.1920.999@0.23.1920.999" timestamp="1650637126026" />
+    <state width="332" height="778" key="GridCell.Tab.0.left/0.23.1920.999@0.23.1920.999" timestamp="1651073443880" />
+    <state width="332" height="778" key="GridCell.Tab.0.right" timestamp="1651073443881">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state width="332" height="778" key="GridCell.Tab.0.right/0.23.1920.999@0.23.1920.999" timestamp="1651073443881" />
+    <state width="1356" height="82" key="GridCell.Tab.1.bottom" timestamp="1650956897027">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state width="1356" height="82" key="GridCell.Tab.1.bottom/0.23.1920.999@0.23.1920.999" timestamp="1650956897027" />
+    <state width="1356" height="82" key="GridCell.Tab.1.center" timestamp="1650956897026">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state width="1356" height="82" key="GridCell.Tab.1.center/0.23.1920.999@0.23.1920.999" timestamp="1650956897026" />
+    <state width="1356" height="82" key="GridCell.Tab.1.left" timestamp="1650956897026">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state width="1356" height="82" key="GridCell.Tab.1.left/0.23.1920.999@0.23.1920.999" timestamp="1650956897026" />
+    <state width="1356" height="82" key="GridCell.Tab.1.right" timestamp="1650956897027">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state width="1356" height="82" key="GridCell.Tab.1.right/0.23.1920.999@0.23.1920.999" timestamp="1650956897027" />
+    <state x="491" y="245" key="RollbackChangesDialog" timestamp="1650945933750">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state x="491" y="245" key="RollbackChangesDialog/0.23.1920.999@0.23.1920.999" timestamp="1650945933750" />
+    <state x="679" y="272" key="VCS.ChangeListViewerDialog" timestamp="1650943021375">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state x="679" y="272" key="VCS.ChangeListViewerDialog/0.23.1920.999@0.23.1920.999" timestamp="1650943021375" />
+    <state x="380" y="311" key="Vcs.Push.Dialog.v2" timestamp="1650956715557">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state x="380" y="311" key="Vcs.Push.Dialog.v2/0.23.1920.999@0.23.1920.999" timestamp="1650956715557" />
+    <state x="720" y="470" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1651071448508">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state x="720" y="470" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1920.999@0.23.1920.999" timestamp="1651071448508" />
+    <state x="1259" y="88" width="661" height="926" key="dock-window-1" timestamp="1651072196967">
+      <screen x="0" y="23" width="1920" height="999" />
+    </state>
+    <state x="1259" y="88" width="661" height="926" key="dock-window-1/0.23.1920.999@0.23.1920.999" timestamp="1651072196967" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/jlu_2119_compiler_design$seman.coverage" NAME="seman Coverage Results" MODIFIED="1650956258533" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/semantic_analysis" />
     <SUITE FILE_PATH="coverage/jlu_2119_compiler_design_semantic_analysis_2$parse.coverage" NAME="parse Coverage Results" MODIFIED="1650637106353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/parseLL1" />
+    <SUITE FILE_PATH="coverage/jlu_2119_compiler_design$parse__1_.coverage" NAME="parse (1) Coverage Results" MODIFIED="1651073443872" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/syntax_analysis/parseLL1" />
     <SUITE FILE_PATH="coverage/jlu_2119_compiler_design_semantic_analysis_2$seman.coverage" NAME="seman Coverage Results" MODIFIED="1650636983343" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/semantic_analysis" />
   </component>
 </project>

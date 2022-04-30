@@ -184,7 +184,10 @@ html,body{
 .main>.outputs>.semantic-tables{
     position: absolute;
     top: 50rem;
-    left: 1rem;
+    left: 32%;
+    width: 67%;
+    max-height: 48rem;
+    overflow: auto;
 }
 
 .main>.outputs>.download-outputs{
@@ -207,7 +210,7 @@ html,body{
     width: 100%;
     display: flex;
     flex-direction: column;
-    max-height: 40rem;
+    max-height: 90rem;
     overflow-y: auto;
 }
 
@@ -359,4 +362,101 @@ html,body{
     color: #d51616;
     height: 7rem;
     overflow: auto;
+}
+
+.sem-err-list{
+    width: 95%;
+    margin: 0rem auto;
+    height: 7rem;
+    overflow: auto;
+}
+
+.sem-err{
+    display: flex;
+    justify-content: space-between;
+    color: #d51616;
+    border-left: 0.25rem solid;
+    margin-bottom: 0.25rem;
+    padding-left: 0.5rem;
+}
+
+.sem-wrapper{
+
+}
+
+.sem-res{
+    width: 100%;
+    border: 1px solid;
+}
+
+.sem-res-body tr{
+    height: 1.5rem;
+}
+
+.sem-res thead tr{
+    height: 3rem;
+    /* border-bottom: 1px solid; */
+}
+
+.sem-res thead td{
+    text-align: center;
+    font-weight: bold;
+    padding: 0rem;
+    margin: 0rem;
+    /* border-bottom: 1px solid; */
+}
+
+.sem-res-body td{
+    text-align: center;
+    border-top: 1px solid;
+}
+
+
+.sem-res thead td:nth-child(1){
+
+}
+.sem-res thead td:nth-child(2){
+
+}
+.sem-res thead td:nth-child(3){
+
+}
+.sem-res thead td:nth-child(4){
+
+}
+.sem-res thead td:nth-child(5){
+
+}
+.sem-res thead td:nth-child(6){
+
+}
+.sem-res thead td:nth-child(7){
+
+}
+.sem-res thead td:nth-child(8){
+
+}
+
+.sem-item-level td:nth-child(1){
+    border-right: 1px solid;
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+.sem-item-non-level td:nth-child(1){
+    
+}
+.sem-item-non-level td:nth-child(2){
+    
+}
+.sem-item-non-level td:nth-child(3){
+    
+}
+.sem-item-non-level td:nth-child(4){
+    
+}
+.sem-item-non-level td:nth-child(5){
+    
+}
+.sem-item-non-level td:nth-child(6){
+    
 }

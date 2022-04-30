@@ -1,0 +1,6 @@
+program p
+var 
+	integer a
+begin
+	a := 1
+end.

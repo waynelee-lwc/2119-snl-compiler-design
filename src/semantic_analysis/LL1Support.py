@@ -101,63 +101,125 @@ class ExpType(Enum):
     Boolean = 3
 
 
-class ParamType(Enum):
-    valparamType = 1
-    varparamType = 2
-
-
-class AccessKind(Enum):
-    dir = 1
-    indir = 2
-
-
-class IdKind(Enum):
-    typeKind = 1
-    varKind = 2
-    procKind = 3
-
-
-class AttributeIR:
+class TokenType:
     def __init__(self):
-        self.idtype = None
-        self.kind = None
-        self.More = {
-            "VarAttr": {
-                "access": None,
-                "level": 0,
-                "off": 0,
-                "isParam": False
-            },
-            "ProcAttr": {
-                "level": 0,
-                "param": None,
-                "mOff": 0,
-                "nOff": 0,
-                "procEntry": 0,
-                "codeEntry": 0
-            }
-        }
+        self.lineshow = None
+        self.col = None
+        self.Lex = None
+        self.Sem = None # 字符串
 
 
-class TypeKind(Enum):
-    intTy = 1
-    charTy = 2
-    arrayTy = 3
-    recordTy = 4
-    boolTy = 5
+class NontmlType(Enum):
+    Program = 1
+    ProgramHead = 2
+    ProgramName = 3
+    DeclarePart = 4
+    TypeDec = 5
+    TypeDeclaration = 6
+    TypeDecList = 7
+    TypeDecMore = 8
+    TypeId = 9
+    TypeName = 10
+    BaseType = 11
+    StructureType = 12
+    ArrayType = 13
+    Low = 14
+    Top = 15
+    RecType = 16
+    FieldDecList = 17
+    FieldDecMore = 18
+    IdList = 19
+    IdMore = 20
+    VarDec = 21
+    VarDeclaration = 22
+    VarDecList = 23
+    VarDecMore = 24
+    VarIdList = 25
+    VarIdMore = 26
+    ProcDec = 27
+    ProcDeclaration = 28
+    ProcDecMore = 29
+    ProcName = 30
+    ParamList = 31
+    ParamDecList = 32
+    ParamMore = 33
+    Param = 34
+    FormList = 35
+    FidMore = 36
+    ProcDecPart = 37
+    ProcBody = 38
+    ProgramBody = 39
+    StmList = 40
+    StmMore = 41
+    Stm = 42
+    AssCall = 43
+    AssignmentRest = 44
+    ConditionalStm = 45
+    StmL = 46
+    LoopStm = 47
+    InputStm = 48
+    InVar = 49
+    OutputStm = 50
+    ReturnStm = 51
+    CallStmRest = 52
+    ActParamList = 53
+    ActParamMore = 54
+    RelExp = 55
+    OtherRelE = 56
+    Exp = 57
+    OtherTerm = 58
+    Term = 59
+    OtherFactor = 60
+    Factor = 61
+    Variable = 62
+    VariMore = 63
+    FieldVar = 64
+    FieldVarMore = 65
+    CmpOp = 66
+    AddOp = 67
+    MultOp = 68
 
 
-class fieldchain():
-    def __init__(self):
-        self.id = [] * 10
-        self.off = None
-        self.UnitType = None
-        self.Next = None
+class StackNode:
+    def __init__(self, flag=0, kind=None):
+        self.flag = flag
+        self.Ntmlvar = None
+        self.tmlvar = None
+        self.underNode = None
+        if flag == 1:
+            self.Ntmlvar = kind
+        elif flag == 2:
+            self.tmlvar = kind
+
+
+def newRootNode():
+    return TreeNode(NodeKind.ProK)
+
+
+def newPheadNode():
+    return TreeNode(NodeKind.PheadK)
+
+
+def newDecANode(kind):
+    return TreeNode(kind)
+
+
+def newDecNode():
+    return TreeNode(NodeKind.DecK)
+
+
+def newProcNode():
+    return TreeNode(NodeKind.ProcDecK)
 
 
 def newStmtNode(kind=None):
     t = TreeNode(NodeKind.StmtK)
     t.kind["stmt"] = kind
+    return t
+
+
+def newStmlNode():
+    t = TreeNode(NodeKind.StmLK)
     return t
 
 
@@ -169,15 +231,18 @@ def newExpNode(kind):
     return t
 
 
-class TypeIR():
-    def __init__(self):
-        self.size = 0
-        self.kind = None
-        self.More = \
-            {
-                "ArrayAttr": {"indexTy": None, "elemTy": None, "low": 0, "up": 0},
-                "body": None
-            }
+def newVarNode():
+    t = TreeNode()
+    t.nodeKind = NodeKind.VarK
+    # t.linePos = lineshow
+    return t
+
+
+def newTypeNode():
+    t = TreeNode()
+    t.nodeKind = NodeKind.TypeK
+    # t.linePos = lineshow
+    return t
 
 
 class IONode:
@@ -566,32 +631,3 @@ class TreeNode:
         cur.brother = br
 
 
-class ParamTable:
-    def __init__(self):
-        entry = SymTableItem()
-        next = None
-
-
-class SymTableItem:
-    def __init__(self):
-        self.idName = ""
-        self.attrIR = AttributeIR()
-        self.next = None
-
-
-def NewTy(kind):
-    table = TypeIR()
-    if kind == TypeKind.boolTy or \
-            kind == TypeKind.intTy or \
-            kind == TypeKind.charTy:
-        table.kind = kind
-        table.size = 1
-    elif kind == TypeKind.arrayTy:
-        table.kind = TypeKind.arrayTy
-        table.More["ArrayAttr"]["indexTy"] = None
-        table.More["ArrayAttr"]["elemTy"] = None
-    elif kind == TypeKind.recordTy:
-        table.kind = TypeKind.recordTy
-        table.More["body"] = None
-
-    return table
