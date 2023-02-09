@@ -1,2 +1,5 @@
 log.out
 runnable
+__pycache__/
+zips/
+outputs/
